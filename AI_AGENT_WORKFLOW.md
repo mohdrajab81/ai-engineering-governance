@@ -8,18 +8,18 @@ On the first serious task in a repository, fill in the canonical commands below 
 
 | Concern | Canonical command | Fast file-scoped alternative | Notes |
 |---|---|---|---|
-| Install / setup | fill me | fill me | package manager, env bootstrap |
-| Build | fill me | fill me | compile / package step |
-| Lint | fill me | fill me | include formatter if separate |
-| Type check | fill me | fill me | skip if repo does not use it |
-| Unit tests | fill me | fill me | smallest relevant test first |
-| Integration tests | fill me | fill me | include services needed |
-| Migrate / seed | fill me | n/a | DB migrations or seed scripts |
-| Start local services | fill me | n/a | DB, broker, cache, or other dependencies |
-| Smoke test | fill me | n/a | verify running service responds after startup |
-| Run locally | fill me | n/a | local launch command |
-| Security scan | fill me | fill me | dependency / SAST / secret scan |
-| Rollback | fill me | n/a | undo migration or revert deployment artifact |
+| Install / setup | `npm install -g markdownlint-cli` | n/a | Install markdown linter globally |
+| Build | n/a | n/a | Docs-only repo — no compile step |
+| Lint | `markdownlint "**/*.md" --ignore node_modules` | `markdownlint path/to/file.md` | Markdown style check |
+| Type check | n/a | n/a | No code — docs-only repo |
+| Unit tests | n/a | n/a | No code — docs-only repo |
+| Integration tests | n/a | n/a | No code — docs-only repo |
+| Migrate / seed | n/a | n/a | No database |
+| Start local services | n/a | n/a | No services required |
+| Smoke test | `grep -r "fill me" . --include="*.md" && exit 1 || echo "OK"` | n/a | Verify no unfilled placeholders remain |
+| Run locally | n/a | n/a | Static docs — no runtime |
+| Security scan | `grep -rE "(password\|secret\|token\|api_key)\s*=\s*\S+" . --include="*.md"` | n/a | Scan for accidentally committed secrets |
+| Rollback | `git revert HEAD` | n/a | Revert last commit |
 
 **Enforcement:** CI must include a step that fails the build if any cell in the command table above still contains the literal text `fill me`. A governance file that has never been completed gives false confidence that commands have been verified. Add a check equivalent to:
 
