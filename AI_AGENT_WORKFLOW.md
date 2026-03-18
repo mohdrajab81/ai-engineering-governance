@@ -16,7 +16,7 @@ On the first serious task in a repository, fill in the canonical commands below 
 | Integration tests | n/a | n/a | No code — docs-only repo |
 | Migrate / seed | n/a | n/a | No database |
 | Start local services | n/a | n/a | No services required |
-| Smoke test | `grep -r "fill me" . --include="*.md" && exit 1 || echo "OK"` | n/a | Verify no unfilled placeholders remain |
+| Smoke test | `grep -rE "^\|.*\| fill me \|" . --include="*.md" && exit 1 || echo "OK"` | n/a | Verify no unfilled table cells remain (table-row pattern avoids self-detection) |
 | Run locally | n/a | n/a | Static docs — no runtime |
 | Security scan | `grep -rE "(password\|secret\|token\|api_key)\s*=\s*\S+" . --include="*.md"` | n/a | Scan for accidentally committed secrets |
 | Rollback | `git revert HEAD` | n/a | Revert last commit |
@@ -24,7 +24,7 @@ On the first serious task in a repository, fill in the canonical commands below 
 **Enforcement:** CI must include a step that fails the build if any cell in the command table above still contains the literal text `fill me`. A governance file that has never been completed gives false confidence that commands have been verified. Add a check equivalent to:
 
 ```bash
-grep -q "fill me" AI_AGENT_WORKFLOW.md && echo "ERROR: Unfilled command table in AI_AGENT_WORKFLOW.md" && exit 1
+grep -E "^\|.*\| fill me \|" AI_AGENT_WORKFLOW.md && echo "ERROR: Unfilled command table in AI_AGENT_WORKFLOW.md" && exit 1
 ```
 
 This check belongs in the repository's CI pipeline, not in agent instructions alone.

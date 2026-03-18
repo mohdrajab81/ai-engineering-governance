@@ -8,7 +8,7 @@ A production-tested, deployable governance standard for AI-assisted software dev
 
 ## Independent Review Scores
 
-Three AI systems evaluated this pack independently across four dimensions. The table shows scores before v8 and after v8.
+Three AI systems evaluated this pack independently across four dimensions. ChatGPT and Gemini were reviewed at v6 and v8. Claude was reviewed at v6, v8, and v9 using adversarial gap-closure methodology.
 
 | Dimension | ChatGPT | Gemini | Claude (Sonnet 4.6) |
 |---|---|---|---|
