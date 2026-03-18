@@ -180,7 +180,7 @@ A consuming team that has customized domain files should treat those customizati
 
 **Mohammad Rajab** — Senior Technical Product Owner | Enterprise Solutions Architect | AI Transformation Lead
 
-20+ years in carrier-grade telecom platforms. PMP, Azure AI-102, AI-900 certified. Currently building Live Meeting Copilot — a real-time bilingual transcription and AI coaching desktop application.
+20+ years in carrier-grade telecom platforms. PMP, Azure AI-102, AI-900 certified.
 
 [LinkedIn](https://www.linkedin.com/in/mohammad-rajab-a2b39822/) | [GitHub](https://github.com/mohdrajab81)
 
