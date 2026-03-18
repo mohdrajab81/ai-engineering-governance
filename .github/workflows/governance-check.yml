@@ -1,0 +1,26 @@
+name: Governance Check
+on: [push, pull_request]
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check command table is filled
+        run: |
+          if grep -q "fill me" AI_AGENT_WORKFLOW.md; then
+            echo "ERROR: AI_AGENT_WORKFLOW.md contains unfilled 'fill me' placeholders."
+            echo "Complete the command table before merging."
+            exit 1
+          fi
+          echo "Command table check passed."
+
+      - name: Check no secrets in governance files
+        run: |
+          if grep -rE "(password|secret|token|api_key)\s*=\s*\S+" \
+            CLAUDE.md .claude/rules/ 2>/dev/null; then
+            echo "ERROR: Possible secret found in governance files."
+            exit 1
+          fi
+          echo "Secret scan passed."
