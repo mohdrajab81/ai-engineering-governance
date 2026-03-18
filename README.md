@@ -2,7 +2,7 @@
 
 > *"Rules written by someone who has seen the failure, not someone who has read about it."*
 
-A production-tested, deployable governance standard for AI-assisted software development. 19 files covering the full engineering lifecycle — from architecture and concurrency to observability, security, migrations, and AI-agent verification. Compatible with Claude Code, GitHub Copilot, OpenAI Codex, Cursor, and any repository-level instruction system.
+A production-tested, deployable governance standard for AI-assisted software development. The repository includes 11 domain rule files, adapters for Claude Code, GitHub Copilot, and OpenAI Codex, and a copy-paste GitHub Actions governance check. Compatible with Cursor and any repository-level instruction system.
 
 ---
 
@@ -56,7 +56,7 @@ The result is a governance system that covers what standards cover — and also 
 
 ## Package Contents
 
-### Root governance files
+### Core governance and adapter files
 
 | File | Purpose |
 | --- | --- |
@@ -64,7 +64,8 @@ The result is a governance system that covers what standards cover — and also 
 | `AI_AGENT_WORKFLOW.md` | Operational workflow — onboarding commands, task flow, done checklist, review template |
 | `RULE_PLACEMENT.md` | Placement guide — separates what linters enforce from what agents need to read |
 | `AGENTS.md` | OpenAI Codex adapter — references CLAUDE.md as authority |
-| `copilot-instructions.md` | GitHub Copilot adapter — references CLAUDE.md as authority |
+| `.github/copilot-instructions.md` | GitHub Copilot adapter — references CLAUDE.md as authority |
+| `copilot-instructions.md` | Root-level pointer to the GitHub Copilot adapter path above, kept for discoverability without duplicating rules |
 | `README.md` | This file |
 | `REFERENCES.md` | Full provenance — standards, review history, production-experience origin |
 
@@ -128,7 +129,8 @@ jobs:
 
 ### For GitHub Copilot
 
-1. Place `copilot-instructions.md` at `.github/copilot-instructions.md`
+1. Place the Copilot adapter at `.github/copilot-instructions.md`
+2. Optional: keep a short root-level pointer file if you want the adapter to be visible from the repository root, but treat `.github/copilot-instructions.md` as the only live instruction file
 
 ### For OpenAI Codex
 
