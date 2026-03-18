@@ -9,7 +9,7 @@ jobs:
 
       - name: Check command table is filled
         run: |
-          if grep -q "fill me" AI_AGENT_WORKFLOW.md; then
+          if grep -E "^\|.*\| fill me \|" AI_AGENT_WORKFLOW.md; then
             echo "ERROR: AI_AGENT_WORKFLOW.md contains unfilled 'fill me' placeholders."
             echo "Complete the command table before merging."
             exit 1
