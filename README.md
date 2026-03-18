@@ -20,6 +20,8 @@ Three AI systems evaluated this pack independently across four dimensions. ChatG
 
 *ChatGPT and Gemini scores: v6 → v8. Claude scores: v6 → v8 → v9. Claude used adversarial gap-closure methodology across all three versions. Reviewed March 2026.*
 
+*These are review summaries from external review sessions. Score tables and quoted conclusions are preserved here; raw chat transcripts are not bundled in the repository.*
+
 ---
 
 ## Endorsements
@@ -120,7 +122,10 @@ jobs:
       - name: Check no secrets in governance files
         run: |
           if grep -rE "(password|secret|token|api_key)\s*=\s*\S+" \
-            CLAUDE.md .claude/rules/ 2>/dev/null; then
+            README.md REFERENCES.md RULE_PLACEMENT.md AI_AGENT_WORKFLOW.md \
+            CLAUDE.md AGENTS.md copilot-instructions.md \
+            .github/copilot-instructions.md .github/workflows/governance-check.yml \
+            .claude/rules/ 2>/dev/null; then
             echo "ERROR: Possible secret found in governance files."
             exit 1
           fi

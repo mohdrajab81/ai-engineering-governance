@@ -36,7 +36,6 @@
 - For each user-facing operation, define at minimum an intent-level SLO: acceptable p99 latency, acceptable error rate, and the alert condition that triggers investigation.
 - Implement burn-rate alerts tied to your error budget. A fast burn rate — consuming the error budget significantly faster than the SLO window allows — should trigger an immediate page. A slow burn rate should create a ticket for investigation before the budget is exhausted. Alerting only on raw error rate without burn-rate context produces either too many alerts or alerts that arrive too late.
 - If a service's error budget is exhausted — meaning the cumulative error rate has exceeded the SLO threshold for the measurement window — halt non-essential feature releases for that service until reliability is restored. Shipping new features into a degraded service compounds risk and delays recovery.
-- Implement burn-rate alerts to detect error budget consumption before exhaustion. A fast burn rate (budget consumed in hours) should trigger an immediate page; a slow burn rate (budget consumed over days) should trigger a ticket for investigation. Alerting only on instantaneous error rate misses gradual degradation that will eventually exhaust the budget.
 - Alerts should fire on symptoms (elevated error rate, latency breach, queue growth) rather than on causes alone (CPU spike, disk usage). Cause-level alerts are supplementary.
 - Keep alert thresholds and SLO targets in version-controlled configuration alongside the code they monitor.
 

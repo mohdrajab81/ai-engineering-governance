@@ -50,6 +50,8 @@ This package was shaped around current public guidance from the following source
 
 This package underwent multi-round independent review by three AI systems across nine iterations (v1–v9):
 
+The repository preserves the score tables, methodology summaries, and selected conclusion excerpts from those review sessions. Raw chat transcripts are not bundled here because the reviews were conducted in external chat environments.
+
 | Reviewer | Method | Versions reviewed | Score progression |
 | --- | --- | --- | --- |
 | Claude (Sonnet 4.6) | Line-by-line adversarial review, gap-closure audit | v6, v8, v9 | 9.0 → 9.4 → **9.7** / 10 |
