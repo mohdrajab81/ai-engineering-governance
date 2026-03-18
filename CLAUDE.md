@@ -1,11 +1,13 @@
 # AI Engineering Operating Rules
 
 ## Purpose
+
 - Make the smallest safe change that fully solves the requested problem.
 - Preserve code health, operational safety, and readability.
 - Prefer verifiable work over impressive-looking work.
 
 ## Non-negotiable rules
+
 - Backward compatibility is the default unless the task explicitly allows a breaking change.
 - When a breaking change is explicitly permitted, document migration path, rollout sequence, and rollback plan before editing.
 - No hardcoded secrets, credentials, endpoints, or environment-specific values in business logic.
@@ -18,6 +20,7 @@
 - Never claim a build, test, or command succeeded unless it was actually executed and the output was inspected.
 
 ## Required working pattern
+
 1. Restate the task in implementation terms.
 2. List affected files, callers, downstream impact, and risks.
 3. For any non-trivial change, propose a short plan before editing.
@@ -26,6 +29,7 @@
 6. Report exactly what changed, what was tested, and what remains unverified.
 
 ## Architecture expectations
+
 - Respect separation of concerns: transport, orchestration, domain logic, persistence, and configuration must remain distinct.
 - Reuse existing patterns before introducing new abstractions.
 - Do not extract an abstraction until the shared concept is stable and has at least two proven, concrete uses.
@@ -33,6 +37,7 @@
 - Update docs when behavior, contracts, config, or operational workflow changes.
 
 ## Concurrency and state
+
 - Any shared mutable state must have an explicit synchronization strategy.
 - Prefer concurrent collections and immutable snapshots over ad hoc locking.
 - Acquire multiple locks only in a documented, consistent order.
@@ -40,12 +45,14 @@
 - Prefer bounded lock acquisition over indefinite blocking when practical.
 
 ## Reliability rules
+
 - Classify failures as transient, persistent, validation, or programmer errors.
 - Retry only transient failures, with capped attempts.
 - Surface safe user-facing errors; keep detailed diagnostics in logs and telemetry.
 - Clean up resources in reverse order of acquisition.
 
 ## Logging and observability
+
 - Use structured logging when supported.
 - Include correlation metadata on every significant log line.
 - For session or dialogue flows, include a session correlation key on every log entry across threads, async tasks, and service boundaries.
@@ -53,17 +60,20 @@
 - Emit metrics for error rate and latency on critical paths. Propagate trace context across service and thread boundaries.
 
 ## API and library usage
+
 - Before using a new function, method, SDK call, or endpoint, review relevant overloads, optional parameters, defaults, and failure modes.
 - Explain why the chosen overload or option set is appropriate.
 - Prefer well-maintained, widely trusted libraries. Do not use a dependency that cannot be verified in the repository or in official documentation.
 
 ## Validation standard
+
 - Run the smallest relevant checks first, then broader checks.
 - Report exact commands executed and their results.
 - If tests could not be run, say so explicitly and explain why.
 - A task is not done until code, tests, docs, and operational concerns are aligned.
 
 ## Command discovery
+
 - Prefer canonical commands from `README`, `Makefile`, `package.json`, `pyproject.toml`, `justfile`, `mvnw`, `gradlew`, or equivalent.
 - If multiple command paths exist, use the one the repository already treats as canonical.
 - When onboarding a repo, document exact build, lint, test, run, and scan commands in `AI_AGENT_WORKFLOW.md` or the repository README.

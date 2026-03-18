@@ -7,6 +7,7 @@ This repository uses a structured governance pack for AI coding agents. The auth
 The authoritative non-negotiable rules are defined in `CLAUDE.md` at the repository root. They apply to all agents. The rules are not duplicated here to prevent silent divergence — if CLAUDE.md and this file ever conflict, CLAUDE.md is the authority.
 
 Summary of the non-negotiables (read CLAUDE.md for the full text and working pattern):
+
 - Smallest safe change. Backward compatibility by default.
 - No hardcoded secrets, credentials, endpoints, or environment-specific values.
 - Explicit timeout on every external call.
@@ -30,7 +31,7 @@ Summary of the non-negotiables (read CLAUDE.md for the full text and working pat
 Detailed rules for each domain are in `.claude/rules/`:
 
 | File | Domain |
-|---|---|
+| --- | --- |
 | 01-architecture.md | Design, separation of concerns, distributed systems |
 | 02-concurrency.md | Thread safety, state machines, atomic transitions |
 | 03-resilience-networking.md | Timeouts, retries, circuit breakers |

@@ -7,7 +7,7 @@ This file turns the governance rules into an operational workflow for AI coding 
 On the first serious task in a repository, fill in the canonical commands below and keep them current. **This table must be completed before any code work begins.** An agent that reads unfilled placeholders must stop and request the missing commands rather than proceed with guesses.
 
 | Concern | Canonical command | Fast file-scoped alternative | Notes |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Install / setup | `npm install -g markdownlint-cli` | n/a | Install markdown linter globally |
 | Build | n/a | n/a | Docs-only repo — no compile step |
 | Lint | `markdownlint "**/*.md" --ignore node_modules` | `markdownlint path/to/file.md` | Markdown style check |
@@ -16,7 +16,7 @@ On the first serious task in a repository, fill in the canonical commands below 
 | Integration tests | n/a | n/a | No code — docs-only repo |
 | Migrate / seed | n/a | n/a | No database |
 | Start local services | n/a | n/a | No services required |
-| Smoke test | `grep -rE "^\|.*\| fill me \|" . --include="*.md" && exit 1 || echo "OK"` | n/a | Verify no unfilled table cells remain (table-row pattern avoids self-detection) |
+| Smoke test | `grep -rE "^\|.*\| fill me \|" . --include="*.md" && exit 1` | n/a | Verify no unfilled table cells remain; grep exits 1 (clean) or 0+exit (found) |
 | Run locally | n/a | n/a | Static docs — no runtime |
 | Security scan | `grep -rE "(password\|secret\|token\|api_key)\s*=\s*\S+" . --include="*.md"` | n/a | Scan for accidentally committed secrets |
 | Rollback | `git revert HEAD` | n/a | Revert last commit |
@@ -32,7 +32,7 @@ This check belongs in the repository's CI pipeline, not in agent instructions al
 **Example — Java / Maven / Spring Boot project:**
 
 | Concern | Canonical command | Fast file-scoped alternative | Notes |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Install / setup | `mvn install -DskipTests` | — | Installs dependencies |
 | Build | `mvn package -DskipTests` | — | Produces target/*.jar |
 | Lint | `mvn checkstyle:check` | — | Fails on style violations |
@@ -49,7 +49,7 @@ This check belongs in the repository's CI pipeline, not in agent instructions al
 **Example — Python / FastAPI / Poetry project:**
 
 | Concern | Canonical command | Fast file-scoped alternative | Notes |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Install / setup | `poetry install` | — | Installs all dependencies |
 | Build | `poetry build` | — | Produces dist/ artifacts |
 | Lint | `ruff check . && black --check .` | `ruff check src/mymodule.py` | Lint + format check |
@@ -128,7 +128,7 @@ flowchart LR
 ## 6) Rollout and adoption plan
 
 | Step | Action | Estimated time |
-|---|---|---|
+| --- | --- | --- |
 | 1 | Place CLAUDE.md at repo root | 1–2 hours |
 | 2 | Add `.claude/rules/*.md` domain files | 2–4 hours |
 | 3 | Fill in all commands in Section 1 of this file | 1–2 hours |

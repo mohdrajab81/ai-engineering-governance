@@ -11,7 +11,7 @@ A production-tested, deployable governance standard for AI-assisted software dev
 Three AI systems evaluated this pack independently across four dimensions. ChatGPT and Gemini were reviewed at v6 and v8. Claude was reviewed at v6, v8, and v9 using adversarial gap-closure methodology.
 
 | Dimension | ChatGPT | Gemini | Claude (Sonnet 4.6) |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Public standard coverage | 9.3 → **9.8** | 9.2 → **9.8** | 8.9 → 9.3 → **9.5** |
 | Practical deployability | 9.1 → **9.6** | 9.7 → **10.0** | 8.7 → 9.2 → **9.6** |
 | AI-agent governance quality | 9.6 → **9.9** | 9.8 → **10.0** | 9.1 → 9.5 → **9.7** |
@@ -42,6 +42,7 @@ Most AI coding governance packs are assembled from public checklists. This one w
 The result is a governance system that covers what standards cover — and also covers what standards miss.
 
 **Rules that appear in this pack but not in any published standard:**
+
 - Out-of-order event delivery creating zombie sessions — and the tombstone/grace-period pattern that prevents it
 - The explicit buffer decision required before closing any stateful I/O resource during transition
 - Transactional outbox discipline — never send a message before its state change is committed
@@ -58,7 +59,7 @@ The result is a governance system that covers what standards cover — and also 
 ### Root governance files
 
 | File | Purpose |
-|---|---|
+| --- | --- |
 | `CLAUDE.md` | Root policy — loaded into every AI coding session. Non-negotiables and working pattern. ~650 words. |
 | `AI_AGENT_WORKFLOW.md` | Operational workflow — onboarding commands, task flow, done checklist, review template |
 | `RULE_PLACEMENT.md` | Placement guide — separates what linters enforce from what agents need to read |
@@ -70,7 +71,7 @@ The result is a governance system that covers what standards cover — and also 
 ### Domain rule files (`.claude/rules/`)
 
 | File | Domain |
-|---|---|
+| --- | --- |
 | `01-architecture.md` | Design, backward compatibility, distributed systems, wire formats |
 | `02-concurrency.md` | Thread safety, lock discipline, state machines, atomic transitions |
 | `03-resilience-networking.md` | Timeouts, retries, backoff, circuit breakers, bulkhead isolation |
@@ -88,6 +89,7 @@ The result is a governance system that covers what standards cover — and also 
 ## How to Deploy
 
 ### For Claude Code
+
 1. Place `CLAUDE.md` at the repository root
 2. Create `.claude/rules/` and add the 11 domain files
 3. Fill in the command table in `AI_AGENT_WORKFLOW.md` with your repo's actual commands
@@ -107,7 +109,7 @@ jobs:
 
       - name: Check command table is filled
         run: |
-          if grep -q "fill me" AI_AGENT_WORKFLOW.md; then
+          if grep -E "^\|.*\| fill me \|" AI_AGENT_WORKFLOW.md; then
             echo "ERROR: AI_AGENT_WORKFLOW.md contains unfilled 'fill me' placeholders."
             echo "Complete the command table before merging."
             exit 1
@@ -125,12 +127,15 @@ jobs:
 ```
 
 ### For GitHub Copilot
+
 1. Place `copilot-instructions.md` at `.github/copilot-instructions.md`
 
 ### For OpenAI Codex
+
 1. Place `AGENTS.md` at the repository root
 
 ### For any agent
+
 The non-negotiables in `CLAUDE.md` apply to all agents. The domain files are the detail layer — load them when working in the relevant domain.
 
 ---

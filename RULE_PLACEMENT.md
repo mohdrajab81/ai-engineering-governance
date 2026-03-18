@@ -12,7 +12,7 @@ Where each type of rule should live and who enforces it.
 ## Placement Table
 
 | Rule Category | CLAUDE.md | .claude/rules/ | Linter / CI / Tools |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Project overview and commands | Yes — repo purpose, stack, canonical commands | | |
 | Working pattern (plan - implement - validate) | Yes — required task flow | | |
 | Backward compatibility default | Yes — non-negotiable rule | 01-architecture — expanded guidance, breaking-change procedure | |

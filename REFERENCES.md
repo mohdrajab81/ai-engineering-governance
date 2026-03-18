@@ -1,10 +1,10 @@
 # Reference Notes
 
-This package was shaped around current public guidance from the following sources, validated through independent multi-round review by Claude, ChatGPT, and Gemini across five iterations.
+This package was shaped around current public guidance from the following sources, validated through independent multi-round review by Claude, ChatGPT, and Gemini across nine iterations (v1–v9).
 
 ## AI Agent Instruction Standards
 
-- **Anthropic** — Claude Code Best Practices, CLAUDE.md documentation, and project memory guidance (code.claude.com)
+- **Anthropic** — Claude Code Best Practices, CLAUDE.md documentation, and project memory guidance (docs.anthropic.com)
 - **OpenAI** — Codex Best Practices and AGENTS.md persistent repository context guidance
 - **OpenSSF** — Security-Focused Guide for AI Code Assistant Instructions (best.openssf.org)
 - **GitHub** — Repository-wide and path-specific Copilot custom instructions; responsible use guidance stating AI review must supplement, not replace, human review
@@ -51,7 +51,7 @@ This package was shaped around current public guidance from the following source
 This package underwent multi-round independent review by three AI systems across nine iterations (v1–v9):
 
 | Reviewer | Method | Versions reviewed | Score progression |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Claude (Sonnet 4.6) | Line-by-line adversarial review, gap-closure audit | v6, v8, v9 | 9.0 → 9.4 → **9.7** / 10 |
 | ChatGPT | Standard alignment + deep-research adversarial | v6, v8 | 9.5 → **9.8** / 10 |
 | Gemini | Holistic four-dimension evaluation | v6, v8 | 9.4 → **9.9** / 10 |
@@ -59,7 +59,7 @@ This package underwent multi-round independent review by three AI systems across
 **Final v9 scores:**
 
 | Dimension | ChatGPT (v8) | Gemini (v8) | Claude (v9) |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Public standard coverage | 9.8 | 9.8 | 9.5 |
 | Practical deployability | 9.6 | 10.0 | 9.6 |
 | AI-agent governance quality | 9.9 | 10.0 | 9.7 |
