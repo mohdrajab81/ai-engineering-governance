@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash:git status*",
+      "Bash:git diff*",
+      "Bash:git log*",
+      "Bash:git add*",
+      "Bash:git commit*",
+      "Bash:git push*",
+      "Bash:markdownlint *"
+    ],
+    "deny": [
+      "Bash:rm -rf*",
+      "Bash:git reset --hard*",
+      "Bash:git push --force*",
+      "Bash:git push -f*",
+      "Bash:git clean -f*"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "markdownlint \"**/*.md\" --ignore node_modules",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

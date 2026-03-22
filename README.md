@@ -65,9 +65,12 @@ The result is a governance system that covers what standards cover — and also 
 | `CLAUDE.md` | Root policy — loaded into every AI coding session. Non-negotiables and working pattern. ~650 words. |
 | `AI_AGENT_WORKFLOW.md` | Operational workflow — onboarding commands, task flow, done checklist, review template |
 | `RULE_PLACEMENT.md` | Placement guide — separates what linters enforce from what agents need to read |
+| `PHASED_ADOPTION.md` | Adoption guide — explains which rules apply immediately, contextually, or as later hardening |
 | `AGENTS.md` | OpenAI Codex adapter — references CLAUDE.md as authority |
 | `.github/copilot-instructions.md` | GitHub Copilot adapter — references CLAUDE.md as authority |
 | `copilot-instructions.md` | Root-level pointer to the GitHub Copilot adapter path above, kept for discoverability without duplicating rules |
+| `.claude/settings.example.json` | Example Claude Code permissions and post-edit hook configuration |
+| `tasks/lessons.md` | Lessons-log template for capturing repeat failures and rule/process improvements |
 | `README.md` | This file |
 | `REFERENCES.md` | Full provenance — standards, review history, production-experience origin |
 
@@ -97,6 +100,7 @@ The result is a governance system that covers what standards cover — and also 
 2. Create `.claude/rules/` and add the 11 domain files
 3. Fill in the command table in `AI_AGENT_WORKFLOW.md` with your repo's actual commands
 4. Configure CI to run build, lint, test, security scan, and the fill-me check — fail on errors
+5. Optional: copy `.claude/settings.example.json` to `.claude/settings.json` and customize the allow-list, deny-list, and post-edit hook for your stack
 
 **Sample GitHub Actions governance check** — copy this to `.github/workflows/governance-check.yml`:
 
@@ -161,6 +165,8 @@ Point developers to domain files when they are working in that area. Working on 
 
 **Ongoing — Living standard:**
 When an AI agent repeatedly makes the same mistake or a new pattern is discovered, update the relevant domain file as a standalone task with its own review. Rule files are governance artifacts — treat them with the same discipline as code.
+
+See [PHASED_ADOPTION.md](./PHASED_ADOPTION.md) for the fuller model, including which domain files should activate only when the relevant layer exists and how to use [tasks/lessons.md](./tasks/lessons.md) to drive rule updates from real failures instead of abstract policy debates.
 
 ---
 

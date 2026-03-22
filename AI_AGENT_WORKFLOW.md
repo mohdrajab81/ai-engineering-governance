@@ -74,7 +74,7 @@ This check belongs in the repository's CI pipeline, not in agent instructions al
 7. Run broader checks before finishing.
 8. Summarize changes, commands run, outcomes, and remaining risks.
 
-> **Note on rule updates:** Reading CLAUDE.md and domain rules is the default first step. Editing governance rules is not part of normal feature work. Update a rule file only when a new pattern is discovered, the agent repeatedly makes the same mistake, or the team intentionally revises policy — and always as a standalone task with its own review.
+> **Note on rule updates:** Reading CLAUDE.md and domain rules is the default first step. Editing governance rules is not part of normal feature work. Update a rule file only when a new pattern is discovered, the agent repeatedly makes the same mistake, or the team intentionally revises policy — and always as a standalone task with its own review. Capture the evidence first in `tasks/lessons.md` so the change has a concrete failure mode behind it.
 
 ## 3) Done checklist
 
@@ -135,4 +135,5 @@ flowchart LR
 | 4 | Configure CI to run build, lint, test, and security scan; fail on errors | 2–4 hours |
 | 5 | Add commands and done-checklist reference to README | 30 minutes |
 | 6 | Walk the team through the workflow: story → plan → AI code → test → review | 1–2 hours |
-| 7 | Iterate: refine rules based on what the AI gets wrong in practice | Ongoing |
+| 7 | Start a lessons log using `tasks/lessons.md` to capture repeat failures and process gaps | 30 minutes |
+| 8 | Iterate: refine rules based on what the AI gets wrong in practice | Ongoing |
