@@ -8,6 +8,8 @@ This package was shaped around current public guidance from the following source
 - **OpenAI** — Codex Best Practices and AGENTS.md persistent repository context guidance
 - **OpenSSF** — Security-Focused Guide for AI Code Assistant Instructions (best.openssf.org)
 - **GitHub** — Repository-wide and path-specific Copilot custom instructions; responsible use guidance stating AI review must supplement, not replace, human review
+- **arXiv:2601.20404** — *On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents* — empirical study across 10 repositories and 124 pull requests; reports lower median runtime and lower token use when `AGENTS.md` is present and focused
+- **arXiv:2602.11988** — *Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?* — finds broader context files can reduce task success and raise inference cost; concludes that human-written context files should describe only minimal requirements
 
 ## Code Quality and Engineering Practices
 
@@ -76,3 +78,4 @@ Rules added from real-world production experience — session state machine orde
 
 - Keep source citations out of agent instruction files. Citations belong in governance docs, design notes, and supporting material — not in CLAUDE.md or domain rule files, where they waste context tokens without adding enforcement value.
 - Rules derived from public standards should be generalized, not copied verbatim. The governance pack reflects the principles behind the guidance, not excerpts from it.
+- Prefer primary sources for evidentiary claims. Social posts, summaries, and commentary can be useful for discovery, but they should not be treated as proof when the primary paper, specification, or official documentation is available.

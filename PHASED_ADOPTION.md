@@ -14,6 +14,19 @@ Use three categories:
 
 This is not a weakening of the pack. It is a sequencing model that keeps the rules credible and enforceable.
 
+## Minimal Context Principle
+
+Repository context files help only when they stay small, specific, and relevant to the task. Two 2026 arXiv studies point in the same direction from different angles: `AGENTS.md` can reduce runtime and token usage when present and focused, but broader context files can reduce task success and raise inference cost when they add unnecessary requirements. The practical rule is simple: keep root context minimal and move detail into files that are loaded only when relevant.
+
+Use this checklist before adding new always-read context:
+
+- Does this requirement need to be read on nearly every task?
+- Is this a hard constraint, not a preference or repository history lesson?
+- Can this live in a domain file, workflow doc, or supporting artifact instead?
+- Will adding this text improve execution more than it increases context load?
+
+If the answer is unclear, do not add it to root context yet.
+
 ## Day-one adoption
 
 Apply these immediately:
