@@ -71,6 +71,7 @@ The result is a governance system that covers what standards cover — and also 
 | `copilot-instructions.md` | Root-level pointer to the GitHub Copilot adapter path above, kept for discoverability without duplicating rules |
 | `.claude/settings.example.json` | Example Claude Code permissions and post-edit hook configuration |
 | `tasks/lessons.md` | Lessons-log template for capturing repeat failures and rule/process improvements |
+| `CONTRIBUTING.md` | Contributor workflow for making focused, reviewable changes to the pack |
 | `README.md` | This file |
 | `REFERENCES.md` | Full provenance — standards, review history, production-experience origin |
 
@@ -181,6 +182,8 @@ This pack follows semantic versioning. Record the version you adopted in your re
 **Major versions (N.0.0):** Breaking changes to rule structure, non-negotiable changes, or removal of rules. Require an explicit team decision before upgrading.
 
 A consuming team that has customized domain files should treat those customizations as a local fork and review each update against their changes before merging.
+
+For contribution workflow inside this repository, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ---
 
