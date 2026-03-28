@@ -26,6 +26,43 @@ Summary of the non-negotiables (read CLAUDE.md for the full text and working pat
 5. Implement in small, reviewable steps.
 6. Report exactly what changed, what was tested, and what remains unverified.
 
+## Recommended source order
+
+On the first non-trivial task in a repository, prefer this reading order:
+
+1. repository `README`
+2. current implementation or execution plan
+3. current technical baseline, if the repo keeps one
+4. current consolidated decision layer, if the repo keeps one
+5. live contract files such as `openapi`, shared interfaces, schemas, migrations, or equivalent
+
+The goal is to understand:
+
+- what the system currently is
+- what is planned next
+- which engineering choices are intentionally fixed
+- which contracts are authoritative
+
+## Conflict order
+
+If repository documents conflict, resolve them in this order:
+
+1. live contracts and code-enforced boundaries
+2. current decision and baseline documents
+3. implementation plans and workflow docs
+4. historical notes, tutorials, archived docs, or old phase documents
+
+Do not treat historical material as if it were current source of truth.
+
+## Current-vs-historical docs rule
+
+If a repository contains both active docs and historical material:
+
+- use current-facing docs for decisions and implementation work
+- keep historical docs for context only
+- when current docs are restructured, remove stale references from active navigation
+- if older ADRs or phase notes become noisy, prefer one maintained current decision surface over many half-current files
+
 ## Domain rules
 
 Detailed rules for each domain are in `.claude/rules/`:

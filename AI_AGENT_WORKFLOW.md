@@ -29,6 +29,29 @@ grep -E "^\|.*\| fill me \|" AI_AGENT_WORKFLOW.md && echo "ERROR: Unfilled comma
 
 This check belongs in the repository's CI pipeline, not in agent instructions alone.
 
+### Environment-qualified commands
+
+Completing the command table is not enough by itself. Repositories should also
+record command prerequisites explicitly whenever they matter.
+
+Examples:
+
+- Linux or WSL2 only
+- Docker daemon required
+- external simulator or peer service required
+- CI-only check
+- local-only convenience command
+
+If the same repository has multiple validation layers, document which commands
+belong to:
+
+- fast local validation
+- real dependency integration
+- live or simulator-backed validation
+
+An agent must not present a command as generally runnable if it only works in a
+special environment.
+
 **Example — Java / Maven / Spring Boot project:**
 
 | Concern | Canonical command | Fast file-scoped alternative | Notes |

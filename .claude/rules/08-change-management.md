@@ -6,6 +6,8 @@
 - Commit only logically complete, validated changes.
 - Do not mix refactoring with behavior changes in the same commit unless they are trivially inseparable. Separating them makes review faster and rollback cleaner.
 - Keep docs, config examples, diagrams, and migration notes in sync with code.
+- Keep the active documentation surface small and current. When documents become historical, archive them, delete them, or clearly remove them from active navigation rather than leaving them mixed with current source-of-truth docs.
+- When a project accumulates many old ADRs or phase notes, prefer one maintained current decision surface over many half-current files.
 - Use branch and PR discipline appropriate to the repository.
 - In the PR description or summary, explain the problem, the approach, risks, rollback considerations, and validation performed.
 - For breaking schema, API, or event changes, use the expand-migrate-contract pattern: add the new form first, migrate all consumers, then remove the old form as a separate step.
