@@ -45,6 +45,7 @@ Where each type of rule should live and who enforces it.
 | Schema / API / event migrations | Brief mention in 01-architecture | 10-config-migrations — expand-migrate-contract pattern | Migration runners, contract test CI |
 | Feature flags and staged rollout | | 10-config-migrations — flag ownership, defaults, removal plan | Feature flag platforms |
 | AI-agent verification / anti-hallucination | Yes — two explicit non-negotiables | 11-ai-agent-verification — full guidance | None — pure judgment |
+| Vertical slice completeness / cross-layer contract closure | | 12-vertical-slice-completeness — routes, events, schemas, interfaces, coexistence paths | Human / AI review |
 | Readability and maintainability | Brief mention (clean, no over-engineering) | 09-readability-maintainability — full guidance | Linters for syntax; human review for judgment |
 
 ## How to Read This

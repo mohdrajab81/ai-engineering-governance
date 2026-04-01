@@ -80,6 +80,7 @@ Detailed rules for each domain are in `.claude/rules/`:
 | 09-readability-maintainability.md | Naming, comments, cognitive load |
 | 10-config-migrations.md | Config, feature flags, schema migrations |
 | 11-ai-agent-verification.md | Anti-hallucination, scope, trust boundaries |
+| 12-vertical-slice-completeness.md | Cross-layer contract closure, compatibility paths, deprecated alias verification |
 
 ## Human review
 

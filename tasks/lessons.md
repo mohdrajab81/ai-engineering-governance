@@ -73,3 +73,53 @@ Copy this block for each new lesson:
 **Evidence**
 
 - Example pattern only. Replace with repository-specific links when copied into a real project.
+
+## 2026-04-01 — Contract-complete work needs cross-layer closure checks
+
+**What happened**
+
+- A change added new contract surfaces and compatibility paths, but only some
+  layers were updated.
+- The code compiled and targeted tests passed, yet the runtime surface was
+  still incomplete because routes, serializers, deprecated aliases, or sibling
+  implementations were missing or only partially updated.
+
+**Why it happened**
+
+- The governance pack already required validation and anti-hallucination
+  discipline, but it did not explicitly require a cross-layer closure check
+  for new contract definitions.
+- Agents and reviewers relied too much on local compile/test success as a proxy
+  for completeness.
+- Deprecated coexistence paths were especially easy to miss because the new
+  canonical surface looked correct while the old surface silently drifted.
+
+**What changed**
+
+- Added a new general rule file:
+  `.claude/rules/12-vertical-slice-completeness.md`.
+- The rule requires explicit checks for:
+  - new shared fields across all constructors, copies, and defaults
+  - new routes across router, handler, serializer, and instrumentation
+  - new event types at the emitter and payload level
+  - new schemas across serialization structs and mappers
+  - new interface methods across all implementations
+  - deprecated aliases and coexistence paths during migration windows
+
+**Prevention rule**
+
+- A contract addition is not done until every layer that must implement or
+  consume it is updated and verified.
+- Passing tests is evidence, not proof of cross-layer completeness.
+- During a migration window, deprecated aliases are still part of the contract
+  and must be verified like the new canonical surface.
+
+**Scope**
+
+- Suitable for the upstream governance pack because this failure mode is common
+  across layered repositories and is not specific to one stack or product.
+
+**Evidence**
+
+- Rule file added: `.claude/rules/12-vertical-slice-completeness.md`
+- Inventory/docs updated to include the new rule.
