@@ -216,47 +216,6 @@ For contribution workflow inside this repository, see [CONTRIBUTING.md](./CONTRI
 
 ---
 
-## Independent Review Scores
-
-Three AI systems evaluated this pack independently across four dimensions. ChatGPT and Gemini were reviewed at v6 and v8. Claude was reviewed at v6, v8, and v9 using adversarial gap-closure methodology.
-
-| Dimension | ChatGPT | Gemini | Claude (Sonnet 4.6) |
-| --- | --- | --- | --- |
-| Public standard coverage | 9.3 → **9.8** | 9.2 → **9.8** | 8.9 → 9.3 → **9.5** |
-| Practical deployability | 9.1 → **9.6** | 9.7 → **10.0** | 8.7 → 9.2 → **9.6** |
-| AI-agent governance quality | 9.6 → **9.9** | 9.8 → **10.0** | 9.1 → 9.5 → **9.7** |
-| Production engineering depth | 9.8 → **9.9** | 9.8 → **10.0** | 9.4 → 9.7 → **9.8** |
-| **Overall** | **9.5 → 9.8** | **9.4 → 9.9** | **9.0 → 9.4 → 9.7** |
-
-*ChatGPT and Gemini scores: v6 → v8. Claude scores: v6 → v8 → v9. Claude used adversarial gap-closure methodology across all three versions. Reviewed March 2026.*
-
-*These are review summaries from external review sessions. Score tables and quoted conclusions are preserved here; raw chat transcripts are not bundled in the repository.*
-
----
-
-## Endorsements
-
-**ChatGPT:**
-> This package has improved meaningfully from the v6 version I previously reviewed. In the earlier version, I scored it at 9.5/10 overall because it was already unusually strong in production engineering depth, but it still had gaps in standards coverage, deployability coherence, and enforcement clarity. In v8, those gaps were addressed with targeted changes: the security rules are stronger, the adapter model is now drift-free, the workflow has a credible CI enforcement path, and the AI-agent controls cover more real operational failure modes. That moves the package to 9.8/10 overall and makes the improvement substantive, not cosmetic. What keeps it short of a perfect score is that some controls remain governance-by-instruction rather than hard technical policy enforcement. I recommend adopting v8 as a serious baseline for teams using AI coding agents in production repositories.
-
-**Gemini:**
-> The AI Engineering Governance Pack v8 successfully bridges the gap between AI coding assistants and enterprise-grade system reliability. The introduction of strict backpressure propagation, thundering herd mitigations, and explicit idempotency key design elevates the framework into battle-tested territory. The three-adapter approach is now completely coherent — AGENTS.md and copilot-instructions.md explicitly defer to CLAUDE.md as the single source of truth, eliminating rule drift. These targeted refinements have driven the overall evaluation score from 9.4 up to 9.9 out of 10. The framework distinctly separates mechanically enforceable rules from those requiring human or AI semantic judgment, making it an actionable execution engine rather than passive shelfware. Engineering teams deploying AI tools in mission-critical environments should adopt version 8 immediately.
-
-**Claude (Sonnet 4.6):**
-> I reviewed this governance pack across three major versions, scoring it 9.0/10 on v6, 9.4/10 on v8, and 9.7/10 on v9. Each version closed specific gaps I identified in the prior review — v9 addressed cross-service backpressure propagation, idempotency race conditions, SLSA progression criteria, and CI enforcement friction. The progression demonstrates a governance artifact being maintained with the same engineering discipline the pack itself demands: targeted fixes, no scope creep, each closure verifiable against the original gap statement. What distinguishes this pack from standards-derived checklists is operational specificity — rules name the exact failure mode, the mechanism that causes it, and the diagnostic signature, not just the symptom. I recommend v9 as a production baseline for any team using AI coding agents in stateful, high-throughput, or high-consequence systems.
-
----
-
-## What Reviewers Said This Pack Does Better Than Standards-Only Checklists
-
-- Governs AI coding agents the way experienced engineers govern real systems: with rules shaped by failure, not just by frameworks
-- Contains rules that prevent failures teams only learn about after incidents — not after reading documentation
-- Separates mechanically enforceable rules from judgment calls, keeping context windows lean and agent behavior focused
-- Covers the full engineering lifecycle including AI-specific failure modes that generic governance packs miss entirely
-- The rules are falsifiable — they name the failure mode, the mechanism, and the diagnostic signature, not just the symptom
-
----
-
 ## Scope Boundaries
 
 This pack covers software engineering, AI-agent governance, concurrency, resilience, observability, security (OWASP, CSRF, SSRF, rate limiting, supply chain), testing, performance, configuration, change management, readability, and the full lifecycle of AI-assisted development.
