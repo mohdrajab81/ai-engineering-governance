@@ -32,10 +32,11 @@
 - Every public or partner-facing endpoint must have a rate limit. Define the limit before the endpoint is deployed, not after abuse is observed. Absence of a rate limit is a design defect, not a performance concern.
 - Apply rate limits at the authenticated identity layer when available, not only at IP address. IP-based limits alone are trivially bypassed and penalize legitimate users behind shared NAT.
 
-## Secrets in AI tool outputs and logs
+## Secrets and regulated data in AI tool inputs
 
 - Never log secrets, tokens, or credentials at any severity level — not at DEBUG, not in structured payloads, not in exception stack traces. Secrets that appear in logs propagate silently to log aggregators, audit trails, and monitoring systems.
 - When using AI coding tools, code review tools, or external analysis services that process source code or runtime output, ensure secrets are not present in the content being submitted. Redact sensitive values before submitting code, logs, configuration, or test output to any external service. The "never log secrets" rule applies to AI tool inputs as much as to production log pipelines.
+- Do not include personally identifiable information, protected health information, financial account data, or other regulated data in prompts or context sent to external AI services without explicit organizational authorization. Apply the same need-to-know principle to AI service inputs as to human access: send only what the tool needs to complete the task. When AI tools process code that references regulated data structures — schemas, models, migrations, fixtures — verify that no sample or real regulated values are present in the submission.
 
 ## Authorization at runtime
 
