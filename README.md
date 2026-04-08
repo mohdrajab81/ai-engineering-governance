@@ -32,7 +32,7 @@ Most AI coding governance packs are assembled from public checklists. This one w
 
 The result is a governance system that covers what standards cover — and also covers what standards miss.
 
-**Rules that appear in this pack but not in any published standard:**
+**Rules that appear in this pack but not in any published AI governance standard:**
 
 - Out-of-order event delivery creating zombie sessions — and the tombstone/grace-period pattern that prevents it
 - The explicit buffer decision required before closing any stateful I/O resource during transition
@@ -254,6 +254,14 @@ Three AI systems evaluated this pack independently across four dimensions. ChatG
 - Separates mechanically enforceable rules from judgment calls, keeping context windows lean and agent behavior focused
 - Covers the full engineering lifecycle including AI-specific failure modes that generic governance packs miss entirely
 - The rules are falsifiable — they name the failure mode, the mechanism, and the diagnostic signature, not just the symptom
+
+---
+
+## Scope Boundaries
+
+This pack covers software engineering, AI-agent governance, concurrency, resilience, observability, security (OWASP, CSRF, SSRF, rate limiting, supply chain), testing, performance, configuration, change management, readability, and the full lifecycle of AI-assisted development.
+
+It intentionally does not cover: data privacy regulation (GDPR, CCPA, right-to-deletion, consent management), accessibility standards (WCAG, ARIA), cost governance and cloud budget controls, or industry-specific compliance frameworks (HIPAA, PCI-DSS, FedRAMP). These are real requirements in their domains and belong in domain-specific extension files rather than in a generic engineering governance pack. The extension pattern in the "How to Deploy" section above describes how to add them.
 
 ---
 

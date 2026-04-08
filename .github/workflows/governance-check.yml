@@ -16,7 +16,7 @@ jobs:
           fi
           echo "Command table check passed."
 
-      - name: Check all rule files exist
+      - name: Check all rule files exist and inventories are in sync
         run: |
           EXPECTED=14
           ACTUAL=$(ls .claude/rules/*.md 2>/dev/null | wc -l)
@@ -25,6 +25,13 @@ jobs:
             exit 1
           fi
           echo "Rule file count check passed: $ACTUAL files."
+          AGENTS_ROWS=$(grep -c "\.md |" AGENTS.md 2>/dev/null || echo 0)
+          if [ "$AGENTS_ROWS" -ne "$EXPECTED" ]; then
+            echo "ERROR: AGENTS.md domain rule table has $AGENTS_ROWS rows, expected $EXPECTED."
+            echo "Add or remove the corresponding row when adding or removing a rule file."
+            exit 1
+          fi
+          echo "AGENTS.md inventory check passed: $AGENTS_ROWS rows."
 
       - name: Validate settings.example.json
         run: |
