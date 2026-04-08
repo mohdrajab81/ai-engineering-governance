@@ -33,6 +33,12 @@ sessions, and hand off safely when a session ends.
   tracked file before ending the session. The summary should capture: what was
   done, what changed, what the next step is, and any open decisions that must
   be resolved before continuing. This is a handoff document, not a log entry.
+  Store it in `tasks/` — for example `tasks/handoff-<topic>.md` — so it is
+  visible in the repository and readable by the next session without searching.
+- Checkpoint before ending any session that contains incomplete high-risk work:
+  schema migrations, public API changes, large refactors, destructive operations,
+  or any change that cannot safely be left in a partial state. Do not rely on
+  resuming the session from memory alone.
 - Do not rely on memory systems (project memory files, CLAUDE.md notes) to
   carry implementation state. Memory is for durable preferences, patterns, and
   decisions — not for tracking mid-task progress. Mid-task progress belongs in
@@ -63,15 +69,31 @@ sessions with stale information that no longer applies.
 
 When ending a session that has incomplete work:
 
-- Commit all changes that are in a stable, reviewable state. Do not leave
-  half-finished changes uncommitted — a future session that reads the working
-  tree needs to see the real current state.
+- Preserve stable, reviewable work in version control before ending the session.
+  If the project allows intermediate commits, commit changes that are in a
+  complete, self-consistent state. If commit policy requires only shippable
+  commits, preserve the work on a branch or in a tracked handoff artifact so
+  a future session does not have to reconstruct what was done from scratch.
 - If work is intentionally incomplete, leave a clear marker in the code or a
   tracked note explaining what is missing and why, so a future session does not
   treat the partial state as complete.
 - Do not end a session mid-migration, mid-refactor, or mid-schema-change without
   either completing the operation or explicitly documenting the safe stopping
   point and what must happen next.
+
+## Multi-agent session handoff
+
+When a session used sub-agents or parallel agents, the orchestrating session
+must record the handoff state before ending:
+
+- List which files each sub-agent read or proposed changes to. A future session
+  must know which areas were already addressed and which were not.
+- Record the accepted source of truth for any conflict between sub-agent outputs.
+  If two sub-agents produced conflicting results, document which was accepted and
+  why, so the next session does not re-derive the conflict.
+- Do not assume a future session can reconstruct multi-agent work from chat
+  history. Multi-agent sessions produce more state faster than single-agent ones;
+  checkpointing discipline matters more, not less.
 
 ## Resuming from a previous session
 

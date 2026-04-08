@@ -81,6 +81,8 @@ Detailed rules for each domain are in `.claude/rules/`:
 | 10-config-migrations.md | Config, feature flags, schema migrations |
 | 11-ai-agent-verification.md | Anti-hallucination, scope, trust boundaries |
 | 12-vertical-slice-completeness.md | Cross-layer contract closure, compatibility paths, deprecated alias verification |
+| 13-slice-exit-evidence.md | Phase and milestone closure — deliverable existence, wiring, evidence, completion note |
+| 14-ai-session-memory.md | Session boundary management, checkpointing, handoff, resume discipline |
 
 ## Human review
 

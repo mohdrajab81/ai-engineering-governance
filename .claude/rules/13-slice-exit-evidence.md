@@ -43,6 +43,12 @@ If the slice promised a directory or corpus:
 
 An empty directory does not satisfy a promised deliverable.
 
+Documentation artifacts are deliverables. If the slice promised or required an
+API spec update, schema reference update, ADR entry, design note, or runbook
+change, those are deliverables subject to the same existence check as code
+artifacts. For cross-layer contract completeness checks within a slice, apply
+Rule 12 (`12-vertical-slice-completeness`).
+
 **2. Contract-to-implementation alignment**
 
 If the slice changed a contract, verify the implementation boundary can express
@@ -76,8 +82,12 @@ For each deliverable, record the validation that proves it works:
 - exact command
 - exact scope
 - result
+- remaining gaps (what could not be validated and why)
 
-If validation was partial, say so explicitly.
+If validation was partial, say so explicitly. If the remaining gap is material —
+behavior not verified, deliverable not confirmed, runtime path not checked — the
+slice is not complete. Do not call it complete and note the gap as a follow-up;
+an unverified deliverable is an open deliverable.
 
 Good examples:
 
