@@ -32,6 +32,15 @@
 - Every public or partner-facing endpoint must have a rate limit. Define the limit before the endpoint is deployed, not after abuse is observed. Absence of a rate limit is a design defect, not a performance concern.
 - Apply rate limits at the authenticated identity layer when available, not only at IP address. IP-based limits alone are trivially bypassed and penalize legitimate users behind shared NAT.
 
+## Secrets in AI tool outputs and logs
+
+- Never log secrets, tokens, or credentials at any severity level — not at DEBUG, not in structured payloads, not in exception stack traces. Secrets that appear in logs propagate silently to log aggregators, audit trails, and monitoring systems.
+- When using AI coding tools, code review tools, or external analysis services that process source code or runtime output, ensure secrets are not present in the content being submitted. Redact sensitive values before submitting code, logs, configuration, or test output to any external service. The "never log secrets" rule applies to AI tool inputs as much as to production log pipelines.
+
+## Authorization at runtime
+
+- Do not cache authorization decisions indefinitely when roles, permissions, or scopes can change at runtime. A stale cache entry can allow access that has been revoked or deny access that has been granted. Define an explicit TTL or invalidation trigger for any cached authorization state.
+
 ## Supply chain integrity
 
 - For any build artifact published to a package registry or deployed to production, generate and retain a build provenance record capturing: source commit, build environment, build inputs, and the identity of the build system. This is the minimum SLSA Level 1 requirement and establishes a baseline for supply-chain incident investigation.

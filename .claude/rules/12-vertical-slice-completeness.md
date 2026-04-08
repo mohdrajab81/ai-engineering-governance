@@ -84,6 +84,10 @@ catch logic errors, not structural gaps between contract layers. Structural gaps
 compile cleanly and pass all tests until a runtime caller discovers the missing
 piece.
 
+## Pairing with phase and milestone governance
+
+When the repository uses named phases, slices, or milestones, pair this rule with `13-slice-exit-evidence`. This file governs whether each individual contract change is structurally complete across all runtime and documentation layers. Rule 13 governs whether the phase or milestone as a whole is complete — all promised deliverables exist, are wired, and have validation evidence.
+
 ## Why this rule exists
 
 In layered architectures (spec → handler → serializer, or interface →

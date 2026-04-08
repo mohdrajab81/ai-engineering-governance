@@ -5,6 +5,7 @@
 - Classify failure mode before adding retry logic.
 - Retry only transient failures such as timeout, connection reset, temporary unavailability, or rate limiting.
 - Use exponential backoff with a bounded retry count. Add jitter for distributed callers when appropriate.
+- Define retry ownership explicitly at each layer. When a dependency is called through multiple layers — SDK, transport, business logic — ensure only one layer retries. Stacked retries at every layer multiply load on a struggling dependency and make total retry count and latency non-deterministic.
 - Do not retry validation failures, auth failures, programmer errors, or business-rule failures.
 - When multiple distributed clients may retry the same dependency simultaneously, cap the total retry pressure to prevent retry storms under sustained failure.
 - Implement a circuit breaker for dependencies that experience sustained failures. When a dependency is unresponsive or error-rate exceeds a defined threshold, stop sending requests rather than continuing to retry. Allow periodic probe requests to detect recovery. A circuit breaker protects both the caller and the struggling dependency.
@@ -14,3 +15,4 @@
 - Reuse connections and clients through pooling or persistent sessions when supported by the platform.
 - Think about bandwidth and payload size. Prefer batching, compression, pagination, delta updates, and streaming when appropriate.
 - Record retry attempts, timeout events, fallback activation, and circuit-breaker-style decisions in logs and telemetry.
+- Timeouts must be visible in metrics, not only in logs. A timeout that only appears in a log entry is invisible to dashboards, burn-rate alerts, and trend analysis. Emit a counter or histogram for timeout events on each dependency so that timeout rate trends are detectable before they escalate to incidents.

@@ -9,6 +9,7 @@
 - Prefer immutable handoff, message passing, or snapshot copies over long-lived shared mutation.
 - Background tasks and async operations must define explicit cancellation behavior. Respect cancellation signals promptly; do not silently discard them.
 - Do not mix concurrency models (for example, raw threads with asyncio, or executor futures with coroutines) without explicit justification and clearly documented ownership boundaries.
+- When a background task owns a timer, retry scheduler, or delayed callback, document who is responsible for cancelling it, what happens if the owning component shuts down before the timer fires, and whether the scheduled action survives a restart. A timer that outlives its owner is a common source of ghost actions — side effects that fire after the state that justified them has already been torn down.
 - Add concurrency-focused tests when the change introduces shared state, async flows, retries, timers, or callbacks.
 
 ## Session state machines and event sequencing

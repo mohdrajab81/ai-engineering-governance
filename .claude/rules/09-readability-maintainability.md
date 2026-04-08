@@ -28,6 +28,10 @@
 - An abstraction that is harder to understand than the two concrete cases it replaces is not an improvement.
 - Avoid abstraction layers that exist only to satisfy a pattern name (Factory, Manager, Handler) without a real boundary benefit.
 
+## Codebase consistency
+
+- When working in an established codebase, prefer matching the surrounding code's conventions and patterns over introducing a new style, even when the new style is objectively better. A local departure from the prevailing pattern adds cognitive load for every reader who follows. Reserve style improvements for cases where they can be applied consistently across a whole module or file — not introduced in a single function while the rest of the file uses the old style.
+
 ## Dead code and hygiene
 
 - Remove dead code rather than commenting it out. Version control preserves history.

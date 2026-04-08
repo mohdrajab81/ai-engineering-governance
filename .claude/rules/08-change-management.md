@@ -13,3 +13,8 @@
 - For breaking schema, API, or event changes, use the expand-migrate-contract pattern — full procedure including contract tests and event versioning is in `10-config-migrations`.
 - For high-risk production changes, prefer a feature flag or staged rollout. Define the flag's owner, default value, purpose, and planned removal timeline before merging.
 - Human review is mandatory for AI-generated code before merge.
+
+## Rule exceptions and waivers
+
+- When a specific situation requires deliberately breaking one of these governance rules, document the exception explicitly: which rule is being broken, the scope of the exception (file, module, release), the owner responsible for it, the risk accepted, and the condition under which it expires or must be revisited. An undocumented rule break is silent governance drift; a documented exception is a deliberate engineering decision.
+- Scope exceptions as narrowly as possible. An exception that applies to a single function or migration is better than one that applies to a whole module. An exception that expires after one release is better than one with no end date.

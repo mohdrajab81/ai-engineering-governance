@@ -7,6 +7,7 @@
 - Separate configuration concerns by audience: infrastructure config (ports, replicas, resource limits) belongs in deployment manifests; application config (timeouts, feature flags, behaviour toggles) belongs in the application's own config layer.
 - Do not read configuration values repeatedly inside hot loops. Load and validate at startup or at a well-defined refresh boundary.
 - When configuration changes at runtime (hot reload), treat the reload path with the same validation rigor as startup. A bad reload must not silently corrupt in-memory state.
+- When a service starts or completes a configuration reload, emit a structured log entry recording the effective configuration profile — excluding any secret values. This confirms the running process is using the intended configuration and provides a reference point for incident diagnosis when behavior differs from expectation.
 - Configuration keys are part of the external contract. Do not rename, remove, or restructure config keys without a migration plan that supports both the old and new key names simultaneously during the transition window.
 
 ## Feature flags
