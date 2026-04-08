@@ -34,6 +34,7 @@ Apply these immediately:
 - `CLAUDE.md` non-negotiables
 - `AI_AGENT_WORKFLOW.md`
 - `11-ai-agent-verification.md`
+- `14-ai-session-memory.md`
 - relevant parts of `01-architecture.md`
 - relevant parts of `06-testing-validation.md`
 - relevant parts of `09-readability-maintainability.md`
@@ -42,6 +43,7 @@ Why:
 
 - These rules prevent the most damaging AI-agent failures even in the first repository session.
 - They do not depend on a specific runtime architecture or deployment model.
+- Rule 14 applies from the very first multi-session task: session boundary failures can occur on day one and are invisible until they produce conflicting or incomplete output.
 
 ## Apply when the layer exists
 
@@ -54,6 +56,8 @@ Bring these files into active use as the corresponding layer appears:
 | `05-security.md` | Secrets, authz, input handling, or data persistence enter the system | Security is always relevant, but several controls become concrete only when the boundary exists |
 | `07-performance-resources.md` | DB access, connection pools, batching, or throughput concerns appear | Resource rules should follow actual bottlenecks, not imagined ones |
 | `10-config-migrations.md` | Config files, flags, migrations, or staged schema changes exist | Migration discipline starts when something can actually be migrated |
+| `12-vertical-slice-completeness.md` | The first contract surface appears — an API route, event type, interface method, or shared data structure | Cross-layer closure checks are meaningless before contracts exist; once the first contract exists, every subsequent one needs this checklist |
+| `13-slice-exit-evidence.md` | The project adopts phased or milestone-driven work | Evidence requirements for phase closure are irrelevant before phases are defined; once phases exist, exit criteria must be explicit |
 
 ## Apply as hardening
 
