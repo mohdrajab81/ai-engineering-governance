@@ -24,7 +24,7 @@ path. A route in the spec with no registration returns a silent 404.
 **3. New event type**
 Find the emitter — the code that owns the domain transition that triggers this
 event. Verify it publishes the new event type with a payload that satisfies all
-required fields.
+required fields. If a deprecated event must coexist, see check 6.
 
 **4. New response or message schema**
 Find or create the corresponding serialization struct. Verify all required
@@ -68,8 +68,8 @@ piece.
 
 ## Why this rule exists
 
-In layered architectures (spec -> handler -> serializer, or interface ->
-in-memory impl -> SQL impl), it is easy to update one layer and forget the
+In layered architectures (spec → handler → serializer, or interface →
+in-memory impl → SQL impl), it is easy to update one layer and forget the
 others. The layers are in different files and sometimes different packages.
 Tests mock the boundaries, so the gap is invisible until integration or
 production. The cost of a 2-minute checklist is lower than the cost of a review

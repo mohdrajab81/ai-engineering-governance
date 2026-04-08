@@ -2,7 +2,7 @@
 
 > *"Rules written by someone who has seen the failure, not someone who has read about it."*
 
-A production-tested, deployable governance standard for AI-assisted software development. The repository includes 12 domain rule files, adapters for Claude Code, GitHub Copilot, and OpenAI Codex, and a copy-paste GitHub Actions governance check. Compatible with Cursor and any repository-level instruction system.
+A production-tested, deployable governance standard for AI-assisted software development. The repository includes 13 domain rule files, adapters for Claude Code, GitHub Copilot, and OpenAI Codex, and a copy-paste GitHub Actions governance check. Compatible with Cursor and any repository-level instruction system.
 
 ---
 
@@ -90,7 +90,8 @@ The result is a governance system that covers what standards cover — and also 
 | `09-readability-maintainability.md` | Naming, comments, cognitive load, dead code |
 | `10-config-migrations.md` | Config externalization, feature flags, schema migrations, staged rollout |
 | `11-ai-agent-verification.md` | Anti-hallucination, scope, trust boundaries, multi-agent chains, tool safety |
-| `12-vertical-slice-completeness.md` | Cross-layer contract closure, compatibility paths, deprecated alias verification |
+| `12-vertical-slice-completeness.md` | Contract-layer completeness checklist — field, route, event, schema, interface, deprecated aliases |
+| `13-slice-exit-evidence.md` | Phase and milestone closure evidence — deliverable existence, wiring, validation, completion note format |
 
 ---
 
@@ -99,7 +100,7 @@ The result is a governance system that covers what standards cover — and also 
 ### For Claude Code
 
 1. Place `CLAUDE.md` at the repository root
-2. Create `.claude/rules/` and add the 12 domain files
+2. Create `.claude/rules/` and add the 13 domain files
 3. Fill in the command table in `AI_AGENT_WORKFLOW.md` with your repo's actual commands
 4. Configure CI to run build, lint, test, security scan, and the fill-me check — fail on errors
 5. Optional: copy `.claude/settings.example.json` to `.claude/settings.json` and customize the allow-list, deny-list, and post-edit hook for your stack
