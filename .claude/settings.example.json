@@ -1,4 +1,5 @@
 {
+  "_note": "Permissions and hooks here are tuned for this docs-only governance repository. Adapt for code repos: narrow the markdownlint hook to changed files only, add git push only if your workflow requires auto-push, and review the deny list against your team's branching workflow.",
   "permissions": {
     "allow": [
       "Bash:git status*",
@@ -6,7 +7,6 @@
       "Bash:git log*",
       "Bash:git add*",
       "Bash:git commit*",
-      "Bash:git push*",
       "Bash:markdownlint *"
     ],
     "deny": [
@@ -14,7 +14,9 @@
       "Bash:git reset --hard*",
       "Bash:git push --force*",
       "Bash:git push -f*",
-      "Bash:git clean -f*"
+      "Bash:git clean -f*",
+      "Bash:git branch -D*",
+      "Bash:git checkout -- *"
     ]
   },
   "hooks": {

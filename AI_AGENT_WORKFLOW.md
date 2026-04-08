@@ -19,6 +19,8 @@ On the first serious task in a repository, fill in the canonical commands below 
 | Smoke test | `grep -rE "^\|.*\| fill me \|" . --include="*.md" && exit 1` | n/a | Verify no unfilled table cells remain; grep exits 1 (clean) or 0+exit (found) |
 | Run locally | n/a | n/a | Static docs — no runtime |
 | Security scan | `grep -rE "(password\|secret\|token\|api_key)\s*=\s*\S+" . --include="*.md"` | n/a | Scan for accidentally committed secrets |
+| JSON validation | `python -m json.tool .claude/settings.example.json > /dev/null` | n/a | Verify settings example is valid JSON |
+| YAML validation | `python -c "import yaml,sys; yaml.safe_load(open('.github/workflows/governance-check.yml'))"` | n/a | Verify CI workflow is valid YAML |
 | Rollback | `git revert HEAD` | n/a | Revert last commit |
 
 **Enforcement:** CI must include a step that fails the build if any cell in the command table above still contains the literal text `fill me`. A governance file that has never been completed gives false confidence that commands have been verified. Add a check equivalent to:
@@ -96,6 +98,7 @@ special environment.
 6. Run the smallest relevant checks first.
 7. Run broader checks before finishing.
 8. Summarize changes, commands run, outcomes, and remaining risks.
+9. If the task is incomplete and will resume in a later session, write a progress summary to `tasks/handoff-<topic>.md` before stopping.
 
 > **Note on rule updates:** Reading CLAUDE.md and domain rules is the default first step. Editing governance rules is not part of normal feature work. Update a rule file only when a new pattern is discovered, the agent repeatedly makes the same mistake, or the team intentionally revises policy — and always as a standalone task with its own review. Capture the evidence first in `tasks/lessons.md` so the change has a concrete failure mode behind it.
 
@@ -116,6 +119,9 @@ A change is done only when all applicable items are true.
 - [ ] Relevant unit tests were added or updated.
 - [ ] Relevant integration or end-to-end checks were run when needed.
 - [ ] Docs / config / examples were updated when behavior or setup changed.
+- [ ] Cross-layer contract closure verified for any change touching an API route, event type, interface method, or shared data structure (Rule 12).
+- [ ] If this closes a phase or milestone, slice exit evidence is complete — all deliverables exist, are wired, and have validation evidence (Rule 13).
+- [ ] If work is incomplete and spans sessions, a handoff artifact exists in `tasks/` (Rule 14).
 - [ ] A human reviewer can understand the change quickly.
 
 ## 4) Review summary template
@@ -129,15 +135,16 @@ Use this structure when reporting work:
 - **Security impact:**
 - **Risks and tradeoffs:**
 - **Commands run:**
+- **Scope:**
 - **Results:**
-- **Not validated:**
+- **Remaining gaps:**
 - **Follow-up recommendations:**
 
 ## 5) Workflow diagram
 
 ```mermaid
 flowchart LR
-  A[Jira Story with AC] --> B[Read CLAUDE.md and Rules]
+  A[Work Item / Issue with AC] --> B[Read CLAUDE.md and Rules]
   B --> C[Plan: affected files, risks, validation]
   C --> D[Implement in small steps]
   D --> E[Run targeted checks]

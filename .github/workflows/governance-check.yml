@@ -16,12 +16,35 @@ jobs:
           fi
           echo "Command table check passed."
 
+      - name: Check all rule files exist
+        run: |
+          EXPECTED=14
+          ACTUAL=$(ls .claude/rules/*.md 2>/dev/null | wc -l)
+          if [ "$ACTUAL" -ne "$EXPECTED" ]; then
+            echo "ERROR: Expected $EXPECTED rule files in .claude/rules/, found $ACTUAL."
+            exit 1
+          fi
+          echo "Rule file count check passed: $ACTUAL files."
+
+      - name: Validate settings.example.json
+        run: |
+          python3 -m json.tool .claude/settings.example.json > /dev/null
+          echo "settings.example.json is valid JSON."
+
+      - name: Lint markdown governance files
+        run: |
+          npm install -g markdownlint-cli --silent
+          markdownlint "**/*.md" --ignore node_modules
+          echo "Markdown lint passed."
+
       - name: Check no secrets in governance files
         run: |
           if grep -rE "(password|secret|token|api_key)\s*=\s*\S+" \
             README.md REFERENCES.md RULE_PLACEMENT.md AI_AGENT_WORKFLOW.md \
             CLAUDE.md AGENTS.md copilot-instructions.md \
             .github/copilot-instructions.md .github/workflows/governance-check.yml \
+            .github/PULL_REQUEST_TEMPLATE.md \
+            .claude/settings.example.json \
             .claude/rules/ 2>/dev/null; then
             echo "ERROR: Possible secret found in governance files."
             exit 1

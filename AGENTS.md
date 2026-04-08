@@ -43,6 +43,8 @@ The goal is to understand:
 - which engineering choices are intentionally fixed
 - which contracts are authoritative
 
+For resumed or multi-session tasks, also read `tasks/handoff-<topic>.md` if one exists before making any changes.
+
 ## Conflict order
 
 If repository documents conflict, resolve them in this order:
@@ -80,9 +82,11 @@ Detailed rules for each domain are in `.claude/rules/`:
 | 09-readability-maintainability.md | Naming, comments, cognitive load |
 | 10-config-migrations.md | Config, feature flags, schema migrations |
 | 11-ai-agent-verification.md | Anti-hallucination, scope, trust boundaries |
-| 12-vertical-slice-completeness.md | Cross-layer contract closure, compatibility paths, deprecated alias verification |
+| 12-vertical-slice-completeness.md | Cross-layer contract closure, compatibility paths, deprecated alias verification, documentation surface updates |
 | 13-slice-exit-evidence.md | Phase and milestone closure — deliverable existence, wiring, evidence, completion note |
 | 14-ai-session-memory.md | Session boundary management, checkpointing, handoff, resume discipline |
+
+Consult Rule 13 before declaring any phase, slice, or milestone complete. Consult Rule 14 before ending any session with incomplete high-risk work or before resuming a task that ran in a prior session.
 
 ## Human review
 

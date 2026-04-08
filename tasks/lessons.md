@@ -11,6 +11,8 @@ Use it when:
 
 This file is not a runtime instruction file. It is a maintainer artifact for improving the governance pack or a consuming repository's local rules.
 
+A lessons entry is evidence for a governance change, not a substitute for it. If the lesson warrants a rule update, make the update. The entry records the failure mode behind it.
+
 ## Entry template
 
 Copy this block for each new lesson:
@@ -18,65 +20,71 @@ Copy this block for each new lesson:
 ```md
 ## YYYY-MM-DD — Short lesson title
 
-**What happened**
+### What happened
 
 - Describe the failure or recurring mistake in one or two specific sentences.
 
-**Why it happened**
+### Why it happened
 
 - Explain the underlying cause.
 - Note whether the problem came from missing guidance, unclear wording, bad workflow, or missing tooling.
 
-**What changed**
+### What changed
 
 - Record the rule, workflow, CI, or review change made in response.
 
-**Prevention rule**
+### Prevention rule
 
 - State the principle the team should follow in future.
 
-**Scope**
+### Decision
+
+- Upstream pack change / repository-local only / no rule change needed
+
+### Scope
 
 - Say whether this is repository-specific or suitable for the upstream governance pack.
 
-**Evidence**
+### Evidence
 
 - Link the relevant file, commit, PR, or review note if available.
 ```
 
-## Example entry
+## 2026-03-23 — Separate governance changes from product-contract changes
 
-### 2026-03-23 — Separate governance changes from product-contract changes
-
-**What happened**
+### What happened
 
 - Governance-file adoption and API contract changes were prepared in the same working session.
 - That made it harder to review and reason about rollback scope.
 
-**Why it happened**
+### Why it happened
 
 - The repository was adopting new AI-governance files while also refining product behavior.
 - There was no explicit reminder to keep process changes separate from architecture or contract changes.
 
-**What changed**
+### What changed
 
 - The repository split the work into separate commits: one for governance files and one for API/interface changes.
 
-**Prevention rule**
+### Prevention rule
 
 - Keep governance/process changes separate from product-contract changes whenever practical.
 
-**Scope**
+### Decision
+
+- Suitable for upstream governance guidance.
+
+### Scope
 
 - Suitable for upstream governance guidance because the review and rollback benefit is generic.
 
-**Evidence**
+### Evidence
 
 - Example pattern only. Replace with repository-specific links when copied into a real project.
 
 ## 2026-04-01 — Contract-complete work needs cross-layer closure checks
 
-**What happened**
+### What happened
 
 - A change added new contract surfaces and compatibility paths, but only some
   layers were updated.
@@ -84,7 +92,7 @@ Copy this block for each new lesson:
   still incomplete because routes, serializers, deprecated aliases, or sibling
   implementations were missing or only partially updated.
 
-**Why it happened**
+### Why it happened
 
 - The governance pack already required validation and anti-hallucination
   discipline, but it did not explicitly require a cross-layer closure check
@@ -94,7 +102,7 @@ Copy this block for each new lesson:
 - Deprecated coexistence paths were especially easy to miss because the new
   canonical surface looked correct while the old surface silently drifted.
 
-**What changed**
+### What changed
 
 - Added a new general rule file:
   `.claude/rules/12-vertical-slice-completeness.md`.
@@ -106,7 +114,7 @@ Copy this block for each new lesson:
   - new interface methods across all implementations
   - deprecated aliases and coexistence paths during migration windows
 
-**Prevention rule**
+### Prevention rule
 
 - A contract addition is not done until every layer that must implement or
   consume it is updated and verified.
@@ -114,12 +122,62 @@ Copy this block for each new lesson:
 - During a migration window, deprecated aliases are still part of the contract
   and must be verified like the new canonical surface.
 
-**Scope**
+### Decision
+
+- Upstream pack change.
+
+### Scope
 
 - Suitable for the upstream governance pack because this failure mode is common
   across layered repositories and is not specific to one stack or product.
 
-**Evidence**
+### Evidence
 
 - Rule file added: `.claude/rules/12-vertical-slice-completeness.md`
 - Inventory/docs updated to include the new rule.
+
+## 2026-04-08 — Session boundaries are engineering boundaries
+
+### What happened
+
+- A long multi-session task produced conflicting outputs because earlier decisions
+  had been made in sessions whose context was no longer available.
+- The agent re-derived conclusions that contradicted established choices and
+  violated constraints it could no longer see.
+
+### Why it happened
+
+- Mid-task progress was held in chat history and project memory files, not in
+  committed repository artifacts.
+- When the session compressed, the earlier decisions became invisible.
+- There was no established pattern for writing a handoff artifact before ending
+  a session with incomplete work.
+
+### What changed
+
+- Added Rule 14: `.claude/rules/14-ai-session-memory.md`.
+- The rule establishes: checkpoint progress in `tasks/handoff-<topic>.md` before
+  ending any session with incomplete high-risk work; verify repository state at
+  the start of each new session; persistent memory is for durable preferences,
+  not mid-task progress.
+
+### Prevention rule
+
+- Treat session boundaries as real engineering boundaries. Commit stable
+  intermediate state before ending a session. Write a handoff file when work
+  will resume in a later session. Do not rely on memory files or chat history
+  to carry implementation state across sessions.
+
+### Decision
+
+- Upstream pack change.
+
+### Scope
+
+- Suitable for the upstream governance pack because session-boundary failures
+  occur in any long AI-assisted project regardless of stack or domain.
+
+### Evidence
+
+- Rule file added: `.claude/rules/14-ai-session-memory.md`
+- Inventory and adapter files updated to reference Rule 14.
