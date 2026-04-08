@@ -31,5 +31,4 @@
 ## Dead code and hygiene
 
 - Remove dead code rather than commenting it out. Version control preserves history.
-- Remove stale feature flags and their branches once the rollout is complete and stable.
 - Remove unused imports, variables, parameters, and dependencies. They create noise and confuse future readers.

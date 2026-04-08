@@ -14,4 +14,4 @@
 - Do not modify or delete tests to make them pass unless the tested behavior intentionally changed. If tests are removed, document why in the commit message.
 - Prefer file-scoped or targeted checks first for fast feedback, then run broader checks before finishing.
 - Never claim success from compilation alone. Run the relevant tests and inspect the results.
-- Report exactly what was validated manually and automatically.
+- When reporting validation results, state: the exact command run, the scope covered (package, module, or full suite), the outcome (pass count, fail count, skip count), and any gap (what could not be validated and why). "Tests pass" with no supporting detail is not an acceptable validation report.

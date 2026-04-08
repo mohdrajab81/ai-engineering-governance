@@ -1,7 +1,6 @@
 # Performance and Resource Rules
 
 - Think in terms of memory, CPU, threads, handles, sockets, queue pressure, and I/O.
-- Do not open and close expensive clients per request when pooling or reuse is available.
 - Release resources in reverse order of acquisition.
 - Avoid unbounded in-memory growth; prefer streaming, chunking, backpressure, or bounded queues.
 - Profile before major optimization, but design obvious hot paths responsibly from the start.
@@ -31,6 +30,8 @@
 - Perform fault injection under load: introduce artificial latency or failure in one downstream dependency while the system is under full traffic load. This reveals thread starvation, queue backup, timeout cascade failures, and retry storms that are invisible when all dependencies are healthy.
 
 ## Backpressure propagation
+
+These rules cover in-process pipeline stage boundaries. For cross-service backpressure propagation at network boundaries (HTTP 429, Kafka lag, gRPC flow control), see `03-resilience-networking`.
 
 - In multi-stage processing pipelines, backpressure signals from a saturated downstream stage must propagate upstream — they must not be absorbed silently by an unbounded buffer at the stage boundary. An unbounded intermediate buffer between a fast producer and a slow consumer hides the overload condition, delays the signal that something is wrong, and eventually causes an OOM failure or processing collapse instead of graceful flow control.
 - Design each stage boundary explicitly: what is the maximum buffer depth, what happens when it is reached (block, drop with metric, reject with error, apply backpressure upstream), and what is the alert condition. These are not defaults to accept from the framework — they are design decisions that determine how the system behaves under load.

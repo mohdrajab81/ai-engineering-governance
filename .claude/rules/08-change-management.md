@@ -10,6 +10,6 @@
 - When a project accumulates many old ADRs or phase notes, prefer one maintained current decision surface over many half-current files.
 - Use branch and PR discipline appropriate to the repository.
 - In the PR description or summary, explain the problem, the approach, risks, rollback considerations, and validation performed.
-- For breaking schema, API, or event changes, use the expand-migrate-contract pattern: add the new form first, migrate all consumers, then remove the old form as a separate step.
+- For breaking schema, API, or event changes, use the expand-migrate-contract pattern — full procedure including contract tests and event versioning is in `10-config-migrations`.
 - For high-risk production changes, prefer a feature flag or staged rollout. Define the flag's owner, default value, purpose, and planned removal timeline before merging.
 - Human review is mandatory for AI-generated code before merge.

@@ -12,6 +12,16 @@
 - Pin dependency versions. Review changelogs before upgrading. Do not accept automatic major-version upgrades without explicit review.
 - Run the repository's security checks when available and call out unresolved findings.
 
+## Server-side request forgery (SSRF)
+
+- When accepting URLs, hostnames, or IP addresses as input and making server-side requests, validate and restrict the target. Block requests to loopback addresses, private network ranges (RFC 1918), link-local addresses, and cloud instance metadata endpoints (169.254.169.254 and platform equivalents). An unguarded SSRF allows an attacker to pivot from a public-facing endpoint into internal infrastructure.
+- Do not rely on DNS resolution at validation time to check whether a hostname resolves to a private address — a DNS rebinding attack can change the resolution between validation and use. Validate the resolved IP address at request time, not only at input time.
+
+## File and path handling
+
+- Validate file paths before any filesystem operation. Reject paths containing `..` sequences, null bytes, or absolute path prefixes. Normalize the path and confirm it falls within the intended directory boundary before opening, reading, or writing.
+- For file upload endpoints: validate content type from file content inspection, not from the `Content-Type` request header; enforce a maximum file size before reading the body; store uploaded files outside the web root and never execute them directly.
+
 ## CSRF defense
 
 - For any server-rendered or cookie-authenticated endpoint, require CSRF token validation on all state-changing operations (POST, PUT, PATCH, DELETE). Do not rely on SameSite cookies alone as the only control — browser support and deployment context vary. AI-generated web endpoint code must include a CSRF defense by default, not as an optional hardening step.
