@@ -57,6 +57,24 @@ verified. Specifically:
 A deprecated surface that silently stops working or changes behaviour during
 the migration window is a breaking change, even if it is labelled deprecated.
 
+**7. Documentation surfaces**
+When behavior changes in a way that is visible to callers or operators, the
+documentation layer is part of the contract and must be verified:
+
+- If the task adds or modifies a public API, verify the API contract file
+  (OpenAPI spec, Protobuf definition, GraphQL schema, or equivalent) is updated
+  to match the implementation before merge.
+- If the task adds or changes a database schema, verify any schema reference
+  document is updated.
+- If the task changes a durable design decision, verify the relevant design
+  note or ADR is updated. A decision captured in a doc that no longer matches
+  the code misleads every future session that reads it.
+- If the task changes how an operator or external caller interacts with the
+  system, verify runbooks or operational procedures are updated.
+
+Documentation drift is invisible in CI. It is discovered during incidents,
+onboarding, and future AI sessions that make decisions based on stale docs.
+
 ## How to apply this
 
 For each applicable check, state which check you are running and show the

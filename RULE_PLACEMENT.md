@@ -47,8 +47,10 @@ Where each type of rule should live and who enforces it.
 | AI-agent verification / anti-hallucination | Yes — two explicit non-negotiables | 11-ai-agent-verification — full guidance | None — pure judgment |
 | Vertical slice completeness / cross-layer contract closure | | 12-vertical-slice-completeness — routes, events, schemas, interfaces, coexistence paths | Human / AI review |
 | Readability and maintainability | Brief mention (clean, no over-engineering) | 09-readability-maintainability — full guidance | Linters for syntax; human review for judgment |
-| Vertical slice completeness — contract layers | | 12-vertical-slice-completeness — field, route, event, schema, interface, deprecated alias checks | Human / AI review |
+| Vertical slice completeness — contract layers | | 12-vertical-slice-completeness — field, route, event, schema, interface, deprecated alias checks, documentation surfaces | Human / AI review |
 | Phase and milestone closure evidence | | 13-slice-exit-evidence — deliverable existence, wiring, validation, completion note | Human / AI review |
+| AI session boundary and memory management | | 14-ai-session-memory — context pressure, checkpointing, handoff, resume discipline | Human / AI review |
+| Domain-specific rules (telecom, fintech, etc.) | | domain/*.md — extend base rules; never modify base files for domain concerns | Human review |
 
 ## How to Read This
 
