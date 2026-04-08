@@ -78,6 +78,7 @@ These files support governance adoption but are not runtime rule files:
 | --- | --- |
 | `RULE_PLACEMENT.md` | Explains what belongs in root policy, domain rules, and deterministic tooling |
 | `tasks/lessons.md` | Captures recurring mistakes, root causes, and rule/process updates |
+| `tasks/handoff-template.md` | Template for session handoff artifacts — copy to `tasks/handoff-<topic>.md` when ending an incomplete session |
 | `.claude/settings.example.json` | Example local permissions and hook configuration for Claude Code |
 
 ## Practical rollout sequence

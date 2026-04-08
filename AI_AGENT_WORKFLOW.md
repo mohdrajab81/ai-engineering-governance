@@ -98,7 +98,7 @@ special environment.
 6. Run the smallest relevant checks first.
 7. Run broader checks before finishing.
 8. Summarize changes, commands run, outcomes, and remaining risks.
-9. If the task is incomplete and will resume in a later session, write a progress summary to `tasks/handoff-<topic>.md` before stopping.
+9. If the task is incomplete and will resume in a later session, write a progress summary to `tasks/handoff-<topic>.md` before stopping. Use `tasks/handoff-template.md` as the starting point.
 
 > **Note on rule updates:** Reading CLAUDE.md and domain rules is the default first step. Editing governance rules is not part of normal feature work. Update a rule file only when a new pattern is discovered, the agent repeatedly makes the same mistake, or the team intentionally revises policy — and always as a standalone task with its own review. Capture the evidence first in `tasks/lessons.md` so the change has a concrete failure mode behind it.
 

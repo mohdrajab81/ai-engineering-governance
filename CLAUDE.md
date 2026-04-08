@@ -80,3 +80,4 @@
 - Prefer canonical commands from `README`, `Makefile`, `package.json`, `pyproject.toml`, `justfile`, `mvnw`, `gradlew`, or equivalent.
 - If multiple command paths exist, use the one the repository already treats as canonical.
 - When onboarding a repo, document build, lint, test, run, and scan commands in `AI_AGENT_WORKFLOW.md` or the repository README.
+- Detailed domain rules live in `.claude/rules/` — load the relevant file when working in that area. This file holds non-negotiables and working pattern only; the domain files hold the specifics.

@@ -8,7 +8,7 @@
 
 Most teams using AI coding agents follow the same implicit workflow: write a prompt, review the output, merge if it looks right. This is prompt-and-hope development. It produces plausible-looking code that invents library calls that do not exist, claims tests pass without running them, silently expands scope, and misses structural gaps that compile cleanly and only surface at runtime or in production.
 
-The statistics are not ambiguous. AI-generated code introduces 1.7× more total issues and 1.75× more logic errors than human-written code across production systems. Approximately 25–30% of AI-generated code contains Common Weakness Enumerations. Only 3% of developers highly trust AI-generated code; 71% never merge without manual review.
+The statistics are not ambiguous. AI-generated code introduces 1.7× more total issues and 1.75× more logic errors than human-written code across production systems. Approximately 25–30% of AI-generated code contains Common Weakness Enumerations. Only 3% of developers highly trust AI-generated code. The overwhelming majority do not merge without manual review.
 
 The problem is not the AI. The problem is the absence of governance. An AI agent operating without rules will follow the path of least resistance — generating output that satisfies the prompt without satisfying the engineering requirements that the prompt did not mention.
 

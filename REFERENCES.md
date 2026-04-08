@@ -45,7 +45,8 @@ This package was shaped around current public guidance from the following source
 
 - **Second Talent / Panto.ai (2026)**: AI-generated code introduces 1.7× more total issues, 1.75× more logic errors, and 1.57× more security findings than human-written code across production systems
 - **Kiuwan / OpenSSF (2025–2026)**: approximately 25–30% of AI-generated code contains Common Weakness Enumerations (CWEs)
-- **Stack Overflow Developer Survey (2025)**: only 3% of developers highly trust AI-generated code; 71% never merge without manual review; 66% spend more time fixing almost-right AI code than writing it manually
+- **Stack Overflow Developer Survey (2025)**: only 3% of developers highly trust AI-generated code
+- **Industry surveys and practitioner reports (2025, secondary compilation)**: approximately 71% of developers do not merge AI-generated code without manual review; approximately 66% report spending more time fixing near-correct AI output than writing code manually — these figures appear across multiple practitioner surveys and roundups; primary source per-stat is not individually verified in this document
 - **Arxiv / SonarQube study (2025)**: concurrency and threading bugs are disproportionately common in LLM-generated code due to underrepresentation of atomicity concepts in training corpora
 
 ## AI Review Process and Scores
