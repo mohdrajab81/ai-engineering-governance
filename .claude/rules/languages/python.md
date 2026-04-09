@@ -96,6 +96,18 @@ The following tools are mandatory on every Python project. Configure them in
   belong at `session` or `module` scope. Per-test setup for expensive resources
   is a performance anti-pattern.
 
+## AI-generated Python code: known failure modes
+
+These patterns are disproportionately common in AI-generated Python code. Reviewers should check for them explicitly — they produce code that passes basic tests but fails silently under real conditions.
+
+- **`except Exception: pass` error suppression.** When an AI agent encounters an error path that complicates the surrounding generation goal, it commonly wraps the block in a bare `except Exception: pass` or `except Exception: return None`. The happy path works; every failure mode is silently discarded. Any bare except with no logging, no re-raise, and no explicit handling is a review flag.
+
+- **Fire-and-forget `asyncio.create_task()`.** AI agents commonly generate `asyncio.create_task(some_coroutine())` without storing the returned `Task` reference or awaiting it. Python's garbage collector can collect an unreferenced task before it completes, silently dropping the work. Always store task references and either await them or add them to a set with a `task.add_done_callback(tasks.discard)` pattern.
+
+- **`requests.get()` without `timeout=`.** The `requests` library has no default timeout. An AI agent generates a call without `timeout=` because the function signature does not require it and the test suite never exercises a slow network. In production, a hung upstream service hangs the thread indefinitely. Every `requests` call must have an explicit `timeout=` argument — see Rule 03.
+
+- **Mutable default arguments.** `def fn(items=[])` shares the same list across all calls. AI agents generate this pattern because it looks like a default value. Any mutable object (list, dict, set) as a default argument is a bug — use `None` and initialize inside the function body.
+
 ## Dependency management
 
 - Pin dependency versions in `pyproject.toml` or `requirements.txt`. Unpinned

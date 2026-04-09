@@ -181,3 +181,91 @@ Copy this block for each new lesson:
 
 - Rule file added: `.claude/rules/14-ai-session-memory.md`
 - Inventory and adapter files updated to reference Rule 14.
+
+## 2026-04-09 — Hardcoded rule count in CI became a latent sync gap
+
+### What happened
+
+- `governance-check.yml` and `check-governance.sh` both contained `EXPECTED=14`.
+- The value was correct but independent of any authoritative source.
+- Every time the base rule set changes, both files must be updated manually, and
+  the failure mode is silent — CI passes with the wrong count if both files are
+  updated consistently but the actual file count diverges.
+
+### Why it happened
+
+- The count was written as a literal at the time the check was introduced.
+  There was no mechanism forcing it to stay in sync with the rule manifest.
+- A reviewer flagged it as a LOW finding after two consecutive version bumps.
+
+### What changed
+
+- Both files now derive `EXPECTED` from the AGENTS.md row count instead of
+  hardcoding a literal. AGENTS.md is the single source of truth for the rule
+  manifest. The file-count check validates actuals against the manifest.
+
+### Prevention rule
+
+- When a CI check compares two independently-maintained values, one should derive
+  from the other rather than being hardcoded in parallel. Two parallel hardcoded
+  values create a latent sync gap that will not be caught until they diverge.
+
+### Decision
+
+- Upstream pack change.
+
+### Scope
+
+- Generic pattern applicable to any repo with count-based CI checks.
+
+### Evidence
+
+- Commit: `governance-check.yml` and `check-governance.sh` updated to derive
+  `EXPECTED=$(grep -c "\.md |" AGENTS.md)`.
+
+## 2026-04-09 — Coverage maps need explicit labels, not implicit completeness
+
+### What happened
+
+- The initial OWASP Agentic Top 10 coverage table in README.md listed a rule
+  reference for every ASI category without distinguishing full from partial
+  coverage.
+- ASI10 (Rogue Agents) was listed with Rule 11 scope discipline and Rule 14
+  session handoff — real coverage, but only on the prevention side.
+  Runtime behavioral monitoring, anomaly detection, and kill-switch controls
+  were not covered, and the table did not say so.
+- A reviewer flagged this as a MEDIUM finding: the table overstated coverage and
+  reintroduced the credibility problem that had been reduced elsewhere.
+
+### Why it happened
+
+- The table was written to map rules to categories, not to assess completeness.
+  The implicit assumption was that a partial mapping was better than no mapping.
+  It was — but without labels, readers could not distinguish partial from full.
+
+### What changed
+
+- Added a Coverage column to the table with Full / Partial labels.
+- Each Partial row now includes a sentence explaining what the pack does not cover
+  and why (usually: runtime/operational concerns outside coding governance scope).
+
+### Prevention rule
+
+- Any coverage or compliance mapping table must use explicit coverage labels.
+  A table row that names a rule without qualifying coverage implies full coverage
+  to a reader who does not inspect every rule in detail. Make the qualifier
+  visible in the table itself, not in accompanying prose.
+
+### Decision
+
+- Upstream pack change.
+
+### Scope
+
+- Applicable to any governance pack producing coverage tables against external
+  frameworks (OWASP, NIST, ISO, regulatory).
+
+### Evidence
+
+- README.md Standards Coverage section updated with Full/Partial labels and
+  inline gap notes per ASI category.

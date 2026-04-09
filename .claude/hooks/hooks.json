@@ -48,6 +48,18 @@
         ]
       },
       {
+        "_rule": "Rule 08 (change-management) — prevent destructive filesystem deletions",
+        "_description": "Blocks rm -rf on high-risk targets: filesystem root (/), home directory (~), current directory wildcard (./* or *), and parent-directory paths (../). These patterns have near-zero legitimate use in AI-assisted coding sessions and near-certain destructive effect. Uses exit 2 (hard block). Does not block rm -rf on named project subdirectories — those require judgment and are intentionally left to the allow/deny list in settings.json.",
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(cat); COMMAND=$(echo \"$INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('command',''))\" 2>/dev/null || echo ''); if echo \"$COMMAND\" | grep -qE 'rm\\s+-[a-zA-Z]*r[a-zA-Z]*f\\s+(\\/\\s|\\/$|~\\/|~\\s|~$|\\.\\.\\/|\\*|\\./\\*)'; then echo '[BLOCKED by Rule 08] rm -rf on root, home, wildcard, or parent-directory paths is not permitted in an AI coding session. If this deletion is intentional, run it manually in a terminal.' >&2; exit 2; fi; exit 0",
+            "timeout": 5
+          }
+        ]
+      },
+      {
         "_rule": "Rule 06 (testing-validation) — do not edit lint/format configs to silence checks",
         "_description": "Config-protection hook. Reads file_path from tool_input via stdin. Hard-blocks (exit 2) edits to dedicated lint and format config files. Issues a warning (exit 0) for pyproject.toml because it contains both build metadata and lint config — a hard block would produce false positives for legitimate dependency and build changes.",
         "matcher": "Edit|Write",

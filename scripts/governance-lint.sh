@@ -150,6 +150,33 @@ else
   ok "No print()/console.log() in non-test source files."
 fi
 
+# ── 6. Real secret scanner recommendation ─────────────────────────────────────
+# The grep pattern above catches obvious literal assignments but misses many real
+# secret formats: base64-encoded keys, JWTs, PEM blocks, cloud provider credential
+# files, and multi-line secrets. For production repositories, replace or supplement
+# the grep check above with a dedicated scanner:
+#
+#   gitleaks detect --source . --verbose
+#   trufflehog filesystem . --only-verified
+#
+# Both tools understand secret entropy, provider-specific patterns (AWS, GCP, GitHub
+# tokens), and scan git history — not just the working tree. The grep above is a
+# fast first pass; a dedicated scanner is the correct production control.
+#
+# Installation: https://github.com/gitleaks/gitleaks
+#               https://github.com/trufflesecurity/trufflehog
+echo "-- Secret scanner availability"
+if command -v gitleaks > /dev/null 2>&1; then
+  ok "gitleaks is installed. Consider adding 'gitleaks detect --source .' to CI."
+elif command -v trufflehog > /dev/null 2>&1; then
+  ok "trufflehog is installed. Consider adding 'trufflehog filesystem . --only-verified' to CI."
+else
+  echo "    [INFO] Neither gitleaks nor trufflehog found. The grep check above covers obvious"
+  echo "           literal patterns only. Install one of these for production-grade secret scanning:"
+  echo "           https://github.com/gitleaks/gitleaks"
+  echo "           https://github.com/trufflesecurity/trufflehog"
+fi
+
 # ── Summary ────────────────────────────────────────────────────────────────────
 echo ""
 echo "=== Results: $PASS passed, $WARN warnings, $FAIL failed ==="

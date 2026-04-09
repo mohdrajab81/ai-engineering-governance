@@ -124,6 +124,18 @@ These rules do not replace the base rules. They add language-specific depth to
   using `http.MaxBytesReader`, and reject oversized or malformed payloads
   before they reach business logic.
 
+## AI-generated Go code: known failure modes
+
+These patterns are disproportionately common in AI-generated Go code. Reviewers should check for them explicitly — they produce code that compiles cleanly and passes basic tests but fails at runtime or under load.
+
+- **Swallowed errors.** AI agents commonly assign error returns to `_` when they cannot immediately determine the right error-handling strategy. The result compiles and the happy path works; errors from I/O, type assertions, or channel operations are silently discarded. Treat any `_ =` or `_, _ =` that discards an error return as a review flag unless there is an explicit comment explaining why the error is safe to ignore.
+
+- **Missing `defer cancel()`.** After `context.WithTimeout` or `context.WithCancel`, the `cancel` function must be deferred immediately on the next line. AI agents frequently generate the context creation but omit the defer, leaking the context goroutine for the duration of the parent context. In request handlers this means one leaked goroutine per request.
+
+- **Goroutines without a defined exit path.** AI agents frequently generate `go func() { ... }()` inside loops or handlers without a mechanism to stop the goroutine or wait for it to complete. This produces goroutine leaks that only become visible under sustained load. Every goroutine must have a documented lifetime and a cancellation path — see Rule 02.
+
+- **`interface{}` / `any` as a shortcut.** When an AI agent is uncertain about a type, it defaults to `interface{}` or `any`. This removes type safety and forces callers to use type assertions that can panic. If a type cannot be determined from context, ask — do not paper over it with an empty interface.
+
 ## Dependency management
 
 - Use Go modules. Commit `go.sum` to the repository. `go.sum` is the integrity
