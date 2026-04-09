@@ -36,7 +36,7 @@ The following tools are mandatory on every Python project. Configure them in
 `pyproject.toml` or equivalent and run them in CI:
 
 | Tool | Purpose | Command |
-|---|---|---|
+| --- | --- | --- |
 | `black` | Code formatting | `black --check .` |
 | `isort` | Import ordering | `isort --check .` |
 | `ruff` | Linting (fast, replaces flake8/pylint for most checks) | `ruff check .` |

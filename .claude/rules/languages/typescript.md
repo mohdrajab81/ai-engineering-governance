@@ -6,6 +6,7 @@ reference TypeScript-specific constructs — `interface`, `type`, `unknown`, `@t
 `z.infer`, type assertions — are **[TS only]** and do not apply to plain JavaScript.
 
 Activate according to `PHASED_ADOPTION.md`:
+
 - TypeScript project (`.ts`, `.tsx`): apply all sections.
 - Plain JavaScript project (`.js`, `.jsx`): apply only sections marked **[TS + JS]**.
 

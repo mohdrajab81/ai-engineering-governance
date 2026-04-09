@@ -2,7 +2,8 @@
 # check-governance.sh — run all governance CI checks locally.
 # Usage: bash scripts/check-governance.sh
 # Mirrors .github/workflows/governance-check.yml so you can validate before pushing.
-# Requirements: bash, python3, markdownlint-cli (npm install -g markdownlint-cli)
+# Requirements: bash, python3, markdownlint-cli, and a Node runtime available
+# in the same shell as `markdownlint` (either `node` or `node.exe`)
 
 set -euo pipefail
 PASS=0
@@ -108,13 +109,13 @@ else
   fail "settings.example.json is not valid JSON (neither python3 nor node could parse it)."
 fi
 
-# 8. Markdown lint (requires markdownlint-cli)
+# 8. Markdown lint (requires markdownlint-cli + node or node.exe)
 echo "-- Markdown lint"
 if command -v markdownlint > /dev/null 2>&1; then
-  if markdownlint "**/*.md" --ignore node_modules 2>/dev/null; then
+  if bash scripts/run-markdownlint.sh 2>/dev/null; then
     ok "Markdown lint passed."
   else
-    fail "Markdown lint failed. Run: markdownlint '**/*.md' --ignore node_modules"
+    fail "Markdown lint failed. Run: bash scripts/run-markdownlint.sh"
   fi
 else
   echo "    [SKIP] markdownlint not installed. Run: npm install -g markdownlint-cli"
@@ -124,7 +125,11 @@ fi
 echo "-- Secret scan"
 if grep -rqE "(password|secret|token|api_key)\s*=\s*\S+" \
   README.md REFERENCES.md RULE_PLACEMENT.md AI_AGENT_WORKFLOW.md \
-  CLAUDE.md AGENTS.md .claude/rules/ 2>/dev/null; then
+  CLAUDE.md AGENTS.md copilot-instructions.md \
+  .github/copilot-instructions.md .github/workflows/governance-check.yml \
+  .github/PULL_REQUEST_TEMPLATE.md \
+  .claude/settings.example.json \
+  .claude/rules/ 2>/dev/null; then
   fail "Possible secret found in governance files."
 else
   ok "Secret scan passed."

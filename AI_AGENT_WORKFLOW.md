@@ -8,19 +8,19 @@ On the first serious task in a repository, fill in the canonical commands below 
 
 | Concern | Canonical command | Fast file-scoped alternative | Notes |
 | --- | --- | --- | --- |
-| Install / setup | `npm install -g markdownlint-cli` | n/a | Install markdown linter globally |
+| Install / setup | `npm install -g markdownlint-cli` | n/a | Install markdown linter globally; requires a Node runtime visible in the same shell that runs it |
 | Build | n/a | n/a | Docs-only repo — no compile step |
-| Lint | `markdownlint "**/*.md" --ignore node_modules` | `markdownlint path/to/file.md` | Markdown style check |
+| Lint | `bash scripts/run-markdownlint.sh` | `bash scripts/run-markdownlint.sh path/to/file.md` | Markdown style check with `node`/`node.exe` fallback for Bash/WSL |
 | Type check | n/a | n/a | No code — docs-only repo |
 | Unit tests | n/a | n/a | No code — docs-only repo |
 | Integration tests | n/a | n/a | No code — docs-only repo |
 | Migrate / seed | n/a | n/a | No database |
 | Start local services | n/a | n/a | No services required |
-| Smoke test | `grep -rE "^\|.*\| fill me \|" . --include="*.md" && exit 1` | n/a | Verify no unfilled table cells remain; grep exits 1 (clean) or 0+exit (found) |
+| Smoke test | `if grep -rE "^\|.*\| fill me \|" . --include="*.md"; then echo "ERROR: Unfilled command table cells remain."; exit 1; else echo "Command table check passed."; fi` | n/a | Verify no unfilled table cells remain |
 | Run locally | n/a | n/a | Static docs — no runtime |
-| Security scan | `grep -rE "(password\|secret\|token\|api_key)\s*=\s*\S+" . --include="*.md"` | n/a | Scan for accidentally committed secrets |
-| JSON validation | `python -m json.tool .claude/settings.example.json > /dev/null` | n/a | Verify settings example is valid JSON |
-| YAML validation | `python -c "import yaml,sys; yaml.safe_load(open('.github/workflows/governance-check.yml'))"` | n/a | Verify CI workflow is valid YAML |
+| Security scan | `grep -rE "(password&#124;secret&#124;token&#124;api_key)\s*=\s*\S+" . --include="*.md"` | n/a | Scan for accidentally committed secrets |
+| JSON validation | `python3 -m json.tool .claude/settings.example.json > /dev/null` | n/a | Verify settings example is valid JSON |
+| YAML validation | `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/governance-check.yml'))"` | n/a | Verify CI workflow is valid YAML; requires `PyYAML` if you want local parsing |
 | Rollback | `git revert HEAD` | n/a | Revert last commit |
 
 **Enforcement:** CI must include a step that fails the build if any cell in the command table above still contains the literal text `fill me`. A governance file that has never been completed gives false confidence that commands have been verified. Add a check equivalent to:

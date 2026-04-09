@@ -30,7 +30,7 @@ Examples:
 
 Before declaring a slice complete, verify all of the following:
 
-**1. Deliverable existence**
+### 1. Deliverable existence
 
 List each deliverable named in the plan or design doc and show the exact file,
 directory, route, schema, fixture set, migration, or package that now exists.
@@ -49,7 +49,7 @@ change, those are deliverables subject to the same existence check as code
 artifacts. For cross-layer contract completeness checks within a slice, apply
 Rule 12 (`12-vertical-slice-completeness`).
 
-**2. Contract-to-implementation alignment**
+### 2. Contract-to-implementation alignment
 
 If the slice changed a contract, verify the implementation boundary can express
 the intended semantics completely.
@@ -63,7 +63,7 @@ Examples of incomplete closure:
 Compiling code is not enough if the type boundary cannot represent the slice's
 required behavior honestly.
 
-**3. Runtime wiring**
+### 3. Runtime wiring
 
 If the slice promised behavior, verify the new code is reachable from the real
 call path, not only from isolated unit tests.
@@ -75,7 +75,7 @@ Examples:
 - worker/store/transport method is called from the owning path
 - fixtures are actually consumed by tests, not only checked in
 
-**4. Evidence-backed validation**
+### 4. Evidence-backed validation
 
 For each deliverable, record the validation that proves it works:
 
@@ -104,7 +104,7 @@ Bad examples:
 
 without any supporting evidence.
 
-**5. Claimed vs actual tree check**
+### 5. Claimed vs actual tree check
 
 Before any completion statement, compare the summary against the actual tree.
 

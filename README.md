@@ -95,64 +95,13 @@ The result is a governance system that covers what standards cover — and also 
 3. Fill in the command table in `AI_AGENT_WORKFLOW.md` with your repo's actual commands
 4. Configure CI to run build, lint, test, security scan, and the fill-me check — fail on errors
 5. Optional: copy `.claude/settings.example.json` to `.claude/settings.json` and customize the allow-list, deny-list, and post-edit hook for your stack
-6. Run `bash scripts/check-governance.sh` locally to validate all structural checks before pushing
+6. Run `bash scripts/check-governance.sh` locally to validate all structural checks before pushing. The markdown lint step requires `markdownlint-cli` plus a Node runtime visible in the same shell; `scripts/run-markdownlint.sh` handles `node` or `node.exe` in Bash/WSL.
 
-**Sample GitHub Actions governance check** — copy this to `.github/workflows/governance-check.yml`:
-
-```yaml
-name: Governance Check
-on: [push, pull_request]
-
-jobs:
-  governance:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Check command table is filled
-        run: |
-          if grep -E "^\|.*\| fill me \|" AI_AGENT_WORKFLOW.md; then
-            echo "ERROR: AI_AGENT_WORKFLOW.md contains unfilled 'fill me' placeholders."
-            echo "Complete the command table before merging."
-            exit 1
-          fi
-          echo "Command table check passed."
-
-      - name: Check all rule files exist
-        run: |
-          EXPECTED=14
-          ACTUAL=$(ls .claude/rules/*.md 2>/dev/null | wc -l)
-          if [ "$ACTUAL" -ne "$EXPECTED" ]; then
-            echo "ERROR: Expected $EXPECTED rule files in .claude/rules/, found $ACTUAL."
-            exit 1
-          fi
-          echo "Rule file count check passed: $ACTUAL files."
-
-      - name: Validate settings.example.json
-        run: |
-          python3 -m json.tool .claude/settings.example.json > /dev/null
-          echo "settings.example.json is valid JSON."
-
-      - name: Lint markdown governance files
-        run: |
-          npm install -g markdownlint-cli --silent
-          markdownlint "**/*.md" --ignore node_modules
-          echo "Markdown lint passed."
-
-      - name: Check no secrets in governance files
-        run: |
-          if grep -rE "(password|secret|token|api_key)\s*=\s*\S+" \
-            README.md REFERENCES.md RULE_PLACEMENT.md AI_AGENT_WORKFLOW.md \
-            CLAUDE.md AGENTS.md copilot-instructions.md \
-            .github/copilot-instructions.md .github/workflows/governance-check.yml \
-            .github/PULL_REQUEST_TEMPLATE.md \
-            .claude/settings.example.json \
-            .claude/rules/ 2>/dev/null; then
-            echo "ERROR: Possible secret found in governance files."
-            exit 1
-          fi
-          echo "Secret scan passed."
-```
+**Canonical GitHub Actions governance check:** copy
+`.github/workflows/governance-check.yml` from this repository rather than
+copying an inline README snippet. The workflow now includes inventory-sync
+checks and cross-reference validation, and keeping the canonical version in
+one file avoids the README drifting behind the real CI logic.
 
 ### For GitHub Copilot
 
@@ -205,9 +154,13 @@ See [PHASED_ADOPTION.md](./PHASED_ADOPTION.md) for the fuller model, including w
 
 This pack follows semantic versioning. Record the version you adopted in your repository — for example in a `docs/ai-governance/VERSION` file.
 
-**Patch versions (x.x.N):** Rule clarifications, typo fixes, example additions. Safe to adopt without a team review session.
+**Patch versions (x.x.N):** Typos, wording clarifications, and other
+non-substantive documentation fixes. Safe to adopt without a team review
+session.
 
-**Minor versions (x.N.0):** New rules or new domain files. Review new rules with the team before adopting. No existing rules are removed or weakened.
+**Minor versions (x.N.0):** Additive rule expansions, new rule files, new
+supporting artifacts, or stronger enforcement that does not remove or weaken
+existing rules. Review the change set with the team before adopting.
 
 **Major versions (N.0.0):** Breaking changes to rule structure, non-negotiable changes, or removal of rules. Require an explicit team decision before upgrading.
 

@@ -4,9 +4,44 @@ All notable changes to the AI Engineering Governance Pack are documented here.
 
 This project follows [Semantic Versioning](https://semver.org/):
 
-- **Patch (x.x.N):** Clarifications, typo fixes, example additions. Safe to adopt without a team review session.
-- **Minor (x.N.0):** New rules or new domain files. Review new rules before adopting. No existing rules removed or weakened.
+- **Patch (x.x.N):** Typos, wording clarifications, and other
+  non-substantive documentation fixes. Safe to adopt without a team review
+  session.
+- **Minor (x.N.0):** Additive rule expansions, new rule files, new
+  supporting artifacts, or stronger enforcement that does not remove or
+  weaken existing rules. Review the change set before adopting.
 - **Major (N.0.0):** Breaking changes to rule structure, non-negotiable changes, or rule removal. Requires an explicit team decision before upgrading.
+
+---
+
+## [v10.9.0] — 2026-04-09
+
+### Added
+
+- **Collateral alignment and local-check reliability** — Added
+  `scripts/run-markdownlint.sh` to make markdown linting work reliably in
+  Bash/WSL environments that expose `node.exe` but not `node`.
+
+### Changed
+
+- **README.md** — Replaced the stale inline CI sample with guidance to copy
+  the canonical workflow file, documented the local lint/runtime
+  requirement more accurately, and revised semantic-versioning wording to
+  match additive rule expansions.
+- **AI_AGENT_WORKFLOW.md** — Corrected the docs-only command table for
+  linting, smoke testing, security scanning, and local YAML/JSON
+  validation.
+- **`scripts/check-governance.sh`** — Aligned the local secret scan with
+  CI, used the new markdownlint helper, and made shell/runtime
+  requirements explicit.
+- **`.claude/settings.example.json`** — Updated the markdownlint hook to
+  use the helper script and documented the Bash/WSL fallback behavior.
+- **Tracked markdown files** — Fixed markdownlint issues in Rule 13 and the
+  Python and TypeScript language-rule files so the full local governance
+  check now passes.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
 
 ---
 
