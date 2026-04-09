@@ -10,6 +10,20 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.6.0] — 2026-04-09
+
+### Added
+
+- **Rule 08 change-management discipline** — Added deliberate deployment
+  strategy selection, predeclared canary success criteria, rollback-path
+  requirements, AI-generated diff size discipline, and incident-driven
+  change-process learning.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.5.0] — 2026-04-09
 
 ### Added
