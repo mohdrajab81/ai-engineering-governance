@@ -170,6 +170,27 @@ For contribution workflow inside this repository, see [CONTRIBUTING.md](./CONTRI
 
 ---
 
+## What This Pack Does Not Enforce
+
+This repository's own CI and local governance checks are structural. They verify
+that the governance pack is internally consistent: rule files exist, cross-references
+resolve, inventories stay in sync, JSON parses, markdown lint passes, and obvious
+secrets are not committed to the governance files themselves.
+
+They do **not** prove that a consuming repository's application code follows the
+substantive engineering rules in this pack. Passing the pack's CI does not prove
+that your code has explicit timeouts, correct concurrency control, safe authorization
+checks, replay-safe migrations, or complete contract closure. Those rules require
+repository-specific enforcement: tests, contract checks, architecture review, static
+analysis, load testing, security scanning, or custom CI checks suited to the stack.
+
+The pack is therefore a governance layer, not a universal enforcement engine.
+Use it to define the engineering standard and the review expectations, then add
+stack-specific code checks in the consuming repository to enforce what can be
+checked mechanically.
+
+---
+
 ## Standards Coverage
 
 ### OWASP Top 10 for Agentic Applications (2026)

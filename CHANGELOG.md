@@ -14,6 +14,20 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.10.0] — 2026-04-09
+
+### Added
+
+- **README enforcement-boundary note** — Added an explicit
+  "What This Pack Does Not Enforce" section clarifying that the pack's own
+  CI is structural and that consuming repositories still need stack-specific
+  code-level enforcement.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.9.0] — 2026-04-09
 
 ### Added
