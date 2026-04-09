@@ -1,5 +1,5 @@
 {
-  "_note": "Permissions and hooks here are tuned for this docs-only governance repository. Adapt for code repos: narrow the markdownlint hook to changed files only, add git push only if your workflow requires auto-push, and review the deny list against your team's branching workflow.",
+  "_note": "Permissions and hooks here are tuned for this docs-only governance repository. Adapt for code repos: narrow the markdownlint hook to changed files only, add git push only if your workflow requires auto-push, and review the deny list against your team's branching workflow. For code repositories, see .claude/hooks/hooks.json for additional governance-enforcing hooks (secret scan, config-protection, --no-verify block) — copy the relevant entries from that file into your project's settings.json under the 'hooks' key. A session-stop handoff reminder is also documented in that file under _optional_examples but is not part of the default hook set; see the note there before enabling it.",
   "permissions": {
     "allow": [
       "Bash:git status*",

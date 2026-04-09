@@ -90,6 +90,7 @@ special environment.
 
 ## 2) Standard task flow
 
+0. Before writing any new code, search the repository for existing implementations, check official vendor or SDK docs, and check package registries if relevant. State briefly what was found and why custom code is needed if that is the decision. Skipping this step and duplicating existing logic is a verification failure. See Rule 11 for the full scope of this requirement.
 1. Read the task, acceptance criteria, and any linked design material.
 2. Identify impacted files, callers, contracts, docs, tests, and operational behavior.
 3. Write a short plan for any non-trivial task.

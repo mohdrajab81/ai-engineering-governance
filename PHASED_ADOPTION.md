@@ -58,6 +58,9 @@ Bring these files into active use as the corresponding layer appears:
 | `10-config-migrations.md` | Config files, flags, migrations, or staged schema changes exist | Migration discipline starts when something can actually be migrated |
 | `12-vertical-slice-completeness.md` | The first contract surface appears — an API route, event type, interface method, or shared data structure | Cross-layer closure checks are meaningless before contracts exist; once the first contract exists, every subsequent one needs this checklist |
 | `13-slice-exit-evidence.md` | The project adopts phased or milestone-driven work | Evidence requirements for phase closure are irrelevant before phases are defined; once phases exist, exit criteria must be explicit |
+| `languages/python.md` | The repository contains Python source files | Language rules are only meaningful when the language is in active use |
+| `languages/typescript.md` | The repository contains TypeScript or JavaScript source files | Apply all sections for TypeScript projects; for plain JavaScript apply only sections marked [TS + JS] — TypeScript-specific type system rules do not apply to JS-only codebases |
+| `languages/golang.md` | The repository contains Go source files | Language rules are only meaningful when the language is in active use |
 
 ## Apply as hardening
 

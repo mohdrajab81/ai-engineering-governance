@@ -50,6 +50,7 @@ Where each type of rule should live and who enforces it.
 | Phase and milestone closure evidence | | 13-slice-exit-evidence — deliverable existence, wiring, validation, completion note | Human / AI review |
 | AI session boundary and memory management | | 14-ai-session-memory — context pressure, checkpointing, handoff, resume discipline | Human / AI review |
 | Domain-specific rules (telecom, fintech, etc.) | | domain/*.md — extend base rules; never modify base files for domain concerns | Human review |
+| Language-specific rules (Python, TypeScript, Go, etc.) | | languages/*.md under `.claude/rules/` — activated when the language is in use; extend base rules, never replace them | Language linters and formatters for syntax; human and AI review for judgment calls |
 
 ## How to Read This
 

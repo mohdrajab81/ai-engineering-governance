@@ -1,0 +1,78 @@
+{
+  "_note": "Governance hooks for code repositories. Copy relevant hooks into your project's .claude/settings.json under the 'hooks' key. Each hook references the governance rule it enforces.",
+
+  "_shell_requirement": "These hooks are written for POSIX-compatible shells (bash, sh). They require cat, grep, basename, and python3. They will work in Linux, macOS, and Windows environments running under WSL2 or Git Bash. They will NOT work in native Windows PowerShell or CMD without modification. If your Claude Code installation runs hooks via PowerShell (possible on Windows without WSL), you must rewrite these as .ps1 scripts. See the Claude Code hooks documentation for PowerShell hook configuration.",
+
+  "_exit_code_reference": {
+    "0": "Success. If stdout contains a valid JSON hook response, Claude Code processes it.",
+    "2": "Hard block. stderr content is shown to Claude as the reason. Tool call is prevented.",
+    "1_or_other": "Non-blocking error. Execution continues regardless. Do NOT use exit 1 to block — it does not work."
+  },
+
+  "_payload_reference": {
+    "PreToolUse_stdin_shape": {
+      "session_id": "string",
+      "hook_event_name": "PreToolUse",
+      "tool_name": "Bash | Edit | Write | ...",
+      "tool_input": {
+        "command": "string (Bash only)",
+        "file_path": "string (Edit/Write only)"
+      }
+    }
+  },
+
+  "hooks": {
+    "PreToolUse": [
+      {
+        "_rule": "Rule 08 (change-management) — never bypass pre-commit hooks",
+        "_description": "Block git commit/merge/rebase --no-verify. Uses exit 2 (hard block) so the tool call is prevented. Reads the Bash command from tool_input.command via stdin. Prints the reason to stderr, which Claude Code shows as the block reason.",
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(cat); COMMAND=$(echo \"$INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('command',''))\" 2>/dev/null || echo ''); if echo \"$COMMAND\" | grep -qE 'git (commit|merge|rebase).*--no-verify'; then echo '[BLOCKED by Rule 08] --no-verify bypasses commit hooks and is not permitted. Fix the failing hook instead of skipping it.' >&2; exit 2; fi; exit 0",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "_rule": "Rule 05 (security) — no secrets in commits",
+        "_description": "Scans the staged diff (not working-tree files) for patterns that look like hardcoded secrets. Uses git diff --cached and filters lines starting with + to scan only the content actually staged for commit. Triggers only on git commit commands. Uses exit 2 (hard block) so the commit is prevented. Diagnostic findings are written to stderr only.",
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(cat); COMMAND=$(echo \"$INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('command',''))\" 2>/dev/null || echo ''); if ! echo \"$COMMAND\" | grep -qE '^git commit'; then exit 0; fi; FINDINGS=$(git diff --cached | grep '^+' | grep -v '^+++' | grep -E '(password|secret|token|api_key|apikey|private_key|access_key|client_secret)[[:space:]]*[=:\"'\\'']+[[:space:]]*[A-Za-z0-9+/_-]{8,}' 2>/dev/null | grep -v '\\.example' | grep -v '\\.sample' | grep -v 'YOUR_' | grep -v 'PLACEHOLDER' | grep -v 'test_' | head -5); if [ -n \"$FINDINGS\" ]; then echo '[BLOCKED by Rule 05] Possible hardcoded secret detected in staged diff. Move secrets to environment variables before committing.' >&2; echo \"$FINDINGS\" >&2; exit 2; fi; exit 0",
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "_rule": "Rule 06 (testing-validation) — do not edit lint/format configs to silence checks",
+        "_description": "Config-protection hook. Reads file_path from tool_input via stdin. Hard-blocks (exit 2) edits to dedicated lint and format config files. Issues a warning (exit 0) for pyproject.toml because it contains both build metadata and lint config — a hard block would produce false positives for legitimate dependency and build changes.",
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(cat); FILE=$(echo \"$INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('file_path',''))\" 2>/dev/null || echo ''); BASENAME=$(basename \"$FILE\"); case \"$BASENAME\" in .eslintrc|.eslintrc.js|.eslintrc.cjs|.eslintrc.json|.eslintrc.yaml|.eslintrc.yml|eslint.config.js|eslint.config.mjs|eslint.config.cjs|.prettierrc|.prettierrc.js|.prettierrc.cjs|.prettierrc.json|.prettierrc.yaml|.prettierrc.yml|prettier.config.js|prettier.config.mjs|ruff.toml|.ruff.toml|.markdownlint.json|.markdownlint.yaml|.markdownlint.yml|.markdownlintrc|.stylelintrc|.stylelintrc.json|.stylelintrc.yaml|stylelint.config.js|.flake8) echo '[BLOCKED by Rule 06] Editing lint/format config to make checks pass is not permitted. Fix the code that fails the check instead. If this is a deliberate team policy change, make it a standalone commit with an explicit reason in the commit message.' >&2; exit 2;; pyproject.toml) echo '[WARN] Editing pyproject.toml: if this touches [tool.ruff], [tool.black], [tool.isort], or [tool.flake8] sections, confirm it is a deliberate team policy decision and not a workaround to silence a failing check.' >&2; exit 0;; *) exit 0;; esac",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+
+  "_optional_examples": {
+    "_note": "The session-stop handoff hook is documented here as an example pattern only. It is NOT included in the default hooks above because Claude Code's Stop event fires after every response, not only when the user ends a session. A naive git-state check fires repeatedly during normal in-progress work, which trains users to ignore Rule 14 reminders. The more reliable enforcement point is the done-checklist in AI_AGENT_WORKFLOW.md section 3.",
+    "session_stop_example": {
+      "_rule": "Rule 14 (ai-session-memory) — checkpoint before ending incomplete work",
+      "_activation": "Opt-in only. Adjust the threshold (currently >3 changed files) to match your workflow.",
+      "matcher": ".*",
+      "hook": {
+        "type": "command",
+        "command": "INPUT=$(cat); CHANGED=$(git status --porcelain 2>/dev/null | grep -v '^??' | wc -l | tr -d ' '); HANDOFF=$(git status --porcelain 2>/dev/null | grep 'tasks/handoff-' | wc -l | tr -d ' '); if [ \"$CHANGED\" -gt 3 ] && [ \"$HANDOFF\" -eq 0 ]; then echo '[WARN] Session has several uncommitted changes and no tasks/handoff-*.md was created. If this work is incomplete or spans sessions, consider writing a handoff artifact (Rule 14, tasks/handoff-template.md).' >&2; fi; exit 0",
+        "timeout": 10
+      }
+    }
+  }
+}

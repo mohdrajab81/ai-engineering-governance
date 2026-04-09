@@ -9,6 +9,26 @@ These rules govern the behavior of AI coding agents in this repository. They exi
 - Never fabricate a package or dependency to satisfy an import. If a suitable library does not already exist in the repository, ask before adding a new one and justify why the standard library or existing dependencies are insufficient.
 - Do not present a design decision as the only option when alternatives exist. Acknowledge relevant tradeoffs.
 
+## Research and reuse before coding
+
+Before writing net-new code, verify that no existing implementation already covers the need. Skipping this search is a verification failure in the same category as invoking an unverified API — it produces unnecessary code, divergent logic, and maintenance debt that could have been avoided.
+
+**Required search order:**
+
+1. Search the repository first. If the pattern, utility, or abstraction already exists in the codebase, use or extend it. Do not duplicate it.
+2. Check official vendor or SDK documentation for the relevant library or platform. Understand what the platform already provides before building a custom solution.
+3. Check package registries (PyPI, npm, crates.io, pkg.go.dev, etc.) only when the standard library and existing dependencies are insufficient and a well-maintained package is likely to exist.
+
+**What counts as a verification failure:**
+- Writing a utility that already exists in the repository without checking.
+- Building functionality the SDK or platform provides natively without consulting the official docs.
+- Adding a dependency without verifying the standard library does not already cover the need.
+
+**What does not count as a verification failure:**
+- Not finding a specific external OSS package when custom code is justified by scope, security, or dependency constraints. Small, targeted custom implementations are often the right call. The obligation is to search at the repository and vendor-docs level; exhaustive external OSS discovery is not required.
+
+**Record the outcome:** When choosing between reuse and custom code, state briefly what was checked and why custom code was chosen if that was the decision. This prevents the next agent session from re-deriving the same question.
+
 ## Verification discipline
 
 - Never claim a build, test, lint, or security scan passed unless the command was actually executed in this session and the output was inspected.
