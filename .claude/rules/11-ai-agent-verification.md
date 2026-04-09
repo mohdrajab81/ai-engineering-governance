@@ -20,11 +20,13 @@ Before writing net-new code, verify that no existing implementation already cove
 3. Check package registries (PyPI, npm, crates.io, pkg.go.dev, etc.) only when the standard library and existing dependencies are insufficient and a well-maintained package is likely to exist.
 
 **What counts as a verification failure:**
+
 - Writing a utility that already exists in the repository without checking.
 - Building functionality the SDK or platform provides natively without consulting the official docs.
 - Adding a dependency without verifying the standard library does not already cover the need.
 
 **What does not count as a verification failure:**
+
 - Not finding a specific external OSS package when custom code is justified by scope, security, or dependency constraints. Small, targeted custom implementations are often the right call. The obligation is to search at the repository and vendor-docs level; exhaustive external OSS discovery is not required.
 
 **Record the outcome:** When choosing between reuse and custom code, state briefly what was checked and why custom code was chosen if that was the decision. This prevents the next agent session from re-deriving the same question.
@@ -35,6 +37,10 @@ Before writing net-new code, verify that no existing implementation already cove
 - Never claim a manual step was performed unless it was performed. If a step could not be completed (environment not available, service not running, test suite too slow), say so explicitly and explain the gap.
 - When reporting test results, include the exact command run and the most precise result summary the toolchain provides — ideally counts of tests executed, passed, failed, and skipped. Do not summarize as "tests pass" without any supporting detail.
 - If a task requires verifying behavior in a running environment but no environment is available, produce the code and flag the verification gap explicitly. Do not close the task.
+- When reviewing your own generated code, apply extra scrutiny to error
+  handling paths, boundary conditions, and API parameter correctness.
+  These are common failure categories in AI-generated code even when the
+  output compiles and looks plausible.
 
 ## Scope discipline
 

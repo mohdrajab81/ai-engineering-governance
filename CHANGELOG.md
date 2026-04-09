@@ -10,6 +10,22 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.8.0] — 2026-04-09
+
+### Added
+
+- **Rules 10, 11, 12, and 14 refinements** — Added IaC drift detection,
+  version-controlled feature flag definitions, migration deployment
+  ordering, AI defect-profile review guidance, fixture and seed-data
+  alignment for shared-structure changes, early contract-file drift
+  checks, large tool-output summarization, and deliberate session restart
+  under context pressure.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.7.0] — 2026-04-09
 
 ### Added

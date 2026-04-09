@@ -14,6 +14,10 @@ Find every place that constructs or copies that structure. Verify the new field
 is explicitly set, defaulted, or intentionally omitted with a reason. A field
 at its zero value in a constructor is a bug until proven intentional.
 In-memory or stub implementations are the most common place this is missed.
+Also verify that test fixtures, factory functions, and seed-data builders that
+construct this shape include the new field with an intentional representative
+value. A fixture that silently omits the new field can make tests pass while
+masking missing-field bugs in real code paths.
 
 **2. New API route or endpoint**
 Verify the route is registered in the router. Verify the handler exists.
@@ -63,7 +67,9 @@ documentation layer is part of the contract and must be verified:
 
 - If the task adds or modifies a public API, verify the API contract file
   (OpenAPI spec, Protobuf definition, GraphQL schema, or equivalent) is updated
-  to match the implementation before merge.
+  to match the implementation before merge. When such a contract file exists,
+  verify it early and treat drift there as a high-severity mismatch because it
+  affects every consumer that reads or generates from the spec.
 - If the task adds or changes a database schema, verify any schema reference
   document is updated.
 - If the task changes a durable design decision, verify the relevant design

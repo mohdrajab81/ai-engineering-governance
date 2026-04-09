@@ -15,6 +15,12 @@ sessions, and hand off safely when a session ends.
 - Monitor context growth during long sessions. When working on a multi-step task
   that spans many file reads, large diffs, or long tool outputs, the risk of
   critical earlier content being truncated increases.
+- When a tool produces large output, do not consume the full output in
+  context unless the task truly requires it. Extract the relevant summary
+  instead: pass/fail counts, key error messages, and the specific findings
+  that drive the next action. Full build logs, lint output, and test
+  output belong in artifacts or files, not in session context where they
+  displace earlier rules and decisions.
 - When context pressure is high and the current task involves a high-risk
   operation — schema migration, destructive action, public API change, security
   boundary — stop and state explicitly that earlier rule content may no longer
@@ -106,6 +112,10 @@ must record the handoff state before ending:
 - Verify that assumptions from the previous session still hold: files mentioned
   may have changed, decisions may have been revisited, dependencies may have
   been updated. Do not carry over state from memory without checking.
+- When context pressure threatens the quality of a high-risk operation, a
+  fresh session with focused context is safer than continuing in a degraded
+  long-running session. Restart deliberately: read the handoff artifact,
+  load only the relevant files, and continue from the committed state.
 
 ## Why this rule exists
 
