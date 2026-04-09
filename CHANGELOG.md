@@ -10,6 +10,20 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.5.0] — 2026-04-09
+
+### Added
+
+- **Rule 07 performance and resource discipline** — Added explicit
+  guidance for container resource budgeting, right-sizing from measured
+  usage, allocation-aware hot-path design, connection pool sizing from
+  real concurrency, and connection acquisition timeout discipline.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.4.0] — 2026-04-09
 
 ### Added

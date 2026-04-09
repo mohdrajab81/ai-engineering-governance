@@ -11,6 +11,21 @@
 - Maintain dev/prod parity in dependencies. The database, broker, cache, and external services used in development should be the same technology and version as production — not substitutes or stubs. Differences between dev and prod environments are a primary source of bugs that only appear after deployment.
 - For changes to performance-critical paths, validate against a defined baseline. Record the benchmark method, environment, and result in the change summary.
 - Monitor long-running services for resource leak indicators: sustained memory growth, connection pool exhaustion, file handle accumulation, and queue depth increase. Add health checks or alarms where practical.
+- For containerized workloads, define explicit resource requests before
+  production deployment. Define memory limits deliberately; memory without
+  a limit risks node-level instability. Treat CPU limits as a
+  workload-specific decision because they can prevent abuse but also
+  introduce throttling. Monitor for OOM kills, eviction, and sustained CPU
+  throttling after deployment.
+- Before scaling horizontally, verify that each instance is using its
+  allocated CPU and memory efficiently. Set requests and limits from
+  measured production-like usage rather than from developer estimates
+  alone. Over-provisioning is a cost defect; under-provisioning is a
+  reliability defect.
+- On hot paths, avoid unnecessary per-operation allocation and repeated
+  string construction. Allocation cost becomes aggregate latency and GC
+  pressure under sustained throughput even when a single operation looks
+  cheap in isolation.
 
 ## Database access patterns
 
@@ -18,6 +33,13 @@
 - For session-owned or aggregate-owned state, consider storing it as a single document or JSON column when doing so reduces round trips and simplifies ownership. A single READ, single UPDATE, and single DELETE is cleaner than scattered column-level operations across the session lifecycle. This is a useful tactic in the right context, not a universal rule — evaluate against normalized tables, append-only events, or key-value storage for your specific access patterns.
 - Reuse prepared statements for repeated query shapes where the database client supports it. Preparing once and executing many times avoids repeated parse-and-plan cost, which is measurable at high call rates. Be aware that some databases cache a generic query plan for prepared statements that may be suboptimal for skewed data distributions — monitor slow queries on prepared statements, not just ad-hoc queries.
 - Validate connection pool sizing under realistic concurrency before going to production. An undersized pool under concurrent session load serializes database access silently — threads queue for a connection rather than failing visibly, making the bottleneck hard to diagnose.
+- Size connection pools from measured concurrent query load, not from the
+  maximum number of application threads or runnable tasks. In async,
+  virtual-thread, or coroutine-based runtimes, a pool sized to task count
+  can exhaust the database long before the application saturates CPU.
+- Set pool acquisition timeouts shorter than request timeouts. A request
+  that waits indefinitely for a connection turns pool exhaustion into a
+  latency mystery instead of a visible resource failure.
 - When multiple application instances share a database or cache, do not rely on local in-process memory for state that must be consistent across instances. Instance A's local buffer is invisible to Instance B. Use a shared distributed state mechanism — such as a distributed cache or database — when correctness depends on cross-instance visibility. The choice of specific technology is an implementation decision; the principle is that shared correctness requires shared state.
 
 ## Load and soak testing
