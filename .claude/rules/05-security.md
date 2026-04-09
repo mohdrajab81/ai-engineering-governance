@@ -12,6 +12,25 @@
 - Pin dependency versions. Review changelogs before upgrading. Do not accept automatic major-version upgrades without explicit review.
 - Run the repository's security checks when available and call out unresolved findings.
 
+## Security misconfiguration and fail-closed behavior
+
+- Change all default credentials, bootstrap passwords, and vendor-provided
+  secrets before a system is reachable from any shared or production
+  environment. A deployed default credential is a known compromise path,
+  not a temporary convenience.
+- Disable debug endpoints, administrative backdoors, unnecessary services,
+  unnecessary open ports, and development-only features in production.
+  Anything left enabled becomes part of the attack surface whether the team
+  intended to expose it or not.
+- External error responses must not expose stack traces, framework
+  versions, internal hostnames, filesystem paths, or configuration
+  details. Return a safe user-facing error and keep the internal detail in
+  protected logs.
+- When an operation fails at an authorization, validation, or dependency
+  boundary, fail closed by default. A security control that "allows for
+  now" because the check errored, timed out, or returned an unexpected
+  state is a vulnerability.
+
 ## Server-side request forgery (SSRF)
 
 - When accepting URLs, hostnames, or IP addresses as input and making server-side requests, validate and restrict the target. Block requests to loopback addresses, private network ranges (RFC 1918), link-local addresses, and cloud instance metadata endpoints (169.254.169.254 and platform equivalents). An unguarded SSRF allows an attacker to pivot from a public-facing endpoint into internal infrastructure.
@@ -26,6 +45,10 @@
 
 - For any server-rendered or cookie-authenticated endpoint, require CSRF token validation on all state-changing operations (POST, PUT, PATCH, DELETE). Do not rely on SameSite cookies alone as the only control — browser support and deployment context vary. AI-generated web endpoint code must include a CSRF defense by default, not as an optional hardening step.
 - Validate CSRF tokens server-side on every state-changing request. Token presence in the request does not imply validity; check origin and token value together.
+- When serving browser-based APIs across origins, restrict CORS to
+  explicitly trusted origins. Never combine wildcard origins with
+  credentials, and do not reflect the `Origin` header without server-side
+  validation against an allow list.
 
 ## Rate limiting and abuse control
 
@@ -45,5 +68,9 @@
 ## Supply chain integrity
 
 - For any build artifact published to a package registry or deployed to production, generate and retain a build provenance record capturing: source commit, build environment, build inputs, and the identity of the build system. This is the minimum SLSA Level 1 requirement and establishes a baseline for supply-chain incident investigation.
+- For any deployable artifact, generate and retain a Software Bill of
+  Materials (SBOM) in a standard format such as SPDX or CycloneDX. Build
+  provenance records how the artifact was produced; the SBOM records what
+  the artifact contains, including direct and transitive dependencies.
 - SLSA Level 1 (provenance record exists) is the appropriate baseline for internal services and private registries. Teams publishing artifacts to public registries, operating in regulated industries, or integrating with third-party supply chain verification should target Level 2 (build service generates and signs the attestation) and evaluate Level 3 (hermetic, verifiable build environment) against their specific threat model. Moving between levels is a deliberate security investment decision, not an automatic upgrade.
 - Do not consume a third-party dependency that has no verifiable release provenance — signed release, reproducible build, or known-good hash in lockfile. If provenance cannot be verified, treat the dependency as untrusted and escalate before adopting it.

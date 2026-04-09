@@ -16,6 +16,15 @@
 - Never claim success from compilation alone. Run the relevant tests and inspect the results.
 - When reporting validation results, state: the exact command run, the scope covered (package, module, or full suite), the outcome (pass count, fail count, skip count), and any gap (what could not be validated and why). "Tests pass" with no supporting detail is not an acceptable validation report.
 - If the only way to verify behavior is in a live or integration environment that is unavailable during the session, state explicitly that the implementation is ready but the task is not fully verified, and describe what environment and conditions are required to complete verification. Do not close the task.
+- Review AI-generated tests for assertion quality, not only for compilation,
+  pass rate, or line coverage. A generated test that asserts nothing
+  meaningful, only mirrors the implementation, or encodes an invented
+  expectation creates false confidence instead of validation.
+- When a production incident, customer escalation, or post-deployment bug
+  reveals a test gap, add a regression test that captures the failure mode
+  before closing the issue when practical. Production failures are evidence
+  that the pre-deployment suite missed a real condition; the suite must be
+  strengthened, not only the code patched.
 
 ## Code review severity tiers
 

@@ -10,6 +10,23 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.4.0] — 2026-04-09
+
+### Added
+
+- **Rule 05 security hardening** — Added security misconfiguration and
+  fail-closed guidance covering default credentials, exposed debug
+  surfaces, safe external error responses, CORS allow-list discipline, and
+  SBOM retention for deployable artifacts.
+- **Rule 06 validation hardening** — Added explicit review guidance for
+  AI-generated tests and a requirement to turn production-discovered test
+  gaps into regression tests when practical.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.3.0] — 2026-04-09
 
 ### Added
