@@ -18,20 +18,16 @@ jobs:
 
       - name: Check all rule files exist and inventories are in sync
         run: |
-          EXPECTED=14
+          # EXPECTED is derived from AGENTS.md (single source of truth for the rule manifest).
+          # To add a rule: add the file to .claude/rules/ AND add a row to AGENTS.md.
+          EXPECTED=$(grep -c "\.md |" AGENTS.md 2>/dev/null || echo 0)
           ACTUAL=$(ls .claude/rules/*.md 2>/dev/null | wc -l)
           if [ "$ACTUAL" -ne "$EXPECTED" ]; then
-            echo "ERROR: Expected $EXPECTED rule files in .claude/rules/, found $ACTUAL."
+            echo "ERROR: AGENTS.md lists $EXPECTED rule files but .claude/rules/ has $ACTUAL."
+            echo "Add or remove the corresponding row in AGENTS.md when adding or removing a rule file."
             exit 1
           fi
-          echo "Rule file count check passed: $ACTUAL files."
-          AGENTS_ROWS=$(grep -c "\.md |" AGENTS.md 2>/dev/null || echo 0)
-          if [ "$AGENTS_ROWS" -ne "$EXPECTED" ]; then
-            echo "ERROR: AGENTS.md domain rule table has $AGENTS_ROWS rows, expected $EXPECTED."
-            echo "Add or remove the corresponding row when adding or removing a rule file."
-            exit 1
-          fi
-          echo "AGENTS.md inventory check passed: $AGENTS_ROWS rows."
+          echo "Rule file count matches AGENTS.md manifest: $ACTUAL files."
 
       - name: Validate Rule N cross-references in prose
         run: |

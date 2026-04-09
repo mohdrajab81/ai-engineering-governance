@@ -10,6 +10,24 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.2.0] — 2026-04-09
+
+### Added
+
+- **Standards Coverage section in README.md** — OWASP Top 10 for Agentic Applications (2026) full coverage map (ASI01–ASI10) with explicit rule-to-category mappings. Summary table for NIST AI RMF, ISO/IEC 42001, IMDA Agentic AI Framework, and EU AI Act.
+- **AI Governance Frameworks section in REFERENCES.md** — Source citations for OWASP Agentic Top 10, NIST AI RMF 1.0, NIST AI RMF Playbook, ISO/IEC 42001:2023, IMDA Agentic AI Framework (January 2026), and EU AI Act with Digital Omnibus caveat.
+- **Rule 11: Agent identity and credential lifecycle** — Scoped least-privilege identities per agent, no credential passing between agents, time-bound tokens, credential exposure as a security incident, auditability requirement for agent identities and actions. Closes ASI03 (Identity & Privilege Abuse).
+- **`scripts/governance-lint.sh`** — Heuristic code quality checks for consuming repositories: bare TODO/FIXME without issue reference, hardcoded localhost literals in production code, secret literal patterns, HTTP calls without explicit timeout (Python), and print()/console.log() in non-test source. Explicitly framed as heuristics with documented false-positive rates per check.
+
+### Changed
+
+- **REFERENCES.md** — AI review score tables moved into a `<details>` collapse block. Caveat ("not independent peer review") now precedes the tables rather than following them. Production-experience origin paragraph promoted above the score detail.
+- **`.markdownlint.json`** — Added `"MD033": false` to permit `<details>` HTML in REFERENCES.md.
+
+All changes are additive. Consuming repositories can adopt without a team review session (patch/minor rules apply).
+
+---
+
 ## [v10.1.0] — 2026-04-09
 
 ### Added

@@ -33,6 +33,20 @@ This package was shaped around current public guidance from the following source
 - **OWASP** — Input validation, authorization as a distinct control from authentication, contextual output encoding, secure logging, session correlation, and safe error handling cheat sheets
 - **SLSA** — Software supply-chain integrity controls (referenced for dependency provenance context)
 
+## AI Governance Frameworks
+
+- **OWASP Top 10 for Agentic Applications (2026)** — The agentic security risk framework, covering ASI01 Agent Goal Hijack through ASI10 Rogue Agents. The full coverage map is in [README.md](./README.md). Source: [genai.owasp.org](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)
+
+- **NIST AI Risk Management Framework (AI RMF 1.0)** — Four core functions: GOVERN, MAP, MEASURE, MANAGE. The governance pack operates at the GOVERN and MEASURE level for engineering teams — establishing rules, reviewing AI outputs, and measuring adherence. Source: [NIST AI RMF 1.0](https://airc.nist.gov/RMF/1)
+
+- **NIST AI RMF Playbook** — Supplementary subcategory guidance for implementing trustworthy AI properties (accurate, explainable, privacy-enhanced, reliable, safe, secure, resilient, transparent). Source: [NIST AI RMF Playbook](https://airc.nist.gov/Docs/2)
+
+- **ISO/IEC 42001:2023** — International standard for AI management systems. Defines requirements for establishing, implementing, maintaining, and continually improving an AI management system. The governance pack provides the engineering-layer controls that an ISO 42001 implementation requires at the team and codebase level.
+
+- **IMDA Agentic AI Framework (January 2026)** — Singapore's national framework for responsible deployment of agentic AI systems, covering trust architecture, human oversight requirements, and accountability for autonomous agent actions. Directly relevant to the multi-agent pipeline rules in Rule 11. Source: [IMDA Agentic AI Framework](https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches/press-releases/2026/imda-launches-agentic-ai-framework)
+
+- **EU AI Act (Regulation EU 2024/1689)** — The baseline application date under the current regulation is 2 August 2026. A Digital Omnibus proposal is under active consideration that may adjust the high-risk system obligations timeline; the precise enforcement date is subject to legislative finalization. Source: [European Commission AI Act FAQ](https://digital-strategy.ec.europa.eu/en/faqs/eu-ai-act-questions-and-answers). The governance pack provides the engineering-layer controls — human review gates, audit trails, scope discipline, and verification requirements — that high-risk AI system obligations assume exist at the development layer but do not specify how to implement.
+
 ## Configuration and Deployment
 
 - **Twelve-Factor App** — Config principle: store environment-varying configuration in environment variables, separate from code (12factor.net)
@@ -51,11 +65,14 @@ This package was shaped around current public guidance from the following source
 
 ## AI Review Process and Scores
 
-This package underwent multi-round AI alignment reviews by three AI systems across nine iterations (v1–v9):
+This package underwent multi-round AI alignment reviews by three AI systems across nine iterations (v1–v9). The repository preserves the score tables, methodology summaries, and selected conclusion excerpts from those review sessions. Raw chat transcripts are not bundled here because the reviews were conducted in external chat environments.
 
-The repository preserves the score tables, methodology summaries, and selected conclusion excerpts from those review sessions. Raw chat transcripts are not bundled here because the reviews were conducted in external chat environments.
+**Important:** These are alignment assessments by AI systems against published engineering standards, conducted at the author's request. They are not independent peer review. The scores reflect how well the pack aligns with known standards and practices as evaluated by the reviewing model — not a third-party audit or external validation.
 
-These are alignment assessments by AI systems against published engineering standards, conducted at the author's request. They are not independent peer review. The scores reflect how well the pack aligns with known standards and practices, not a third-party audit.
+Rules added from real-world production experience — session state machine ordering, tombstone/grace-period handling, transactional outbox atomicity, hot-loop telemetry discipline, resource-transition buffer decisions, database access patterns, microservice cost evaluation, wire format as interface contract, Kafka partition affinity, idempotency key design, cross-service backpressure propagation — were not suggested by any AI reviewer. They came from 20+ years of carrier-grade telecom system engineering. This distinction is intentional and documented: AI systems can validate alignment with published standards; they cannot originate rules that only exist because a production system failed.
+
+<details>
+<summary>Score detail (AI alignment assessments, not peer review)</summary>
 
 | Reviewer | Method | Versions reviewed | Score progression |
 | --- | --- | --- | --- |
@@ -73,9 +90,9 @@ These are alignment assessments by AI systems against published engineering stan
 | Production engineering depth | 9.9 | 10.0 | 9.8 |
 | **Overall** | **9.8** | **9.9** | **9.7** |
 
-Claude's score progression (9.0 → 9.4 → 9.7) across v6, v8, and v9 reflects the most rigorous of the three review processes — adversarial methodology with explicit gap identification and closure audit at each version. Each score increment is earned against specific named gaps, not estimated.
+Claude's review across v6, v8, and v9 used an adversarial methodology with explicit gap identification and closure audit at each version. Each score increment corresponds to named gaps identified and closed, not estimated.
 
-Rules added from real-world production experience — session state machine ordering, tombstone/grace-period handling, transactional outbox atomicity, hot-loop telemetry discipline, resource-transition buffer decisions, database access patterns, microservice cost evaluation, wire format as interface contract, Kafka partition affinity, idempotency key design, cross-service backpressure propagation — were not suggested by any AI reviewer. They came from 20+ years of carrier-grade telecom system engineering. This distinction is intentional and documented: AI systems can validate alignment with published standards; they cannot originate rules that only exist because a production system failed.
+</details>
 
 ## Principles
 

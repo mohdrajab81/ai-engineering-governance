@@ -25,19 +25,15 @@ else
 fi
 
 # 2. Rule file count + AGENTS.md row count
+# EXPECTED is derived from AGENTS.md (single source of truth for the rule manifest).
+# To add a rule: add the file to .claude/rules/ AND add a row to AGENTS.md.
 echo "-- Rule file count and AGENTS.md inventory sync"
-EXPECTED=14
+EXPECTED=$(grep -c "\.md |" AGENTS.md 2>/dev/null || echo 0)
 ACTUAL=$(ls .claude/rules/*.md 2>/dev/null | wc -l | tr -d ' ')
 if [ "$ACTUAL" -ne "$EXPECTED" ]; then
-  fail "Expected $EXPECTED rule files in .claude/rules/, found $ACTUAL."
+  fail "AGENTS.md lists $EXPECTED rule files but .claude/rules/ has $ACTUAL. Add or remove the corresponding row in AGENTS.md."
 else
-  ok "Rule file count: $ACTUAL."
-fi
-AGENTS_ROWS=$(grep -c "\.md |" AGENTS.md 2>/dev/null || echo 0)
-if [ "$AGENTS_ROWS" -ne "$EXPECTED" ]; then
-  fail "AGENTS.md has $AGENTS_ROWS domain rule rows, expected $EXPECTED."
-else
-  ok "AGENTS.md inventory: $AGENTS_ROWS rows."
+  ok "Rule file count matches AGENTS.md manifest: $ACTUAL files."
 fi
 
 # 3. Rule N cross-references
