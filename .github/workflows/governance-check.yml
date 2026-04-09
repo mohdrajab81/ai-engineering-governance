@@ -65,6 +65,21 @@ jobs:
           fi
           echo "README domain-rule inventory check passed."
 
+      - name: Validate RULE_PLACEMENT.md rule entries match actual files
+        run: |
+          FAILED=0
+          while IFS= read -r filename; do
+            if [ ! -f ".claude/rules/$filename" ]; then
+              echo "ERROR: RULE_PLACEMENT.md references '.claude/rules/$filename' but the file does not exist."
+              FAILED=$((FAILED + 1))
+            fi
+          done < <(grep -oE '`[0-9]{2}-[a-z-]+\.md`' RULE_PLACEMENT.md | tr -d '`')
+          if [ "$FAILED" -gt 0 ]; then
+            echo "Update RULE_PLACEMENT.md table to match the actual files in .claude/rules/."
+            exit 1
+          fi
+          echo "RULE_PLACEMENT.md inventory check passed."
+
       - name: Validate PHASED_ADOPTION language-rule entries match actual files
         run: |
           FAILED=0

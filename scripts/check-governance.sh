@@ -72,7 +72,22 @@ else
   ok "README domain-rule inventory matches .claude/rules/."
 fi
 
-# 5. PHASED_ADOPTION language-rule inventory
+# 5. RULE_PLACEMENT.md inventory
+echo "-- RULE_PLACEMENT.md inventory sync"
+RP_FAILED=0
+while IFS= read -r filename; do
+  if [ ! -f ".claude/rules/$filename" ]; then
+    echo "    RULE_PLACEMENT.md references '.claude/rules/$filename' but file does not exist."
+    RP_FAILED=$((RP_FAILED + 1))
+  fi
+done < <(grep -oE '`[0-9]{2}-[a-z-]+\.md`' RULE_PLACEMENT.md | tr -d '`')
+if [ "$RP_FAILED" -gt 0 ]; then
+  fail "RULE_PLACEMENT.md table out of sync with .claude/rules/."
+else
+  ok "RULE_PLACEMENT.md inventory matches .claude/rules/."
+fi
+
+# 6. PHASED_ADOPTION language-rule inventory
 echo "-- PHASED_ADOPTION language-rule inventory sync"
 LANG_FAILED=0
 while IFS= read -r entry; do
@@ -87,7 +102,7 @@ else
   ok "PHASED_ADOPTION language-rule inventory matches .claude/rules/languages/."
 fi
 
-# 6. settings.example.json validity
+# 7. settings.example.json validity
 echo "-- settings.example.json JSON validity"
 if python3 -m json.tool .claude/settings.example.json > /dev/null 2>&1; then
   ok "settings.example.json is valid JSON (python3)."
@@ -97,7 +112,7 @@ else
   fail "settings.example.json is not valid JSON (neither python3 nor node could parse it)."
 fi
 
-# 7. Markdown lint (requires markdownlint-cli)
+# 8. Markdown lint (requires markdownlint-cli)
 echo "-- Markdown lint"
 if command -v markdownlint > /dev/null 2>&1; then
   if markdownlint "**/*.md" --ignore node_modules 2>/dev/null; then
@@ -109,7 +124,7 @@ else
   echo "    [SKIP] markdownlint not installed. Run: npm install -g markdownlint-cli"
 fi
 
-# 8. Secret grep
+# 9. Secret grep
 echo "-- Secret scan"
 if grep -rqE "(password|secret|token|api_key)\s*=\s*\S+" \
   README.md REFERENCES.md RULE_PLACEMENT.md AI_AGENT_WORKFLOW.md \

@@ -10,6 +10,31 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.1.0] — 2026-04-09
+
+### Added
+
+- **Language rule files** (`.claude/rules/languages/`) — optional extensions for Python, TypeScript, and Go. Activated per `PHASED_ADOPTION.md` when the language is in active use. Python: type annotations, frozen dataclasses, black/ruff/isort/mypy, bandit, pytest markers. TypeScript: `unknown` over `any`, Zod boundary validation, no `console.log`, Playwright E2E. Sections annotated `[TS only]` vs `[TS + JS]`. Go: gofmt/goimports/vet/staticcheck/gosec, interface design, context timeouts, `-race` flag, table-driven tests.
+- **Rule 11: Research and Reuse Before Coding** — new section defining hallucination-by-omission narrowly: failing to check repo patterns or vendor docs is a verification failure; not finding an external package when custom code is justified is not.
+- **Rule 06: Code review severity tiers** — CRITICAL / HIGH / MEDIUM / LOW with explicit merge gate semantics. CRITICAL and HIGH are hard blockers; MEDIUM requires acknowledged follow-up; LOW does not block merge.
+- **AI_AGENT_WORKFLOW.md step 0** — research and reuse before coding added to the standard task flow.
+- **`.claude/hooks/hooks.json`** — optional governance-enforcing hooks: `--no-verify` block (Rule 08), staged-diff secret scan on `git commit` (Rule 05), config-protection for lint/format files with warn-only for `pyproject.toml` (Rule 06). All hooks use `exit 2` + stderr for hard blocking. Session-stop handoff hook documented as opt-in example with explanation. Windows/PowerShell portability caveat documented.
+- **`scripts/check-governance.sh`** — local validation script mirroring all CI checks. Structured pass/fail output. Falls back to `node` for JSON validation when `python3` is unavailable.
+- **Semantic CI checks** (`governance-check.yml`) — three new steps: Rule N cross-reference validation (prose references must resolve to existing files), README domain-rule inventory sync, PHASED_ADOPTION language-rule sync.
+- Rule 01: dependency direction rule and ADR capture discipline.
+- Rule 03: graceful degradation pre-definition and readiness vs liveness health check semantics.
+- Rule 03: error boundary design — callers must define explicit error propagation contracts at module and service boundaries.
+
+### Changed
+
+- README.md: "Proven in Production" renamed to "Battle-Tested on a Production Build" with explicit scope sentence (one project, one engineer, one language).
+- REFERENCES.md: "independent review" replaced with "multi-round AI alignment reviews" in all three occurrences. Caveat paragraph added before score table: scores reflect AI alignment assessment, not independent peer review.
+- PHASED_ADOPTION.md: language rule files added to middle-tier activation table.
+- RULE_PLACEMENT.md: language-specific rules row added.
+- `settings.example.json`: note updated to reference `hooks.json` and distinguish default hooks from optional examples.
+
+---
+
 ## [v10.0.0] — 2026-04-08
 
 ### Added
