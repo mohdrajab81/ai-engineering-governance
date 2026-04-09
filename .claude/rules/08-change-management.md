@@ -42,5 +42,5 @@
 
 ## Rule exceptions and waivers
 
-- When a specific situation requires deliberately breaking one of these governance rules, document the exception explicitly: which rule is being broken, the scope of the exception (file, module, release), the owner responsible for it, the risk accepted, and the condition under which it expires or must be revisited. An undocumented rule break is silent governance drift; a documented exception is a deliberate engineering decision.
+- When a specific situation requires deliberately breaking one of these governance rules, document the exception explicitly: which rule is being broken, the scope of the exception (file, module, release), the owner responsible for it, the risk accepted, and the condition under which it expires or must be revisited.
 - Scope exceptions as narrowly as possible. An exception that applies to a single function or migration is better than one that applies to a whole module. An exception that expires after one release is better than one with no end date.

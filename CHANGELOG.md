@@ -14,6 +14,32 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.11.1] — 2026-04-09
+
+### Changed
+
+- **Adapter compaction** — Removed duplicated non-negotiable summaries from
+  `AGENTS.md` and `.github/copilot-instructions.md` while keeping
+  `CLAUDE.md` as the canonical rule source and retaining adapter-specific
+  guidance.
+
+Safe to adopt without a team review session.
+
+---
+
+## [v10.11.0] — 2026-04-09
+
+### Changed
+
+- **Safe compaction pass** — Removed a small amount of tutorial and
+  restated text from Rules 06, 08, 10, 12, and 13 without changing rule
+  substance or file structure.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.10.0] — 2026-04-09
 
 ### Added

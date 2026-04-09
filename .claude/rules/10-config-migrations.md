@@ -23,7 +23,7 @@
   alongside the code whenever the platform allows it. A flag that exists
   only in a runtime dashboard is harder to review, audit, and retire.
 - Treat a feature flag's default value as a contract. Changing the default is a potentially breaking change and must be reviewed as one.
-- Set a maximum lifetime for each flag. Flags that outlive their intended window become permanent accidental branches that increase cognitive load and test surface.
+- Set a maximum lifetime for each flag.
 - Remove flags and their dead branches promptly after a rollout is confirmed stable. Do not accumulate flag debt.
 - Test both flag states (enabled and disabled) before merging. A flag that has never been tested in its off state is a latent defect.
 
@@ -40,8 +40,7 @@
 - When a migration requires coordinated schema and application changes,
   deploy the additive schema expansion first, then deploy the application
   code that uses the new shape, then remove the old shape in a later
-  contract phase. Do not deploy code that requires a schema change before
-  the schema exists in the target environment.
+  contract phase.
 - For event-driven systems: version event schemas explicitly. Consumers must tolerate unknown fields in newer events (forward compatibility) and producers must tolerate missing optional fields in older consumers (backward compatibility).
 - For public or partner-facing APIs: maintain a documented deprecation window before removing any field or endpoint. Communicate the timeline to consumers before beginning the contract phase.
 

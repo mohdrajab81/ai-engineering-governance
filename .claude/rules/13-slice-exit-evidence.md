@@ -14,14 +14,6 @@ work.
 
 Use this rule whenever work is described in terms such as:
 
-- phase
-- slice
-- milestone
-- track
-- deliverable set
-
-Examples:
-
 - "Slice 3 is complete"
 - "Phase 11 store work is done"
 - "Track A can be closed"
@@ -125,12 +117,3 @@ Slice closure check:
 ```
 
 If any remaining gap is non-empty, do not call the slice complete.
-
-## Why this rule exists
-
-Phase-driven repositories fail in a predictable way: package-level work gets
-finished, tests in that package pass, and the agent reports the slice complete
-even though one of the promised artifacts is still missing or one boundary type
-cannot express the required semantics.
-
-This rule prevents "complete in summary, partial in tree" failures.

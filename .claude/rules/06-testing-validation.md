@@ -44,4 +44,4 @@ No functional impact. The reviewer notes it but the author decides whether to ac
 
 **Reporting format:** State the severity tier explicitly for each finding. Do not mix severities in a single bullet. A useful finding looks like: `[HIGH] The retry loop in process_payment() is not idempotent — a double-charge is possible if the network times out after the charge succeeds.`
 
-**Merge gate:** A change with any open CRITICAL or HIGH finding must not be merged. Both tiers are hard blockers — the difference is severity and urgency, not whether they can be deferred. MEDIUM findings do not block merge but must be acknowledged with a tracked follow-up. LOW findings do not block merge.
+**Merge gate:** A change with any open CRITICAL or HIGH finding must not be merged. MEDIUM findings do not block merge but must be acknowledged with a tracked follow-up. LOW findings do not block merge.

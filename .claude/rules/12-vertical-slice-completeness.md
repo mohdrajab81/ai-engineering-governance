@@ -85,20 +85,8 @@ onboarding, and future AI sessions that make decisions based on stale docs.
 
 For each applicable check, state which check you are running and show the
 evidence (grep result, file section, or compiler output) that confirms the
-connection exists. Do not rely on "the tests pass" as a substitute — test suites
-catch logic errors, not structural gaps between contract layers. Structural gaps
-compile cleanly and pass all tests until a runtime caller discovers the missing
-piece.
+connection exists. Do not rely on "the tests pass" as a substitute.
 
 ## Pairing with phase and milestone governance
 
 When the repository uses named phases, slices, or milestones, pair this rule with `13-slice-exit-evidence`. This file governs whether each individual contract change is structurally complete across all runtime and documentation layers. Rule 13 governs whether the phase or milestone as a whole is complete — all promised deliverables exist, are wired, and have validation evidence.
-
-## Why this rule exists
-
-In layered architectures (spec → handler → serializer, or interface →
-in-memory impl → SQL impl), it is easy to update one layer and forget the
-others. The layers are in different files and sometimes different packages.
-Tests mock the boundaries, so the gap is invisible until integration or
-production. The cost of a 2-minute checklist is lower than the cost of a review
-finding or a runtime 404.
