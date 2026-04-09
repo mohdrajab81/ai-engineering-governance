@@ -10,6 +10,27 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.3.0] — 2026-04-09
+
+### Added
+
+- **Rule 04 observability expansion** — Added guidance for wide events
+  and context-rich telemetry, continuous profiling as the fourth
+  observability signal, AI and GenAI operational observability (model
+  spans, token accounting, retrieval instrumentation, redaction), and
+  backend-specific cardinality management.
+
+### Changed
+
+- **Rule 04 metrics section** — Clarified that high-cardinality
+  restrictions apply specifically to time-series metric backends, with
+  guidance to route investigative context to event or trace backends
+  instead of dropping it.
+
+All changes are additive. Consuming repositories can adopt on a normal minor-upgrade schedule.
+
+---
+
 ## [v10.2.0] — 2026-04-09
 
 ### Added
