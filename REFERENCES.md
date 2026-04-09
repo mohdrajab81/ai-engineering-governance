@@ -55,6 +55,8 @@ This package underwent multi-round independent review by three AI systems across
 
 The repository preserves the score tables, methodology summaries, and selected conclusion excerpts from those review sessions. Raw chat transcripts are not bundled here because the reviews were conducted in external chat environments.
 
+These are alignment assessments by AI systems against published engineering standards, conducted at the author's request. They are not independent peer review. The scores reflect how well the pack aligns with known standards and practices, not a third-party audit.
+
 | Reviewer | Method | Versions reviewed | Score progression |
 | --- | --- | --- | --- |
 | Claude (Sonnet 4.6) | Line-by-line adversarial review, gap-closure audit | v6, v8, v9 | 9.0 → 9.4 → **9.7** / 10 |

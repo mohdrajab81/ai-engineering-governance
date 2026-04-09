@@ -16,9 +16,9 @@ This pack is the governance layer. It tells the agent what the rules are, where 
 
 ---
 
-## Proven in Production
+## Battle-Tested on a Production Build
 
-This pack was used as the primary governance framework for building a production-grade dual-RAT Cell Broadcast Centre — two protocol stacks (SBc-AP/SCTP and CBSP/TCP), a transactional dispatch engine, 14 database migrations, a full REST and WebSocket API, and 670 automated tests. The build was completed by a team of one engineer in approximately one week, working in a language used for the first time on this project.
+This pack was used as the primary governance framework for building a production-grade dual-RAT Cell Broadcast Centre — two protocol stacks (SBc-AP/SCTP and CBSP/TCP), a transactional dispatch engine, 14 database migrations, a full REST and WebSocket API, and 670 automated tests. The build was completed by a team of one engineer in approximately one week, working in a language used for the first time on this project. That is one project, one engineer, one language — a real proof point, not a broad claim.
 
 The outcome — zero data races, fail-closed dispatch with AMBIGUOUS outcome detection, a consolidated architecture decision record, and complete documentation at every layer — was not accidental. It was the direct result of applying the rules in this pack consistently across every AI session.
 
@@ -95,6 +95,7 @@ The result is a governance system that covers what standards cover — and also 
 3. Fill in the command table in `AI_AGENT_WORKFLOW.md` with your repo's actual commands
 4. Configure CI to run build, lint, test, security scan, and the fill-me check — fail on errors
 5. Optional: copy `.claude/settings.example.json` to `.claude/settings.json` and customize the allow-list, deny-list, and post-edit hook for your stack
+6. Run `bash scripts/check-governance.sh` locally to validate all structural checks before pushing
 
 **Sample GitHub Actions governance check** — copy this to `.github/workflows/governance-check.yml`:
 

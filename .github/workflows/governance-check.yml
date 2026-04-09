@@ -33,6 +33,53 @@ jobs:
           fi
           echo "AGENTS.md inventory check passed: $AGENTS_ROWS rows."
 
+      - name: Validate Rule N cross-references in prose
+        run: |
+          FAILED=0
+          while IFS= read -r ref; do
+            num=$(echo "$ref" | grep -oE "[0-9]+")
+            padded=$(printf "%02d" "$((10#$num))")
+            if ! ls .claude/rules/${padded}-*.md > /dev/null 2>&1; then
+              echo "ERROR: '$ref' referenced in prose but .claude/rules/${padded}-*.md does not exist."
+              FAILED=$((FAILED + 1))
+            fi
+          done < <(grep -rh --include="*.md" -oE "Rule [0-9]+" . | sort -u)
+          if [ "$FAILED" -gt 0 ]; then
+            echo "$FAILED broken rule reference(s) found. Update the prose or add the missing rule file."
+            exit 1
+          fi
+          echo "Rule cross-reference check passed."
+
+      - name: Validate README domain-rule inventory matches actual files
+        run: |
+          FAILED=0
+          while IFS= read -r filename; do
+            if [ ! -f ".claude/rules/$filename" ]; then
+              echo "ERROR: README.md lists '.claude/rules/$filename' but the file does not exist."
+              FAILED=$((FAILED + 1))
+            fi
+          done < <(grep -oE '\`[0-9]{2}-[a-z-]+\.md\`' README.md | tr -d '`')
+          if [ "$FAILED" -gt 0 ]; then
+            echo "Update README.md domain-rule table to match the actual files in .claude/rules/."
+            exit 1
+          fi
+          echo "README domain-rule inventory check passed."
+
+      - name: Validate PHASED_ADOPTION language-rule entries match actual files
+        run: |
+          FAILED=0
+          while IFS= read -r entry; do
+            if [ ! -f ".claude/rules/$entry" ]; then
+              echo "ERROR: PHASED_ADOPTION.md references '$entry' but .claude/rules/$entry does not exist."
+              FAILED=$((FAILED + 1))
+            fi
+          done < <(grep -oE '\`languages/[a-z]+\.md\`' PHASED_ADOPTION.md | tr -d '`')
+          if [ "$FAILED" -gt 0 ]; then
+            echo "Update PHASED_ADOPTION.md language-rule table to match actual files in .claude/rules/languages/."
+            exit 1
+          fi
+          echo "PHASED_ADOPTION language-rule inventory check passed."
+
       - name: Validate settings.example.json
         run: |
           python3 -m json.tool .claude/settings.example.json > /dev/null

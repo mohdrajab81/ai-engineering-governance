@@ -11,6 +11,8 @@
 - Keep functions focused. If a function becomes hard to explain quickly, split it.
 - Keep classes cohesive. If a class owns unrelated responsibilities, separate them.
 - Treat design docs and feature specs as part of the implementation surface. Update them when behavior changes.
+- Dependencies must flow inward toward domain logic, not outward. Transport adapters, HTTP handlers, database clients, and queue consumers must depend on domain interfaces — not vice versa. When business logic imports from infrastructure layers, the coupling is expensive to remove: tests require real infrastructure, migrations require rewriting logic, and the domain model becomes entangled with delivery mechanism details.
+- When a significant architectural decision is made — wire format, database choice, service boundary, key algorithm, auth model — record it immediately as a brief decision note: what was decided, what alternatives were considered, and why this option was chosen. Capture this before or immediately after the decision, not after the system is built. Future AI sessions reading only the code cannot recover the reasoning behind a decision, and will re-derive the same options from scratch without the context that ruled them out.
 
 ## Distributed systems and service decomposition
 
