@@ -1,6 +1,6 @@
 # Reference Notes
 
-This package was shaped around current public guidance from the following sources, validated through independent multi-round review by Claude, ChatGPT, and Gemini across nine iterations (v1–v9).
+This package was shaped around current public guidance from the following sources, validated through multi-round AI alignment reviews by Claude, ChatGPT, and Gemini across nine iterations (v1–v9).
 
 ## AI Agent Instruction Standards
 
@@ -51,7 +51,7 @@ This package was shaped around current public guidance from the following source
 
 ## AI Review Process and Scores
 
-This package underwent multi-round independent review by three AI systems across nine iterations (v1–v9):
+This package underwent multi-round AI alignment reviews by three AI systems across nine iterations (v1–v9):
 
 The repository preserves the score tables, methodology summaries, and selected conclusion excerpts from those review sessions. Raw chat transcripts are not bundled here because the reviews were conducted in external chat environments.
 
@@ -73,7 +73,7 @@ These are alignment assessments by AI systems against published engineering stan
 | Production engineering depth | 9.9 | 10.0 | 9.8 |
 | **Overall** | **9.8** | **9.9** | **9.7** |
 
-Claude's score progression (9.0 → 9.4 → 9.7) across v6, v8, and v9 reflects the most rigorous independent evaluation — adversarial methodology with explicit gap identification and closure audit at each version. Each score increment is earned against specific named gaps, not estimated.
+Claude's score progression (9.0 → 9.4 → 9.7) across v6, v8, and v9 reflects the most rigorous of the three review processes — adversarial methodology with explicit gap identification and closure audit at each version. Each score increment is earned against specific named gaps, not estimated.
 
 Rules added from real-world production experience — session state machine ordering, tombstone/grace-period handling, transactional outbox atomicity, hot-loop telemetry discipline, resource-transition buffer decisions, database access patterns, microservice cost evaluation, wire format as interface contract, Kafka partition affinity, idempotency key design, cross-service backpressure propagation — were not suggested by any AI reviewer. They came from 20+ years of carrier-grade telecom system engineering. This distinction is intentional and documented: AI systems can validate alignment with published standards; they cannot originate rules that only exist because a production system failed.
 
