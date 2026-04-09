@@ -14,6 +14,9 @@
 - Do not leave misleading or stale comments. A comment that no longer matches the code is worse than no comment.
 - Document preconditions, postconditions, and invariants for non-trivial functions, especially when callers must satisfy constraints.
 - TODO comments must include the reason and a reference (ticket, issue, or owner). A bare TODO is not actionable.
+- Extract domain-significant numeric and string literals into named
+  constants. A raw timeout, threshold, retry count, or status code in
+  business logic hides intent from the reader.
 
 ## Cognitive load and structure
 
@@ -27,6 +30,13 @@
 - Do not introduce abstractions speculatively. Duplication is preferable to a premature or wrong abstraction.
 - An abstraction that is harder to understand than the two concrete cases it replaces is not an improvement.
 - Avoid abstraction layers that exist only to satisfy a pattern name (Factory, Manager, Handler) without a real boundary benefit.
+- AI-generated code must meet the same readability standard as
+  human-written code. Review it specifically for generic naming,
+  unnecessary wrappers, duplicated logic, and verbose reimplementation of
+  standard-library behavior.
+- Duplication is acceptable while the shared concept is unstable. If the
+  same logic with the same semantics appears in three or more places,
+  extract it deliberately rather than letting parallel copies drift.
 
 ## Codebase consistency
 

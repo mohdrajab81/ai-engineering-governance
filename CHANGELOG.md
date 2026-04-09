@@ -10,6 +10,19 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.7.0] — 2026-04-09
+
+### Added
+
+- **Rule 09 readability discipline** — Added guidance for
+  domain-significant constants, AI-generated readability review, and a
+  three-instance duplication extraction heuristic.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.6.0] — 2026-04-09
 
 ### Added
