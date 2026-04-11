@@ -64,6 +64,7 @@ The result is a governance system that covers what standards cover — and also 
 | `CONTRIBUTING.md` | Contributor workflow for making focused, reviewable changes to the pack |
 | `README.md` | This file |
 | `REFERENCES.md` | Full provenance — standards, review history, production-experience origin |
+| `docs/upstream/` | Evaluations of external governance packs and selective adoption decisions |
 
 ### Domain rule files (`.claude/rules/`)
 
