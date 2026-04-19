@@ -37,6 +37,7 @@
 - Reuse existing patterns before introducing new abstractions.
 - Do not extract an abstraction until the shared concept is stable and has at least two proven, concrete uses.
 - Do not over-engineer. Solve the current problem cleanly.
+- This policy governs implementation behavior for coding work. If a repository also uses a delivery-governance or runtime-enforcement system, treat that system as complementary rather than as a replacement for these implementation rules.
 - Update docs when behavior, contracts, config, or operational workflow changes. Cross-layer contract completeness and phase/milestone exit evidence are enforced by Rules 12 and 13. For tasks that span multiple sessions, preserve progress in a tracked handoff artifact before ending the session (Rule 14).
 
 ## Concurrency and state

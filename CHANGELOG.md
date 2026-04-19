@@ -14,6 +14,35 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.12.0] — 2026-04-19
+
+### Added
+
+- **Ecosystem positioning and composition guidance** — README and CLAUDE.md now
+  explicitly position this pack as the implementation-layer governance layer,
+  designed to compose with delivery-governance systems (e.g., GAAI-framework)
+  and runtime-enforcement systems (e.g., microsoft/agent-governance-toolkit)
+  rather than compete with them.
+- **Landscape review** (`docs/upstream/landscape-review.md`) — structured
+  comparison of five adjacent projects: GAAI-framework, agent-governance-toolkit,
+  frai, AssurancePlatform, and VerifyWise. Includes adopt/borrow/reject decisions
+  and a quarterly freshness cadence.
+- **Upstream evaluations index** (`docs/upstream/README.md`) — explains the
+  purpose of the upstream folder and lists current evaluations.
+- **Native assurance and evidence template** (`tasks/assurance-evidence-template.md`)
+  — claim, evidence, rollout, rollback, runtime wiring, and closure statement
+  sections anchored to this repo's own rule categories (CLAUDE.md, Rules 08, 10,
+  12, 13, 14). Wired into `AI_AGENT_WORKFLOW.md` step 3, the done checklist,
+  and `CONTRIBUTING.md` PR guidance.
+- **Filled example** (`tasks/examples/assurance-evidence-example-api-field-migration.md`)
+  — concrete API field migration scenario (expand phase of `request_id` →
+  `correlation_id`) showing how to fill the template for a real high-risk change.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.11.1] — 2026-04-09
 
 ### Changed

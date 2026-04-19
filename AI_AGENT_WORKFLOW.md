@@ -93,7 +93,7 @@ special environment.
 0. Before writing any new code, search the repository for existing implementations, check official vendor or SDK docs, and check package registries if relevant. State briefly what was found and why custom code is needed if that is the decision. Skipping this step and duplicating existing logic is a verification failure. See Rule 11 for the full scope of this requirement.
 1. Read the task, acceptance criteria, and any linked design material.
 2. Identify impacted files, callers, contracts, docs, tests, and operational behavior.
-3. Write a short plan for any non-trivial task.
+3. Write a short plan for any non-trivial task. For changes that cross a high-risk boundary — backward-compatibility risk, schema or API migration, destructive operation, public contract change, staged rollout, or multi-session work — copy `tasks/assurance-evidence-template.md` and fill it in before implementation begins. The template's risk-trigger checklist identifies whether it applies.
 4. Define exact validation before coding.
 5. Implement in small steps.
 6. Run the smallest relevant checks first.
@@ -123,6 +123,7 @@ A change is done only when all applicable items are true.
 - [ ] Cross-layer contract closure verified for any change touching an API route, event type, interface method, or shared data structure (Rule 12).
 - [ ] If this closes a phase or milestone, slice exit evidence is complete — all deliverables exist, are wired, and have validation evidence (Rule 13).
 - [ ] If work is incomplete and spans sessions, a handoff artifact exists in `tasks/` (Rule 14).
+- [ ] For high-risk changes, the assurance-evidence template closure statement is complete (`tasks/assurance-evidence-template.md`).
 - [ ] A human reviewer can understand the change quickly.
 
 ## 4) Review summary template

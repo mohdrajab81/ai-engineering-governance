@@ -190,6 +190,18 @@ Use it to define the engineering standard and the review expectations, then add
 stack-specific code checks in the consuming repository to enforce what can be
 checked mechanically.
 
+This is an implementation-layer governance pack: it governs how coding agents
+plan, change, validate, and report software work. It is designed to compose
+cleanly with stronger adjacent systems rather than compete with them. For
+example:
+
+- a delivery-governance layer can decide what enters execution and when a story
+  is done
+- a runtime-enforcement layer can allow or deny agent actions at execution time
+
+See [docs/upstream/landscape-review.md](./docs/upstream/landscape-review.md) for
+the current comparison and scope boundary.
+
 ---
 
 ## Standards Coverage
@@ -227,6 +239,17 @@ Full source citations and framework notes are in [REFERENCES.md](./REFERENCES.md
 This pack covers software engineering, AI-agent governance, concurrency, resilience, observability, security (OWASP, CSRF, SSRF, rate limiting, supply chain), testing, performance, configuration, change management, readability, and the full lifecycle of AI-assisted development.
 
 It intentionally does not cover: data privacy regulation (GDPR, CCPA, right-to-deletion, consent management), accessibility standards (WCAG, ARIA), cost governance and cloud budget controls, or industry-specific compliance frameworks (HIPAA, PCI-DSS, FedRAMP). These are real requirements in their domains and belong in domain-specific extension files rather than in a generic engineering governance pack. The extension pattern in the "How to Deploy" section above describes how to add them.
+
+It also intentionally does not try to become a delivery daemon, multi-agent
+runtime, policy-enforcement engine, or enterprise governance dashboard. Those
+can stack on top of or alongside this pack; they are not this pack's scope.
+
+For high-risk changes that need explicit evidence against this repository's own
+rule categories, use
+[tasks/assurance-evidence-template.md](./tasks/assurance-evidence-template.md).
+See
+[tasks/examples/assurance-evidence-example-api-field-migration.md](./tasks/examples/assurance-evidence-example-api-field-migration.md)
+for a filled example.
 
 ---
 

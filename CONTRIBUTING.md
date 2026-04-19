@@ -33,6 +33,7 @@ If you are updating or adding a rule because of a real failure pattern, also rev
 - `RULE_PLACEMENT.md`: maintainer guidance on where rules belong
 - `PHASED_ADOPTION.md`: maintainer guidance on when to apply parts of the pack
 - `tasks/lessons.md`: evidence log for recurring failures and improvements
+- `tasks/assurance-evidence-template.md`: evidence and assurance template for high-risk changes; copy and fill when the risk-trigger checklist in that file applies
 - `.claude/settings.example.json`: optional local setup example, not a policy source
 
 If you are unsure where something belongs, update `RULE_PLACEMENT.md` and the relevant file together.
@@ -94,6 +95,8 @@ Every PR should explain:
 - why the chosen design is correct
 - what validation was run
 - what remains unverified
+
+For high-risk changes — backward-compatibility risk, schema or API migration, destructive operation, public contract change, or staged rollout — include the closure statement from a filled `tasks/assurance-evidence-template.md` in the PR description or as an attached file.
 
 Use the repository PR template.
 

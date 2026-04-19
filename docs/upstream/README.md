@@ -33,3 +33,4 @@ support material for future changes to:
 Current evaluations:
 
 - `EVERYTHING_CLAUDE_CODE_EVALUATION.md`
+- `landscape-review.md`
