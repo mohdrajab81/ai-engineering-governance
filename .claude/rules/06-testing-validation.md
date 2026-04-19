@@ -26,6 +26,52 @@
   that the pre-deployment suite missed a real condition; the suite must be
   strengthened, not only the code patched.
 
+## Validating AI-integrated components
+
+- Distinguish deterministic artifacts from nondeterministic generation when
+  designing tests for AI-integrated systems. Schema-conformant JSON outputs,
+  tool-call envelopes, routing decisions, and other structured control signals
+  should use exact assertions. Free-form natural-language generation usually
+  should not.
+- Do not force exact-string assertions onto nondeterministic model output unless
+  the system is explicitly configured to make that output deterministic. Brittle
+  exact-match tests on free-form generation create flaky suites that fail
+  without a meaningful regression.
+- When validating free-form generation, define an evaluation method that matches
+  the risk being tested: rubric-based checks, semantic-similarity thresholds,
+  human-reviewed golden answers, or model-assisted evaluation where
+  appropriate. Record why that method is sufficient for the specific behavior
+  under test.
+- Model-assisted evaluation introduces its own bias risk — particularly when the
+  evaluator model shares training data, provider lineage, or architectural
+  assumptions with the model under test. Validate model-assisted scores against
+  human judgment periodically and do not treat them as ground truth.
+- For retrieval-augmented generation or ranking systems, maintain a golden
+  dataset for retrieval and relevance regression. The goal is to catch
+  degradation in retrieval accuracy, ranking quality, grounding, or citation
+  coverage even when the final wording varies.
+- Keep AI evaluations reproducible enough to compare runs over time. Fix the
+  test dataset, prompt template, model version where possible, and scoring
+  rubric for a given regression suite. If those inputs change, record the
+  change explicitly so a score shift is not misread as a product regression.
+
+## Property-based and fuzz testing
+
+- For parsers, state machines, data validation layers, and other edge-heavy
+  components that AI agents commonly get almost right, add property-based or
+  fuzz-style tests when the risk justifies them. Fixed examples rarely cover
+  the combinatorial boundary conditions where these components actually fail.
+- Use property-based testing to express invariants rather than examples: valid
+  inputs round-trip without corruption, invalid inputs fail safely, state
+  transitions remain legal, and normalization rules are idempotent. A thousand
+  randomized cases exercising one invariant often finds defects that dozens of
+  hand-written examples miss.
+- This is especially important for protocol parsing, schema validation,
+  user-controlled text parsing, and session/state transition logic. AI agents
+  often generate plausible happy-path handling while hallucinating rare
+  edge-case behavior; property-based tests are one of the few practical ways to
+  expose those gaps before production.
+
 ## Code review severity tiers
 
 When reviewing code or reporting review findings — whether as a human reviewer, an AI agent, or an automated check — classify every finding by severity before reporting it. A review without severity tiers produces a flat list that treats a security hole and a naming preference as equivalent. That makes it harder to decide what blocks a merge.

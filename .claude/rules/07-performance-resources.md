@@ -27,6 +27,29 @@
   pressure under sustained throughput even when a single operation looks
   cheap in isolation.
 
+## Long-lived streaming responses
+
+- Treat long-lived streaming responses — such as server-sent events, token
+  streaming, websocket message streams, or chunked generation — as a different
+  resource profile from normal request/response traffic. They hold sockets,
+  buffers, concurrency slots, and proxy state for far longer than ordinary
+  requests.
+- Define maximum stream duration, idle timeout, and disconnect behavior before
+  deployment. A stream that can remain open indefinitely is an unbounded
+  resource commitment and a denial-of-service risk even when each individual
+  stream appears cheap.
+- Ensure every streaming path has a heartbeat or equivalent keepalive strategy
+  that matches the behavior of upstream proxies, load balancers, and clients.
+  A stream that is healthy at the application layer but silent at the transport
+  layer is often terminated by intermediaries with confusing partial-output
+  failures.
+- Bound per-stream memory use explicitly. Do not accumulate generated chunks,
+  transcripts, or client-specific buffers in memory without a cap. Stream data
+  through incrementally and discard sent chunks as soon as correctness allows.
+- Size concurrency controls, worker pools, and connection budgets with stream
+  duration in mind. A system sized for short requests can be exhausted by a
+  much smaller number of long-lived streams.
+
 ## Database access patterns
 
 - Minimize database round trips on hot paths. A call-per-record or call-per-event pattern that could be a single bulk operation is a design defect, not a minor inefficiency. Buffer writes within a session or time window and execute as a single batch where semantics allow.

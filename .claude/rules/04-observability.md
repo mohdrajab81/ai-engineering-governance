@@ -107,6 +107,11 @@
   latency, input token count, output token count, and total token count or
   cost-equivalent usage when available. An LLM call without token
   accounting is an unmonitored cost center and a capacity blind spot.
+- Record the most specific model identifier the provider exposes — versioned or
+  dated model ID, deployment name, or equivalent — not only the marketing-level
+  family name. Silent model revisions break prompts, structured outputs, and
+  evaluation baselines in ways that are hard to diagnose if telemetry only says
+  "gpt-4" or equivalent.
 - In agentic pipelines, represent the agent execution tree in traces:
   parent span for the user-visible task, child spans for tool calls,
   retrieval steps, sub-agents, and model invocations. A multi-agent
@@ -125,6 +130,12 @@
   on abnormal token growth, request fan-out in agent chains, and sudden
   changes in model mix. A token spike is often the first signal of prompt
   drift, retrieval failure, or runaway agent behavior.
+- Capture quality signals alongside technical telemetry when the product
+  surface supports them: explicit user feedback, regeneration requests, task
+  abandonment, fallback-to-human escalation, or equivalent signals of
+  dissatisfaction. Link those signals to the same `trace_id`, `session_id`, or
+  request correlation key used for the underlying model spans so quality drift
+  can be investigated in the same trace context as latency and token usage.
 
 ## Cardinality management
 

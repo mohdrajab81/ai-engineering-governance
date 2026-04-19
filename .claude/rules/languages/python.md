@@ -21,6 +21,21 @@ These rules do not replace the base rules. They add language-specific depth to
   parse into typed structures at the boundary. Do not pass raw `dict` or `str`
   deep into business logic.
 
+## Boundary validation
+
+- For external input boundaries — HTTP request bodies, file contents,
+  environment variables, CLI arguments, and LLM structured outputs — use
+  runtime schema validation before the data enters business logic. Static type
+  hints alone are not a runtime safety mechanism.
+- `pydantic` is the recommended default for Python boundary validation. Use a
+  `BaseModel` or equivalent validated settings model for external payloads,
+  configuration parsing, and AI-generated structured data so malformed or
+  hallucinated fields are rejected or normalized at the boundary.
+- `@dataclass`, `TypedDict`, and plain annotated `dict` objects do not perform
+  runtime validation by themselves. They are appropriate for trusted internal
+  data structures after validation, not as the primary guard at an untrusted
+  boundary.
+
 ## Immutability and data structures
 
 - Prefer immutable data transfer objects. Use `@dataclass(frozen=True)` or
@@ -107,6 +122,14 @@ These patterns are disproportionately common in AI-generated Python code. Review
 - **`requests.get()` without `timeout=`.** The `requests` library has no default timeout. An AI agent generates a call without `timeout=` because the function signature does not require it and the test suite never exercises a slow network. In production, a hung upstream service hangs the thread indefinitely. Every `requests` call must have an explicit `timeout=` argument — see Rule 03.
 
 - **Mutable default arguments.** `def fn(items=[])` shares the same list across all calls. AI agents generate this pattern because it looks like a default value. Any mutable object (list, dict, set) as a default argument is a bug — use `None` and initialize inside the function body.
+
+- **Unprotected async generators.** When an async generator streams data over a
+  network connection or holds a resource such as a client session, file handle,
+  or cursor, client disconnects and task cancellation can raise
+  `asyncio.CancelledError` or terminate iteration before cleanup code at the end
+  of the function is reached. Wrap resource acquisition in `try/finally` inside
+  the generator and release resources in the `finally` block. Do not swallow
+  cancellation — clean up and let the cancellation propagate.
 
 ## Dependency management
 

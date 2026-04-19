@@ -14,6 +14,42 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.14.0] — 2026-04-19
+
+### Added
+
+- **AI retrieval and model-governance rules** — Added embedding and vector-index
+  contract guidance in Rule 01, explicit treatment of foundation models as
+  volatile external contracts, and token-budget-aware AI dependency resilience
+  in Rule 03.
+- **AI quality, verification, and memory discipline** — Expanded Rules 04, 06,
+  11, and 14 with qualitative AI telemetry, exact model-version logging,
+  property-based testing guidance for edge-heavy logic, independent
+  spec-grounded verification oracles for high-risk AI-authored changes,
+  autonomous-agent egress controls, sub-agent output distillation, and stronger
+  context-selection discipline.
+- **Streaming and agent-runtime hardening** — Added long-lived streaming
+  resource-management rules in Rule 07 and decoupled machine-identity guidance
+  for autonomous or long-lived agents in Rule 11.
+- **Language-specific AI boundary rules** — Expanded Python guidance with
+  runtime validation at external and AI-output boundaries plus async-generator
+  cleanup discipline, and expanded TypeScript guidance with `strict: true`
+  requirements and tighter `as` assertion boundaries.
+
+### Changed
+
+- **Security secret-scanning guidance** — Rule 05 now explicitly prefers
+  maintained secret-scanning tools over regex-only detection in CI and hooks
+  when the repository tooling supports them.
+- **AI evaluation guidance** — Rule 06 now warns that model-assisted evaluation
+  is itself a biased signal and must be calibrated periodically against human
+  judgment rather than treated as ground truth.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.13.0] — 2026-04-19
 
 ### Added

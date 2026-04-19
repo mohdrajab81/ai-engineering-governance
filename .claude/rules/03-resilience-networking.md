@@ -19,6 +19,29 @@
 - Define the fallback behavior for each dependency before it is needed, not during an outage. When a circuit opens or a timeout fires, the system must have a pre-defined response: fail fast with a structured error, return a stale cached value, return a degraded response with reduced functionality, or reject intake at the boundary. An undefined fallback means every partial failure triggers an improvised response under pressure — which is when improvisation is most dangerous.
 - Distinguish readiness from liveness in health check endpoints. A liveness probe confirms the process is alive and should not be restarted. A readiness probe confirms the service can accept traffic — required dependencies are reachable and initialization is complete. A service that reports ready before its dependencies are available causes cascading failures during deployment and restart. These are different signals; conflating them hides the actual failure mode from the orchestrator.
 
+## Token-budget-aware AI dependency resilience
+
+- For AI model providers and token-metered inference services, distinguish
+  request-rate limits from token-budget limits. A dependency may accept only a
+  small number of requests per second, a bounded number of tokens per minute,
+  or both. A single oversized prompt can exhaust the token budget while
+  consuming only one request slot.
+- Track token consumption as a first-class resilience signal alongside request
+  counts, latency, and error rate. If the provider exposes token-usage headers,
+  quotas, or remaining-budget metadata, record and alert on them. If it does
+  not, estimate token usage at the caller and expose the estimate as telemetry.
+- When an AI dependency returns overload or quota errors, identify whether the
+  saturation is driven by request count, token volume, or concurrency. The
+  mitigation differs: a request-count cap may call for slower intake; a token
+  budget cap may require prompt-size reduction, admission control, batching, or
+  deferral of large requests.
+- Define the fallback behavior for token-budget exhaustion before production
+  use: fail fast with a structured quota error, downgrade to a smaller or less
+  capable model where correctness requirements permit, reject large prompts
+  first, defer non-critical traffic, or other explicit behavior that matches
+  the system's correctness requirements. Do not improvise quota handling during
+  an incident.
+
 ## Retry budgets and retry amplification
 
 The existing rule to cap total retry pressure requires a mechanism to make it operational. A retry budget is that mechanism: a token-bucket or rate-limit on outgoing retries expressed as a fraction of normal request volume.

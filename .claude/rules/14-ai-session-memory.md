@@ -139,6 +139,11 @@ When ending a session that has incomplete work:
 When a session used sub-agents or parallel agents, the orchestrating session
 must record the handoff state before ending:
 
+- A sub-agent should return only the final artifact, a structured summary, or
+  the specific findings needed by the parent task. Do not forward the
+  sub-agent's entire working context, failed attempts, raw tool output, or
+  intermediate debugging trail back into the parent session unless that raw
+  material is itself the artifact under review. Distill before returning.
 - List which files each sub-agent read or proposed changes to. A future session
   must know which areas were already addressed and which were not.
 - Record the accepted source of truth for any conflict between sub-agent outputs.
@@ -147,6 +152,19 @@ must record the handoff state before ending:
 - Do not assume a future session can reconstruct multi-agent work from chat
   history. Multi-agent sessions produce more state faster than single-agent ones;
   checkpointing discipline matters more, not less.
+
+## Context selection discipline
+
+- When loading context for peripheral dependencies, prefer the smallest slice
+  that answers the current question: interface signatures, the relevant
+  function or class, the specific schema fragment, or the exact configuration
+  block in scope. Do not dump whole large files into context unless the task
+  genuinely requires end-to-end review of that file.
+- Distill repeated or noisy context instead of duplicating it across turns.
+  If the same decision, log output, or research result has already been
+  summarized into a stable note, reuse the summary rather than reintroducing
+  the full raw material. Repetition without new information accelerates context
+  collapse and degrades reasoning quality before the hard token limit is hit.
 
 ## Resuming from a previous session
 

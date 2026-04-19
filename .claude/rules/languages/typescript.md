@@ -16,6 +16,11 @@ These rules do not replace the base rules. They add language-specific depth to
 
 ## Type safety [TS only]
 
+- `strict: true` is non-negotiable in `tsconfig.json` for TypeScript projects.
+  Do not disable `strictNullChecks`, `noImplicitAny`, or other strict-mode
+  component flags to make code compile quickly. If a legacy project cannot
+  enable full strict mode immediately, document the exception and track the
+  migration plan explicitly.
 - Never use `any` unless it is genuinely unavoidable and accompanied by a comment
   explaining why. An unexplained `any` disables type checking at that point and
   silently propagates through callers.
@@ -28,9 +33,11 @@ These rules do not replace the base rules. They add language-specific depth to
 - Avoid non-null assertion (`!`) on values that could legitimately be null or
   undefined. A `!` that turns out to be wrong throws at runtime with no warning
   at compile time. Use optional chaining (`?.`) and explicit null checks instead.
-- Use `as T` type assertions only when you have verified the shape from an external
-  source and cannot express the proof to the type system. Add a comment explaining
-  the verification. An unverified cast is a runtime error waiting to happen.
+- Use `as T` type assertions only at the external boundary where an untyped
+  source first enters typed code and the shape has been verified but the proof
+  cannot be expressed to the type system. Add a comment explaining the
+  verification. Inside typed business logic, `as` is not a general escape hatch;
+  if a cast is needed there, the types are usually wrong upstream.
 
 ## Boundary validation [TS + JS]
 

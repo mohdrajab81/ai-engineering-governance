@@ -12,6 +12,11 @@
 - Keep classes cohesive. If a class owns unrelated responsibilities, separate them.
 - Treat design docs and feature specs as part of the implementation surface. Update them when behavior changes.
 - Dependencies must flow inward toward domain logic, not outward. Transport adapters, HTTP handlers, database clients, and queue consumers must depend on domain interfaces — not vice versa. When business logic imports from infrastructure layers, the coupling is expensive to remove: tests require real infrastructure, migrations require rewriting logic, and the domain model becomes entangled with delivery mechanism details.
+- Architectural constraints that matter to correctness — dependency direction,
+  layer boundaries, forbidden imports, and module ownership rules — must be
+  enforced by automated checks when the repository defines them, not only stated
+  in documentation. A documented boundary with no automated enforcement will
+  drift under routine change, and AI-assisted refactors accelerate that drift.
 - When a significant architectural decision is made — wire format, database choice, service boundary, key algorithm, auth model — record it immediately as a brief decision note: what was decided, what alternatives were considered, and why this option was chosen. Capture this before or immediately after the decision, not after the system is built. Future AI sessions reading only the code cannot recover the reasoning behind a decision, and will re-derive the same options from scratch without the context that ruled them out.
 - Define explicit error propagation contracts at every module and service boundary. A caller must know: which error conditions are transient and retryable, which are permanent and should not be retried, and which indicate caller error (bad input, auth failure) versus system error (dependency unavailable). Without an explicit error boundary contract, every caller implements its own interpretation, producing inconsistent retry behavior, silent swallowing of failures, and error types that leak internal implementation details to external consumers.
 
@@ -34,3 +39,42 @@
 
 - Treat a published API field name, route path, error code, or enum value as permanent once it has external consumers. Renaming is a breaking change even if the semantics are identical. To evolve a field, add the new name alongside the old one, populate both during a migration window, then deprecate the old form — do not rename in place. See `10-config-migrations.md` for the mechanical execution of this pattern.
 - Choose the API versioning strategy — URL path segment, request header, content-type negotiation, or query parameter — as a first-class design decision before the first consumer exists. Record it as a decision note. Changing the versioning strategy after consumers depend on it is a migration that affects every client simultaneously.
+
+## AI retrieval and embedding contracts
+
+- Treat embedding model choice, vector dimensionality, chunking strategy, and
+  vector index configuration as contract-bearing design decisions when a system
+  stores or compares embeddings. These choices define the meaning of persisted
+  vectors. Changing them is a migration, not a refactor.
+- Do not mix embeddings produced by different models, dimensions, or incompatible
+  preprocessing strategies in the same logical index unless the separation is
+  explicit in the schema and query path. Similarity scores across incompatible
+  vector spaces are semantically invalid even when the storage layer accepts
+  them without error.
+- When evolving an embedding model or retrieval representation, define the
+  migration plan before changing production traffic: how new embeddings will be
+  generated, whether old and new indexes will coexist temporarily, how query
+  routing will work during transition, and how rollback will be achieved if the
+  new representation performs worse.
+- Record the retrieval contract in a decision note when the system first ships:
+  embedding model, chunking policy, index type, distance metric, and any other
+  setting that affects retrieval semantics. A future session reading only code
+  and infrastructure cannot infer which of these choices are deliberate and
+  compatibility-sensitive.
+
+## Foundation models as volatile external contracts
+
+- Treat foundation models and hosted inference deployments as volatile external
+  contracts, not stable internal implementation details. Providers deprecate
+  model versions, change behavior behind a family name, alter structured-output
+  fidelity, and retire features on timelines outside your control.
+- Keep prompt construction, model selection, and response parsing behind an
+  explicit application boundary rather than scattering vendor-specific calls
+  through business logic. If a model must be replaced, routed differently, or
+  temporarily downgraded, the change should occur in one boundary layer — not
+  through a repository-wide rewrite of core domain code.
+- When a user-facing or correctness-sensitive workflow depends on a specific
+  model behavior, record the dependency explicitly: which model or deployment is
+  required, what assumptions the prompt/parser makes about its behavior, and
+  what fallback or migration path exists if that model is deprecated or its
+  output shape drifts.

@@ -11,6 +11,10 @@
 - Avoid obscure or hallucinated dependencies. If adding a dependency, justify why the standard library or existing repo dependencies are insufficient.
 - Pin dependency versions. Review changelogs before upgrading. Do not accept automatic major-version upgrades without explicit review.
 - Run the repository's security checks when available and call out unresolved findings.
+- For secret detection in CI and commit hooks, prefer a maintained secret
+  scanning tool over ad-hoc regex alone. Regex-based hooks are a useful baseline
+  but should be supplemented or replaced by purpose-built scanners when the
+  repository's tooling supports them.
 
 ## Security misconfiguration and fail-closed behavior
 
@@ -64,6 +68,14 @@
 ## Authorization at runtime
 
 - Do not cache authorization decisions indefinitely when roles, permissions, or scopes can change at runtime. A stale cache entry can allow access that has been revoked or deny access that has been granted. Define an explicit TTL or invalidation trigger for any cached authorization state.
+
+## Outbound egress control for autonomous agents
+
+- For environments that execute autonomous or tool-using agents, outbound
+  network access must be allow-listed by default rather than open-ended. An
+  agent that can both access sensitive local or retrieved data and call
+  arbitrary external destinations is a data-exfiltration path, not merely a
+  convenience feature.
 
 ## Supply chain integrity
 
