@@ -44,22 +44,41 @@
 
 ## Retry budgets and retry amplification
 
-The existing rule to cap total retry pressure requires a mechanism to make it operational. A retry budget is that mechanism: a token-bucket or rate-limit on outgoing retries expressed as a fraction of normal request volume.
+A retry budget makes the "cap total retry pressure" rule operational: use a
+token-bucket or rate-limit on outgoing retries expressed as a fraction of
+normal request volume.
 
 - Size the retry budget at 10–20% of normal outbound request rate for the dependency as a starting point. A higher budget masks a dependency that is genuinely failing rather than transiently slow. A lower budget may leave legitimate transient failures unretried. Calibrate against your dependency's error-rate baseline and adjust from there.
-- Understand retry amplification before layering retries. If a request passes through N layers each retrying M times, the dependency receives up to M^N requests per original call. Three layers each retrying three times produces 27 requests per original. This is not a theoretical concern — it is the mechanism behind every retry storm. The non-negotiable rule is: only one layer in a call chain retries a given failure. The others propagate the error.
-- Document the retry policy for every dependency in the calling service's configuration or design note: which errors are retried, how many times, with what backoff, and which layer owns the retry. An undocumented retry policy is a time bomb during incidents when engineers need to understand total load on a struggling dependency.
-- Emit retry-rate metrics per dependency alongside error-rate metrics. A rising retry rate is an early warning signal; it precedes the circuit-breaker threshold and provides earlier intervention opportunity than error rate alone.
+- Understand retry amplification before layering retries. If a request passes
+  through N layers each retrying M times, the dependency receives up to M^N
+  requests per original call. Three layers each retrying three times produces
+  27 requests per original. Only one layer in a call chain retries a given
+  failure; the others propagate the error.
+- Document the retry policy for every dependency in configuration or a design
+  note: which errors are retried, how many times, with what backoff, and which
+  layer owns the retry.
+- Emit retry-rate metrics per dependency alongside error-rate metrics. A rising
+  retry rate is an early warning signal that often precedes the circuit-breaker
+  threshold.
 
 ## Load shedding
 
-Circuit breakers protect callers from failing dependencies. Backpressure propagates overload signals upstream. Load shedding is the complementary server-side control: the server protects itself from its own callers when it is overloaded.
+Circuit breakers protect callers from failing dependencies. Backpressure
+propagates overload signals upstream. Load shedding is the complementary
+server-side control: the server protects itself from its own callers when it is
+overloaded.
 
-- Define a load-shedding threshold for each service: the point at which the service begins rejecting requests rather than queuing them. This threshold must be set before deployment, not discovered during an incident. Express it in terms of observable signals: request queue depth, active goroutine/thread count, CPU saturation, or memory pressure.
-- Shed load as early and cheaply as possible — before parsing the request body, before acquiring locks, before touching the database. A 503 response sent at the connection-accept or router layer costs a fraction of a request that is accepted and then fails mid-processing. The goal is to protect the healthy capacity, not to process more requests than the service can handle.
-- When shedding, prefer priority-aware rejection: reject low-priority or background traffic first, preserve capacity for critical paths. A service that sheds uniformly treats a health check the same as a user-facing transaction. Classify traffic and shed the cheapest-to-drop requests first.
-- Emit shed-rate as a first-class metric. A non-zero shed rate is an operational signal that the service is at or near capacity. Alert on sustained shedding; it indicates either a traffic surge, a performance regression, or an infrastructure problem that precedes a more severe failure.
-- Load shedding and backpressure are complementary, not alternatives. A server that sheds load must also signal upstream callers to slow down — otherwise the rejected requests are immediately retried, the shed rate stays high, and no capacity is actually recovered.
+- Define a load-shedding threshold for each service: the point where it begins
+  rejecting requests instead of queuing them. Set it before deployment and
+  express it in observable signals such as queue depth, active thread count,
+  CPU saturation, or memory pressure.
+- Shed load as early and cheaply as possible — before parsing the request body,
+  acquiring locks, or touching the database.
+- Prefer priority-aware rejection: reject low-priority or background traffic
+  first and preserve capacity for critical paths.
+- Emit shed-rate as a first-class metric and alert on sustained shedding.
+- Load shedding and backpressure are complementary, not alternatives. A server
+  that sheds load must also signal upstream callers to slow down.
 
 ## Hedged requests for tail latency
 
@@ -74,10 +93,17 @@ Standard retries address requests that fail. Hedged requests address requests th
 
 ## Graceful degradation planning
 
-The existing rule to pre-define fallback behavior is the entry point. This section makes it a structured discipline rather than a per-incident decision.
+The rule to pre-define fallback behavior is the entry point. This section makes
+it a structured discipline rather than a per-incident decision.
 
-- For each external dependency, define its criticality tier before the first deployment: critical (service cannot fulfill its primary function without it), degraded (service can fulfill its primary function with reduced functionality), or cosmetic (service is fully functional without it, output is less rich). The tier determines the fallback contract.
-- Critical dependencies: the fallback is fail-fast with a structured error — do not attempt to substitute or approximate. A substituted critical dependency produces incorrect behavior that is harder to diagnose than an explicit failure.
-- Degraded dependencies: define the specific reduced functionality that applies when the dependency is unavailable. "Return stale cache" or "omit recommendations section" is a degradation plan. "Handle gracefully" is not.
-- Test degradation paths explicitly before they are needed. Inject dependency failures in a staging environment and verify the system behaves according to the degradation plan — not according to what the code was intended to do. Untested degradation paths almost always contain surprises.
-- Document the degradation plan in the service's operational runbook. During an incident, engineers should be reading a pre-written plan, not making real-time decisions about what to omit.
+- For each external dependency, define its criticality tier before first
+  deployment: critical, degraded, or cosmetic. The tier determines the fallback
+  contract.
+- Critical dependencies fail fast with a structured error. Do not substitute or
+  approximate them.
+- Degraded dependencies must define the exact reduced functionality that
+  applies when the dependency is unavailable. "Handle gracefully" is not a
+  plan.
+- Test degradation paths explicitly before they are needed. Inject dependency
+  failures in staging and verify behavior against the degradation plan.
+- Document the degradation plan in the service's operational runbook.

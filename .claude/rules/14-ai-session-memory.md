@@ -73,36 +73,34 @@ sessions with stale information that no longer applies.
 
 ## Recommended memory structure
 
-For projects that span multiple sessions, consider organizing persistent memory
-into three tiers. This structure is a recommendation, not a required repository
-layout.
+For multi-session projects, organize persistent memory into three tiers. This is
+a recommendation, not a required repository layout.
 
-**Semantic memory** — stable facts about the project that every session needs.
-Load at session start. Keep it short enough that loading it costs negligible
-context. Examples: what the project does, technology stack, non-negotiable
-constraints, key dependencies.
+**Semantic memory** — stable facts every session needs. Load at session start
+and keep it short enough that loading it costs negligible context. Examples:
+what the project does, technology stack, non-negotiable constraints, key
+dependencies.
 
-**Episodic memory** — durable decisions recorded in append-only form. Load
-selectively based on relevance to the current task, not in bulk. Record a
-decision when it would otherwise be re-derived in a future session, causing
-drift or contradiction. Examples: why a specific library was chosen, why a
-particular approach was rejected, which migration path was selected. Never
-delete entries — append revisions when a decision changes.
+**Episodic memory** — durable decisions recorded in append-only form. Load it
+selectively by topic, not in bulk. Record a decision when it would otherwise be
+re-derived later and cause drift or contradiction. Examples: why a library was
+chosen, why an approach was rejected, which migration path was selected. Do not
+delete entries; append revisions when a decision changes.
 
 **Procedural memory** — conventions and patterns that govern implementation.
-Load before implementation sessions. Unlike episodic memory, this is updated
-as conventions evolve rather than append-only. Examples: naming conventions,
-testing approach, error handling patterns for this codebase.
+Load before implementation sessions. Unlike episodic memory, update this as
+conventions evolve. Examples: naming conventions, testing approach, error
+handling patterns for this codebase.
 
-**Selective loading principle:** Never load all memory into a context window by
-default. Load semantic memory every session. Load procedural memory for
-implementation work. Load episodic memory only for the topic area relevant to
-the current task. Irrelevant memory in context causes drift and contradictions
-across sessions.
+**Selective loading principle:** Never load all memory by default. Load
+semantic memory every session, procedural memory for implementation work, and
+episodic memory only for the topic area in scope. Irrelevant memory causes
+drift and contradictions across sessions.
 
-**Lifecycle:** After a significant decision, record it in episodic memory before
-ending the session. When episodic memory grows large, distill it — extract the
-still-relevant decisions into a compact summary and archive the verbose originals.
+**Lifecycle:** After a significant decision, record it in episodic memory
+before ending the session. When episodic memory grows large, distill the
+still-relevant decisions into a compact summary and archive the verbose
+originals.
 
 A minimal layout that satisfies this structure:
 
@@ -114,9 +112,9 @@ tasks/memory/
 ```
 
 This sits alongside `tasks/handoff-*.md` (in-progress work) and
-`tasks/lessons.md` (recurring failure patterns). They serve different purposes:
-handoff files track incomplete work within a task; lessons capture process
-failures; memory files preserve durable knowledge across tasks.
+`tasks/lessons.md` (recurring failure patterns). Handoff files track incomplete
+work within a task, lessons capture recurring process failures, and memory
+files preserve durable knowledge across tasks.
 
 ## Session handoff
 
@@ -184,10 +182,8 @@ must record the handoff state before ending:
 
 ## Why this rule exists
 
-Long multi-session AI-assisted projects fail in a specific way: the agent loses
-track of what was decided, re-derives conclusions that conflict with earlier
-ones, or misses a constraint that was established in a session it can no longer
-read. The failure is not dramatic — it produces plausible-looking output that
-violates an earlier decision. The fix is to treat session boundaries as real
-engineering boundaries: checkpoint explicitly, commit before handing off, and
-verify state at the start of each new session rather than assuming continuity.
+Multi-session AI work fails when the agent re-derives old decisions, misses a
+prior constraint, or carries forward stale context. The output still looks
+plausible, which makes the failure hard to catch. Treat session boundaries as
+real engineering boundaries: checkpoint explicitly, commit before handoff, and
+re-verify state when a new session starts.
