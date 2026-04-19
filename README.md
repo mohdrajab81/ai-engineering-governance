@@ -32,7 +32,8 @@ Most AI coding governance packs are assembled from public checklists. This one w
 
 The result is a governance system that covers what standards cover — and also covers what standards miss.
 
-**Rules that appear in this pack but not in any published AI governance standard:**
+**Examples of rules in this pack that are uncommon or underspecified in
+published AI governance standards:**
 
 - Out-of-order event delivery creating zombie sessions — and the tombstone/grace-period pattern that prevents it
 - The explicit buffer decision required before closing any stateful I/O resource during transition
@@ -43,6 +44,9 @@ The result is a governance system that covers what standards cover — and also 
 - Kafka partition key selection for session affinity and rebalance impact on in-flight sessions
 - Idempotency key design — why auto-incremented IDs fail on retry and where to store the key
 - AI session boundary management — why context loss mid-task is an active hazard, not a minor inconvenience
+- Embedding model and vector index as immutable schema contracts — changing the model is a migration, not a refactor, requiring dual-write re-indexing
+- Token-budget exhaustion handled distinctly from request-rate limits — a single oversized prompt can exhaust the TPM budget while consuming one request slot
+- Sub-agent output distillation — a sub-agent must return only its final artifact; its working context, failed attempts, and raw tool output must not pollute the parent session
 
 ---
 
@@ -52,7 +56,7 @@ The result is a governance system that covers what standards cover — and also 
 
 | File | Purpose |
 | --- | --- |
-| `CLAUDE.md` | Root policy — loaded into every AI coding session. Non-negotiables and working pattern. ~650 words. |
+| `CLAUDE.md` | Root policy — loaded into every AI coding session. Non-negotiables and working pattern. ~800 words. |
 | `AI_AGENT_WORKFLOW.md` | Operational workflow — onboarding commands, task flow, done checklist, review template |
 | `RULE_PLACEMENT.md` | Placement guide — separates what linters enforce from what agents need to read |
 | `PHASED_ADOPTION.md` | Adoption guide — explains which rules apply immediately, contextually, or as later hardening |
@@ -60,7 +64,11 @@ The result is a governance system that covers what standards cover — and also 
 | `.github/copilot-instructions.md` | GitHub Copilot adapter — references CLAUDE.md as authority |
 | `copilot-instructions.md` | Root-level pointer to the GitHub Copilot adapter path above, kept for discoverability without duplicating rules |
 | `.claude/settings.example.json` | Example Claude Code permissions and post-edit hook configuration |
+| `.claude/hooks/hooks.json` | Governance enforcement hooks for Rules 05, 06, and 08 — secret scanning, lint-config protection, destructive-command blocking |
 | `tasks/lessons.md` | Lessons-log template for capturing repeat failures and rule/process improvements |
+| `tasks/handoff-template.md` | Session handoff template — used when incomplete work must survive a session boundary (Rule 14) |
+| `.github/PULL_REQUEST_TEMPLATE.md` | PR template pre-populated with the governance review checklist |
+| `CHANGELOG.md` | Full version history — every release with added, changed, and migration notes |
 | `CONTRIBUTING.md` | Contributor workflow for making focused, reviewable changes to the pack |
 | `README.md` | This file |
 | `REFERENCES.md` | Full provenance — standards, review history, production-experience origin |
@@ -70,20 +78,28 @@ The result is a governance system that covers what standards cover — and also 
 
 | File | Domain |
 | --- | --- |
-| `01-architecture.md` | Design, backward compatibility, distributed systems, wire formats |
+| `01-architecture.md` | Design, backward compatibility, distributed systems, wire formats, embedding and retrieval contracts |
 | `02-concurrency.md` | Thread safety, lock discipline, state machines, atomic transitions |
-| `03-resilience-networking.md` | Timeouts, retries, backoff, circuit breakers, bulkhead isolation |
+| `03-resilience-networking.md` | Timeouts, retries, backoff, circuit breakers, bulkhead isolation, token-budget-aware LLM rate limits |
 | `04-observability.md` | Structured logging, metrics, traces, SLOs, burn-rate alerts, Kafka health |
 | `05-security.md` | Input validation, authorization, CSRF, rate limiting, supply chain, SLSA |
-| `06-testing-validation.md` | Test discipline, hermetic tests, replay/recovery tests, contract tests |
-| `07-performance-resources.md` | Resource lifecycle, DB patterns, backpressure, thundering herd, idempotency |
+| `06-testing-validation.md` | Test discipline, hermetic tests, replay/recovery tests, contract tests, AI component and non-deterministic output evaluation |
+| `07-performance-resources.md` | Resource lifecycle, DB patterns, backpressure, thundering herd, idempotency, long-lived streaming connections |
 | `08-change-management.md` | PR discipline, runbooks, expand-migrate-contract, feature flags |
 | `09-readability-maintainability.md` | Naming, comments, cognitive load, dead code |
 | `10-config-migrations.md` | Config externalization, feature flags, schema migrations, staged rollout |
-| `11-ai-agent-verification.md` | Anti-hallucination, scope, trust boundaries, multi-agent chains, tool safety |
+| `11-ai-agent-verification.md` | Anti-hallucination, scope, trust boundaries, multi-agent chains, tool safety, verification oracles, agent identity lifecycle |
 | `12-vertical-slice-completeness.md` | Contract-layer completeness — code layers, documentation surfaces, deprecated aliases |
 | `13-slice-exit-evidence.md` | Phase and milestone closure evidence — deliverable existence, wiring, validation, completion note format |
-| `14-ai-session-memory.md` | Session boundary management, context pressure, progress checkpointing, session handoff |
+| `14-ai-session-memory.md` | Session boundary management, context pressure, sub-agent output distillation, context selection, progress checkpointing, session handoff |
+
+**Language-specific extensions (`.claude/rules/languages/`)**
+
+| File | Coverage |
+| --- | --- |
+| `languages/golang.md` | Go-specific depth for architecture, concurrency, resilience, security, testing, and AI failure modes |
+| `languages/python.md` | Python-specific depth including runtime boundary validation, Pydantic as the recommended default, async generator safety, and AI failure modes |
+| `languages/typescript.md` | TypeScript-specific depth including strict-mode requirements, zod as the recommended boundary validator, and type-safety rules |
 
 ---
 
@@ -93,10 +109,12 @@ The result is a governance system that covers what standards cover — and also 
 
 1. Place `CLAUDE.md` at the repository root
 2. Create `.claude/rules/` and add the 14 domain files
-3. Fill in the command table in `AI_AGENT_WORKFLOW.md` with your repo's actual commands
-4. Configure CI to run build, lint, test, security scan, and the fill-me check — fail on errors
-5. Optional: copy `.claude/settings.example.json` to `.claude/settings.json` and customize the allow-list, deny-list, and post-edit hook for your stack
-6. Run `bash scripts/check-governance.sh` locally to validate all structural checks before pushing. The markdown lint step requires `markdownlint-cli` plus a Node runtime visible in the same shell; `scripts/run-markdownlint.sh` handles `node` or `node.exe` in Bash/WSL.
+3. If your stack is Go, Python, or TypeScript, add the relevant file from `.claude/rules/languages/` — these extend the base rules with language-specific depth
+4. Fill in the command table in `AI_AGENT_WORKFLOW.md` with your repo's actual commands
+5. Configure CI to run build, lint, test, security scan, and the fill-me check — fail on errors
+6. Optional: copy `.claude/settings.example.json` to `.claude/settings.json` and customize the allow-list, deny-list, and post-edit hook for your stack
+7. Optional: copy the relevant hook entries from `.claude/hooks/hooks.json` into your `.claude/settings.json` under the `hooks` key to enable secret scanning, lint-config protection, and destructive-command blocking
+8. Run `bash scripts/check-governance.sh` locally to validate all structural checks before pushing. The markdown lint step requires `markdownlint-cli` plus a Node runtime visible in the same shell; `scripts/run-markdownlint.sh` handles `node` or `node.exe` in Bash/WSL.
 
 **Canonical GitHub Actions governance check:** copy
 `.github/workflows/governance-check.yml` from this repository rather than
@@ -166,6 +184,8 @@ existing rules. Review the change set with the team before adopting.
 **Major versions (N.0.0):** Breaking changes to rule structure, non-negotiable changes, or removal of rules. Require an explicit team decision before upgrading.
 
 A consuming team that has customized domain files should treat those customizations as a local fork and review each update against their changes before merging.
+
+The full release history with per-version change details is in [CHANGELOG.md](./CHANGELOG.md).
 
 For contribution workflow inside this repository, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
