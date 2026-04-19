@@ -21,6 +21,7 @@
 - If unsure, stop and state the uncertainty instead of inventing behavior.
 - Never invent APIs, SDK calls, library names, config keys, or command options. Verify unfamiliar items against repo code or official docs.
 - Never claim a build, test, or command succeeded unless it was actually executed and the output was inspected.
+- Any action not explicitly authorized by the task scope is prohibited. When scope is ambiguous, stop and confirm rather than extending it.
 
 ## Required working pattern
 

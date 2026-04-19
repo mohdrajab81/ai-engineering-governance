@@ -59,6 +59,32 @@ Before writing net-new code, verify that no existing implementation already cove
 - Express confidence levels honestly. If a solution is a best guess given incomplete context, say so. Confident-sounding wrong answers are more dangerous than honest uncertainty.
 - When a task touches a high-risk area (security, data migration, public API, shared contract), produce a plan and checklist first. If an approval workflow exists, await confirmation before editing. Otherwise, proceed only with the smallest safe reversible change and state assumptions explicitly.
 
+## Independent evaluation for consequential outputs
+
+For consequential outputs — architectural decisions, breaking change proposals,
+migration and rollback strategies, high-risk assessments, and assurance or
+evidence claims — challenge the output from a fresh perspective before presenting
+it to the human:
+
+- State the proposal as a claim and actively look for counterarguments. Do not
+  simply confirm the first answer reached. A proposal that survives an adversarial
+  review is more reliable than one that was never challenged.
+- When the tooling or workflow allows it, prefer a fresh session or separate
+  agent instance with isolated context for that review. A reviewer that did not
+  produce the original output is more likely to notice hidden assumptions than
+  the same context re-reading its own reasoning.
+- When a consequential proposal still has unresolved concerns after two revision
+  passes, stop and escalate to the human rather than continuing to refine. A
+  third revision pass on a contested proposal is a signal that human judgment is
+  needed, not more agent iteration.
+- If a fresh session or separate reviewer is not available, simulate that
+  isolation as closely as possible: re-read the claim cold, check it against the
+  acceptance criteria and relevant rules, and ask whether a reviewer seeing it
+  for the first time would accept it without qualification.
+
+This applies to consequential outputs only. Do not apply it to routine
+implementation, minor changes, or straightforward factual questions.
+
 ## Human review
 
 - AI-generated code must be reviewed by a human before merge. This applies regardless of test coverage, lint results, or apparent correctness.

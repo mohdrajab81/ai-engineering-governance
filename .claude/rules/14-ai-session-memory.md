@@ -71,6 +71,53 @@ Persistent memory is not for:
 Putting ephemeral state into persistent memory pollutes the context of future
 sessions with stale information that no longer applies.
 
+## Recommended memory structure
+
+For projects that span multiple sessions, consider organizing persistent memory
+into three tiers. This structure is a recommendation, not a required repository
+layout.
+
+**Semantic memory** — stable facts about the project that every session needs.
+Load at session start. Keep it short enough that loading it costs negligible
+context. Examples: what the project does, technology stack, non-negotiable
+constraints, key dependencies.
+
+**Episodic memory** — durable decisions recorded in append-only form. Load
+selectively based on relevance to the current task, not in bulk. Record a
+decision when it would otherwise be re-derived in a future session, causing
+drift or contradiction. Examples: why a specific library was chosen, why a
+particular approach was rejected, which migration path was selected. Never
+delete entries — append revisions when a decision changes.
+
+**Procedural memory** — conventions and patterns that govern implementation.
+Load before implementation sessions. Unlike episodic memory, this is updated
+as conventions evolve rather than append-only. Examples: naming conventions,
+testing approach, error handling patterns for this codebase.
+
+**Selective loading principle:** Never load all memory into a context window by
+default. Load semantic memory every session. Load procedural memory for
+implementation work. Load episodic memory only for the topic area relevant to
+the current task. Irrelevant memory in context causes drift and contradictions
+across sessions.
+
+**Lifecycle:** After a significant decision, record it in episodic memory before
+ending the session. When episodic memory grows large, distill it — extract the
+still-relevant decisions into a compact summary and archive the verbose originals.
+
+A minimal layout that satisfies this structure:
+
+```text
+tasks/memory/
+├── project-context.md       ← semantic; always load
+├── decisions-log.md         ← episodic; append-only; load selectively
+└── patterns-conventions.md  ← procedural; load for implementation sessions
+```
+
+This sits alongside `tasks/handoff-*.md` (in-progress work) and
+`tasks/lessons.md` (recurring failure patterns). They serve different purposes:
+handoff files track incomplete work within a task; lessons capture process
+failures; memory files preserve durable knowledge across tasks.
+
 ## Session handoff
 
 When ending a session that has incomplete work:

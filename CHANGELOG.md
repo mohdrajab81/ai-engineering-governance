@@ -14,6 +14,30 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.13.0] — 2026-04-19
+
+### Added
+
+- **Rule 11 independent-evaluation discipline** — Added guidance to challenge
+  consequential outputs from a fresh perspective before presenting them to a
+  human, prefer a fresh session or isolated reviewer when available, and
+  escalate after two unresolved revision passes rather than iterating
+  indefinitely.
+- **Rule 14 structured memory guidance** — Added a recommended semantic /
+  episodic / procedural memory model, selective-loading principle, and basic
+  ingest / retrieve / compact lifecycle for multi-session projects.
+
+### Changed
+
+- **`CLAUDE.md` default-deny scope rule** — Made the repository's default scope
+  stance explicit: actions not authorized by the task scope are prohibited, and
+  ambiguous scope must be confirmed rather than extended.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.12.0] — 2026-04-19
 
 ### Added
