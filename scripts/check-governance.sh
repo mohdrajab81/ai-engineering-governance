@@ -56,6 +56,68 @@ list_hook_scripts() {
   fi
 }
 
+run_node() {
+  if command -v node > /dev/null 2>&1; then
+    node "$@"
+  elif command -v node.exe > /dev/null 2>&1; then
+    node.exe "$@"
+  else
+    return 127
+  fi
+}
+
+extract_hook_manifest_scripts() {
+  if python3 - <<'PY' 2>/dev/null; then
+import json
+from pathlib import Path
+
+data = json.loads(Path(".claude/hooks/hooks.json").read_text())
+paths = set()
+
+for event_hooks in data.get("hooks", {}).values():
+    for item in event_hooks:
+        for hook in item.get("hooks", []):
+            command = hook.get("command", "")
+            prefix = "bash "
+            script_prefix = ".claude/hooks/scripts/"
+            if command.startswith(prefix + script_prefix) and command.endswith(".sh"):
+                paths.add(command[len(prefix):])
+
+for path in sorted(paths):
+    print(path)
+PY
+    return 0
+  fi
+
+  if run_node - <<'JS' 2>/dev/null; then
+const fs = require("fs");
+
+const data = JSON.parse(fs.readFileSync(".claude/hooks/hooks.json", "utf8"));
+const paths = new Set();
+
+for (const eventHooks of Object.values(data.hooks || {})) {
+  for (const item of eventHooks || []) {
+    for (const hook of item.hooks || []) {
+      const command = hook.command || "";
+      const prefix = "bash ";
+      const scriptPrefix = ".claude/hooks/scripts/";
+      if (command.startsWith(prefix + scriptPrefix) && command.endsWith(".sh")) {
+        paths.add(command.slice(prefix.length));
+      }
+    }
+  }
+}
+
+for (const path of Array.from(paths).sort()) {
+  console.log(path);
+}
+JS
+    return 0
+  fi
+
+  return 1
+}
+
 echo "=== Governance check: $ROOT ==="
 echo ""
 
@@ -116,41 +178,28 @@ compare_expected_to_actual "PHASED_ADOPTION.md language-rule inventory" "$EXPECT
 echo "-- Claude settings and hook JSON validity"
 if python3 -m json.tool .claude/settings.example.json > /dev/null 2>&1; then
   ok "settings.example.json is valid JSON (python3)."
-elif node -e "JSON.parse(require('fs').readFileSync('.claude/settings.example.json','utf8'))" > /dev/null 2>&1; then
+elif run_node -e "JSON.parse(require('fs').readFileSync('.claude/settings.example.json','utf8'))" > /dev/null 2>&1; then
   ok "settings.example.json is valid JSON (node)."
 else
-  fail "settings.example.json is not valid JSON (neither python3 nor node could parse it)."
+  fail "settings.example.json is not valid JSON (neither python3 nor node/node.exe could parse it)."
 fi
 
 if python3 -m json.tool .claude/hooks/hooks.json > /dev/null 2>&1; then
   ok "hooks.json is valid JSON (python3)."
-elif node -e "JSON.parse(require('fs').readFileSync('.claude/hooks/hooks.json','utf8'))" > /dev/null 2>&1; then
+elif run_node -e "JSON.parse(require('fs').readFileSync('.claude/hooks/hooks.json','utf8'))" > /dev/null 2>&1; then
   ok "hooks.json is valid JSON (node)."
 else
-  fail "hooks.json is not valid JSON (neither python3 nor node could parse it)."
+  fail "hooks.json is not valid JSON (neither python3 nor node/node.exe could parse it)."
 fi
 
 # 6. Claude hook script manifest sync, syntax, and tracking
 echo "-- Claude hook script sync, syntax, and tracking"
-python3 - > "$EXPECTED_HOOK_SCRIPTS" <<'PY'
-import json
-from pathlib import Path
-
-data = json.loads(Path(".claude/hooks/hooks.json").read_text())
-paths = set()
-
-for event_hooks in data.get("hooks", {}).values():
-    for item in event_hooks:
-        for hook in item.get("hooks", []):
-            command = hook.get("command", "")
-            prefix = "bash "
-            script_prefix = ".claude/hooks/scripts/"
-            if command.startswith(prefix + script_prefix) and command.endswith(".sh"):
-                paths.add(command[len(prefix):])
-
-for path in sorted(paths):
-    print(path)
-PY
+if extract_hook_manifest_scripts > "$EXPECTED_HOOK_SCRIPTS"; then
+  :
+else
+  fail "Could not extract hook script references from hooks.json (requires python3 or node/node.exe)."
+  : > "$EXPECTED_HOOK_SCRIPTS"
+fi
 compare_expected_to_actual "Hook manifest script inventory" "$EXPECTED_HOOK_SCRIPTS" "$ACTUAL_HOOK_SCRIPTS"
 
 HOOK_SCRIPT_FAILED=0

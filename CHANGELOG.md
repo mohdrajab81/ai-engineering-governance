@@ -43,6 +43,9 @@ This project follows [Semantic Versioning](https://semver.org/):
   delegates to `scripts/check-governance.sh` instead of duplicating the same
   checks inline. The local script is the single source of truth for structural
   governance validation.
+- **Local check portability** — `scripts/check-governance.sh` now uses the same
+  Python-to-Node fallback for hook manifest extraction that it uses for JSON
+  validation, including `node.exe` in Bash/WSL environments.
 - **Inventory validation** — Domain-rule inventories in `AGENTS.md` and
   `README.md` are now exact sorted-set comparisons against repository files,
   not count-only or listed-file-exists checks. `RULE_PLACEMENT.md` is documented
