@@ -3,11 +3,19 @@
 When a task adds a contract definition — an API route, an event type, a schema,
 a field on a shared data structure, or an interface method — that definition is
 not done until every layer that must implement or consume it is also updated and
-verified. Contract additions that compile cleanly and pass all tests are still
-incomplete if any downstream layer is missing.
+verified. The contract must also have a named consumer or domain transition that
+justifies its existence. Contract additions that compile cleanly and pass all
+tests are still incomplete if any downstream layer is missing.
 
 Run this checklist before marking any task done if the work touched a public
 contract (API spec, interface definition, event schema, shared domain type):
+
+**0. Contract intent and consumer trace**
+Before adding a new contract surface, identify the caller, actor, workflow,
+screen, service operation, scheduled job, or domain transition that needs it.
+Record the trigger and the concrete data or behavior the consumer requires.
+A route, event, field, or schema that exists only because a table column or
+internal object exists is an orphan contract until that trace is established.
 
 **1. New field on a shared data structure**
 Find every place that constructs or copies that structure. Verify the new field
@@ -23,7 +31,9 @@ masking missing-field bugs in real code paths.
 Verify the route is registered in the router. Verify the handler exists.
 Verify the response serializer includes all required fields from the schema.
 Verify any routing instrumentation (metrics labels, middleware) covers the new
-path. A route in the spec with no registration returns a silent 404.
+path. Verify the endpoint has a named caller, trigger, and data need; otherwise
+it may force clients to reconstruct business logic locally. A route in the spec
+with no registration returns a silent 404.
 
 **3. New event type**
 Find the emitter — the code that owns the domain transition that triggers this

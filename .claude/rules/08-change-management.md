@@ -7,6 +7,16 @@
 - Do not mix refactoring with behavior changes in the same commit unless they are trivially inseparable. Separating them makes review faster and rollback cleaner.
 - Keep docs, config examples, diagrams, and migration notes in sync with code.
 - Keep the active documentation surface small and current. When documents become historical, archive them, delete them, or clearly remove them from active navigation rather than leaving them mixed with current source-of-truth docs.
+- When a repository has multiple active authority layers — live contracts,
+  current decisions, workflow docs, rule files, implementation plans, or
+  historical evidence — define the conflict order in the agent entrypoint,
+  workflow doc, or equivalent. Do not leave agents to infer which source wins.
+- When a document is derived from another source — for example, a coverage map,
+  generated report, generated index, summary, or state matrix summary — name
+  the authoritative source it summarizes and state which source wins on
+  conflict. A derived document that
+  disagrees with its authority is the artifact to fix, not a competing
+  decision layer.
 - When a project accumulates many old ADRs or phase notes, prefer one maintained current decision surface over many half-current files.
 - Use branch and PR discipline appropriate to the repository.
 - In the PR description or summary, explain the problem, the approach, risks, rollback considerations, and validation performed.

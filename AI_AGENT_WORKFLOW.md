@@ -98,8 +98,9 @@ special environment.
 5. Implement in small steps.
 6. Run the smallest relevant checks first.
 7. Run broader checks before finishing.
-8. Summarize changes, commands run, outcomes, and remaining risks.
-9. If the task is incomplete and will resume in a later session, write a progress summary to `tasks/handoff-<topic>.md` before stopping. Use `tasks/handoff-template.md` as the starting point.
+8. When reporting validation, distinguish blocking gates from report-only checks. A check is a gate only when it exits non-zero for the condition it claims to block.
+9. Summarize changes, commands run, outcomes, and remaining risks.
+10. If the task is incomplete and will resume in a later session, write a progress summary to `tasks/handoff-<topic>.md` before stopping. Use `tasks/handoff-template.md` as the starting point.
 
 > **Note on rule updates:** Reading CLAUDE.md and domain rules is the default first step. Editing governance rules is not part of normal feature work. Update a rule file only when a new pattern is discovered, the agent repeatedly makes the same mistake, or the team intentionally revises policy — and always as a standalone task with its own review. Capture the evidence first in `tasks/lessons.md` so the change has a concrete failure mode behind it.
 
@@ -119,6 +120,7 @@ A change is done only when all applicable items are true.
 - [ ] API, schema, or event contract versioning impact was assessed.
 - [ ] Relevant unit tests were added or updated.
 - [ ] Relevant integration or end-to-end checks were run when needed.
+- [ ] Any check described as a gate actually fails on the condition it claims to block; report-only checks are labeled as report-only.
 - [ ] Docs / config / examples were updated when behavior or setup changed.
 - [ ] Cross-layer contract closure verified for any change touching an API route, event type, interface method, or shared data structure (Rule 12).
 - [ ] If this closes a phase or milestone, slice exit evidence is complete — all deliverables exist, are wired, and have validation evidence (Rule 13).

@@ -62,6 +62,11 @@ Bring these files into active use as the corresponding layer appears:
 | `languages/typescript.md` | The repository contains TypeScript or JavaScript source files | Apply all sections for TypeScript projects; for plain JavaScript apply only sections marked [TS + JS] — TypeScript-specific type system rules do not apply to JS-only codebases |
 | `languages/golang.md` | The repository contains Go source files | Language rules are only meaningful when the language is in active use |
 
+For contract-heavy repositories, optional generated coverage reports and
+contract-baseline diff checks can strengthen Rule 12 and Rule 13 evidence. Keep
+the distinction clear: a generated report is review evidence unless it exits
+non-zero for the claimed failure condition.
+
 ## Apply as hardening
 
 These rules matter most once the system is already functional:

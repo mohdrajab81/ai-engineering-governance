@@ -76,6 +76,10 @@ For each deliverable, record the validation that proves it works:
 - result
 - remaining gaps (what could not be validated and why)
 
+Do not call a command a gate unless it exits non-zero for the condition it is
+claimed to enforce. If a check only reports a gap, that report can be useful
+evidence, but the completion note must label it as report-only and list the gap.
+
 If validation was partial, say so explicitly. If the remaining gap is material —
 behavior not verified, deliverable not confirmed, runtime path not checked — the
 slice is not complete. Do not call it complete and note the gap as a follow-up;

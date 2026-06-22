@@ -26,6 +26,28 @@ Every rule that was applied produced the outcome the rule was designed to produc
 
 ---
 
+## Methodology Lessons From a Contract-First Rebuild
+
+A later contract-first rebuild methodology review tested the pack on a
+documentation-heavy project. This is not presented as a second production proof
+point; it is a method extraction. Product decisions and private project
+artifacts stay local, while the portable lessons feed back into this pack:
+
+- **Gate honesty:** a generated report is not a blocking gate unless the command
+  exits non-zero for the condition it claims to enforce.
+- **No-orphan contracts:** new endpoints, events, fields, and schemas need a
+  named caller, trigger, workflow, and data need before they become shared
+  contracts.
+- **Ranked source-of-truth layers:** live contracts, current decisions,
+  governance, active state, and historical evidence need an explicit conflict
+  order so agents do not choose the most convenient document.
+- **Self-subordinating derived docs:** summaries and coverage maps should name
+  the authority that wins if they drift.
+- **Compact active head plus archive:** keep current state small enough to load
+  safely, and move detailed history into dated archives.
+
+---
+
 ## What This Pack Is
 
 Most AI coding governance packs are assembled from public checklists. This one was written differently: the rules came from engineering judgment accumulated over 20+ years of operating carrier-grade telecom systems — real-time signaling at thousands of transactions per second, SMS gateways handling millions of messages per day, Kafka streaming pipelines under production load. Public standards were used as a validation layer afterward, not as the starting point.

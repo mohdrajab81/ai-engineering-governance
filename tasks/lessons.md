@@ -269,3 +269,138 @@ Copy this block for each new lesson:
 
 - README.md Standards Coverage section updated with Full/Partial labels and
   inline gap notes per ASI category.
+
+## 2026-06-22 — Gates must enforce what documentation claims
+
+### What happened
+
+- A project methodology review found a generated coverage check described with
+  gate language even though one important gap class was report-only.
+- The output was still useful, but the documentation made the check sound more
+  blocking than its exit behavior actually was.
+
+### Why it happened
+
+- The workflow treated "strict report is clean today" and "strict report would
+  fail if this condition appeared tomorrow" as equivalent.
+- The existing validation rules required exact commands and results, but did
+  not explicitly require claimed gates to match command exit semantics.
+
+### What changed
+
+- Added gate-honesty guidance to Rule 06, Rule 13, and
+  `AI_AGENT_WORKFLOW.md`.
+- Added the pattern to the README methodology lessons so consuming teams know
+  to distinguish blocking gates from report-only evidence.
+
+### Prevention rule
+
+- A check is a gate only when it exits non-zero for the condition it claims to
+  block. If a tool only reports a gap, call it report-only evidence and list
+  the remaining gap explicitly.
+
+### Decision
+
+- Upstream pack change.
+
+### Scope
+
+- Suitable for the upstream governance pack because false gate language is a
+  generic validation and completion-risk pattern.
+
+### Evidence
+
+- Contract-first rebuild methodology review, 2026-06-22. The source methodology
+  file is external evidence and is not bundled into this repository.
+
+## 2026-06-22 — Contract surfaces need a named consumer need
+
+### What happened
+
+- A contract-first project found that API endpoints designed directly from
+  schema tables can return the wrong shape for real clients.
+- The project avoided orphan endpoints by tracing each endpoint to an actor,
+  trigger, workflow or screen, and concrete data need before implementation.
+
+### Why it happened
+
+- Rule 12 already required cross-layer closure once a contract exists, but it
+  did not explicitly require a new contract surface to prove why it should
+  exist.
+- Without that trace, an endpoint, event, or schema field can be technically
+  implemented while still leaving consumers to invent missing business logic.
+
+### What changed
+
+- Rule 12 now includes a no-orphan contract check before the existing
+  cross-layer checklist.
+- README methodology lessons now call out consumer-traced contracts as a
+  portable pattern.
+
+### Prevention rule
+
+- A new contract surface should have a named caller or consumer, trigger, and
+  data need before it is promoted into the public or shared contract.
+
+### Decision
+
+- Upstream pack change.
+
+### Scope
+
+- Suitable for the upstream governance pack because orphan contract surfaces
+  appear across UI, API, event-driven, and service-to-service systems.
+
+### Evidence
+
+- Contract-first rebuild methodology review, 2026-06-22. The source methodology
+  file is external evidence and is not bundled into this repository.
+
+## 2026-06-22 — Authority layers and derived documents need conflict order
+
+### What happened
+
+- A documentation-heavy project relied on live contracts, current decisions,
+  governance files, generated reports, state summaries, and methodology notes.
+- The method worked because authority layers had an explicit conflict order and
+  derived documents stayed subordinate to the sources they summarized.
+- Without explicit subordination, derived documents can silently become a second
+  decision layer when they drift.
+
+### Why it happened
+
+- The pack already encouraged small current docs and archived history, but did
+  not explicitly require repositories to define conflict order when multiple
+  active authority layers existed.
+- It also did not explicitly require derived documents to name the source they
+  summarize.
+- Agents tend to trust the most readable or recent document unless the conflict
+  order is stated directly in the artifact.
+
+### What changed
+
+- Rule 08 now requires repositories with multiple active authority layers to
+  define conflict order in the agent entrypoint, workflow doc, or equivalent.
+- Rule 08 also requires derived documents to name their authoritative source and
+  state which source wins on conflict.
+
+### Prevention rule
+
+- When several active authority layers exist, define their conflict order where
+  agents will read it before work begins.
+- A derived document should identify the source of truth it summarizes and
+  declare itself the artifact to fix if the two disagree.
+
+### Decision
+
+- Upstream pack change.
+
+### Scope
+
+- Suitable for the upstream governance pack because generated reports, indexes,
+  coverage maps, and summary docs are common across AI-assisted projects.
+
+### Evidence
+
+- Contract-first rebuild methodology review, 2026-06-22. The source methodology
+  file is external evidence and is not bundled into this repository.

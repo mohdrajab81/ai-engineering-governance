@@ -15,6 +15,9 @@
 - Prefer file-scoped or targeted checks first for fast feedback, then run broader checks before finishing.
 - Never claim success from compilation alone. Run the relevant tests and inspect the results.
 - When reporting validation results, state: the exact command run, the scope covered (package, module, or full suite), the outcome (pass count, fail count, skip count), and any gap (what could not be validated and why). "Tests pass" with no supporting detail is not an acceptable validation report.
+- Call a validation command a gate only if it exits non-zero when the stated
+  condition fails. If a tool only prints warnings or lists gaps, report it as
+  review evidence or a known gap, not as a blocking gate.
 - If the only way to verify behavior is in a live or integration environment that is unavailable during the session, state explicitly that the implementation is ready but the task is not fully verified, and describe what environment and conditions are required to complete verification. Do not close the task.
 - Review AI-generated tests for assertion quality, not only for compilation,
   pass rate, or line coverage. A generated test that asserts nothing

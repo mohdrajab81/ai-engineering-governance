@@ -14,6 +14,32 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.15.0] — 2026-06-22
+
+### Added
+
+- **Contract-first methodology lesson extraction** — README now records portable
+  lessons from a contract-first rebuild methodology review without importing
+  project-specific product details.
+- **Lessons log entries** — Added evidence entries for gate honesty,
+  no-orphan contract surfaces, and authority-layer conflict order.
+- **Rule 12 contract intent guidance** — Added a no-orphan contract check
+  requiring a named consumer, trigger, and data need before promoting a new
+  endpoint, event, field, schema, or shared contract surface.
+- **Validation gate honesty** — Rules 06 and 13 plus `AI_AGENT_WORKFLOW.md`
+  now distinguish blocking gates from report-only checks based on command exit
+  behavior.
+- **Authority-layer conflict order** — Rule 08 now requires repositories with
+  multiple active authority layers to define which source wins.
+- **Derived-document subordination** — Rule 08 now requires generated reports,
+  indexes, coverage maps, summaries, and state matrix summaries to name the
+  authority they summarize and state which source wins on conflict.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.14.0] — 2026-04-19
 
 ### Added
