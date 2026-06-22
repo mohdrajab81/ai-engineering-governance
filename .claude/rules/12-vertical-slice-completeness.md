@@ -1,5 +1,7 @@
 # Vertical Slice Completeness
 
+This is a risk-triggered completeness rule, not a requirement to expand every small change into a full delivery framework. Apply it when a task changes a public contract, shared type, event, interface, or externally visible behavior. For isolated internal refactors with no contract surface, keep the evidence proportional and do not invent artificial layers.
+
 When a task adds a contract definition — an API route, an event type, a schema,
 a field on a shared data structure, or an interface method — that definition is
 not done until every layer that must implement or consume it is also updated and

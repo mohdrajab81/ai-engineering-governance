@@ -14,6 +14,64 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
+## [v10.16.0] — 2026-06-22
+
+### Added
+
+- **Reviewability for Claude hooks** — Added companion scripts under
+  `.claude/hooks/scripts/` for the default governance hooks and updated the hook
+  manifest to call those scripts instead of embedding non-trivial shell logic in
+  JSON strings.
+- **Hook validation** — Local and GitHub Actions governance checks now validate
+  `.claude/hooks/hooks.json`, verify the hook manifest's script inventory,
+  require referenced hook scripts to be tracked by git, and run `bash -n` over
+  companion hook scripts.
+- **Active-layer recording guidance** — `PHASED_ADOPTION.md` now recommends a
+  small current artifact for recording which domain and language rule files are
+  active in a consuming repository.
+- **Repository security policy** — Added `SECURITY.md` with private
+  vulnerability-reporting guidance for this repository.
+- **Line-ending normalization** — Added `.gitattributes` so text files normalize
+  to LF while Windows batch files keep CRLF.
+- **Path-scoped language rules** — Added Claude Code `paths` front matter to the
+  Go, Python, and TypeScript language rule files so they load only when matching
+  source, dependency, or config files are in scope.
+
+### Changed
+
+- **Governance check authority** — `.github/workflows/governance-check.yml` now
+  delegates to `scripts/check-governance.sh` instead of duplicating the same
+  checks inline. The local script is the single source of truth for structural
+  governance validation.
+- **Inventory validation** — Domain-rule inventories in `AGENTS.md` and
+  `README.md` are now exact sorted-set comparisons against repository files,
+  not count-only or listed-file-exists checks. `RULE_PLACEMENT.md` is documented
+  as a placement matrix rather than a rule-file inventory.
+- **Local settings hygiene** — `.gitignore` now excludes
+  `.claude/settings.json` and `.claude/settings.local.json`.
+- **Planning guidance** — `AI_AGENT_WORKFLOW.md` and `RULE_PLACEMENT.md` now
+  make explicit that agents should name relevant domain and language rule files
+  during non-trivial planning.
+- **Domain-rule precision** — Rules 03, 04, 06, and 07 now clarify token
+  estimation overhead, trace sampling ownership, golden dataset storage, and
+  explicit database pool sizing.
+- **Deployment docs** — README and settings examples now state that consumers
+  copying hook entries must also copy the companion hook scripts or update the
+  command paths.
+- **Instruction and rule scope discipline** — Rule 11 now makes instruction
+  placement, conflict handling, and mechanical enforcement boundaries explicit.
+- **Proportional evidence guidance** — Rules 12 and 13 now clarify that vertical
+  slice and phase-exit evidence are risk-triggered controls, not a reason to
+  invent artificial layers or phases.
+- **Memory boundary guidance** — Rule 14 now states that memory and instruction
+  files guide behavior but do not enforce it; hard blocks belong in permissions,
+  hooks, CI, or platform controls.
+
+All changes are additive. Consuming repositories can adopt on a normal
+minor-upgrade schedule.
+
+---
+
 ## [v10.15.0] — 2026-06-22
 
 ### Added

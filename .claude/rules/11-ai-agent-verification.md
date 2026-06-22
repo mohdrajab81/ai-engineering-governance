@@ -9,6 +9,14 @@ These rules govern the behavior of AI coding agents in this repository. They exi
 - Never fabricate a package or dependency to satisfy an import. If a suitable library does not already exist in the repository, ask before adding a new one and justify why the standard library or existing dependencies are insufficient.
 - Do not present a design decision as the only option when alternatives exist. Acknowledge relevant tradeoffs.
 
+## Instruction and rule-file discipline
+
+- Keep agent instructions minimal, specific, and verifiable. Do not add broad reminders, duplicated lint rules, or process text that belongs in workflow documentation. Context bloat reduces the chance that critical rules are followed.
+- Add or change a rule only when it encodes a durable repository-wide standard, a repeated review finding, or a known AI-agent failure mode. Do not create a new rule to solve a one-off task-specific issue.
+- Place guidance in the narrowest effective location: root policy for session-wide non-negotiables, `.claude/rules/` for durable cross-codebase rules, language rule files for language-specific behavior, workflow documents for procedures, and hooks or CI for enforceable gates.
+- If two instruction files conflict, do not choose arbitrarily. Follow the most specific authoritative source that matches the task, flag the conflict, and propose a cleanup as a separate governance change.
+- Do not rely on instruction text alone for safety-critical enforcement. If an action must be blocked regardless of model behavior, use a hook, permission rule, CI gate, or platform control when the repository supports one.
+
 ## Research and reuse before coding
 
 Before writing net-new code, verify that no existing implementation already covers the need. Skipping this search is a verification failure in the same category as invoking an unverified API — it produces unnecessary code, divergent logic, and maintenance debt that could have been avoided.

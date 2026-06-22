@@ -64,11 +64,12 @@ For documentation changes:
 
 - verify all referenced files and paths exist
 - verify any JSON examples parse
-- run markdown linting if available in your environment
+- run `bash scripts/check-governance.sh` as the canonical local parity check before pushing
+- if `markdownlint` is not installed locally, note that the script skipped markdown lint
 
 For workflow or governance-check changes:
 
-- review `.github/workflows/governance-check.yml`
+- review `scripts/check-governance.sh`; the GitHub Actions workflow delegates to it
 - ensure new instructions do not conflict with existing adapters or root policy
 
 If you could not run a check, say so explicitly in the PR.

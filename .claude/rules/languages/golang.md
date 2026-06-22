@@ -1,4 +1,13 @@
+---
+paths:
+  - "**/*.go"
+  - "**/go.mod"
+  - "**/go.sum"
+---
+
 # Go Language Rules
+
+This rule file is path-scoped so it loads when Go source or module files are in scope. It complements the base governance rules; it does not replace them.
 
 This file extends the base governance rules with Go-specific guidance. It applies
 whenever the repository contains `.go`, `go.mod`, or `go.sum` files. Activate it

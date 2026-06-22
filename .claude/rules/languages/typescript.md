@@ -1,4 +1,17 @@
+---
+paths:
+  - "**/*.{ts,tsx,mts,cts}"
+  - "**/*.{js,jsx,mjs,cjs}"
+  - "**/package.json"
+  - "**/package-lock.json"
+  - "**/pnpm-lock.yaml"
+  - "**/yarn.lock"
+  - "**/tsconfig*.json"
+---
+
 # TypeScript Language Rules
+
+This rule file is path-scoped so it loads when TypeScript, JavaScript, or Node package/config files are in scope. It complements the base governance rules; it does not replace them.
 
 This file covers TypeScript projects primarily. Several sections also apply to plain
 JavaScript projects (`.js`, `.jsx`); those are marked **[TS + JS]**. Sections that

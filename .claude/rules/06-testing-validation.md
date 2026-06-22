@@ -53,6 +53,12 @@
   dataset for retrieval and relevance regression. The goal is to catch
   degradation in retrieval accuracy, ranking quality, grounding, or citation
   coverage even when the final wording varies.
+- Store golden datasets, prompts, and scoring rubrics in version-controlled
+  fixtures when size and data policy allow it; JSONL is a common portable
+  format. If the dataset lives in an external evaluation platform, keep a
+  versioned manifest in the repository that records the dataset ID/version,
+  rubric, evaluator configuration, owner, and export date. Do not rely on an
+  unversioned dashboard as the only regression baseline.
 - Keep AI evaluations reproducible enough to compare runs over time. Fix the
   test dataset, prompt template, model version where possible, and scoring
   rubric for a given regression suite. If those inputs change, record the

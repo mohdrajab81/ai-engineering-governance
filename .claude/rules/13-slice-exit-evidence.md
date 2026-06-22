@@ -10,6 +10,8 @@ This rule is local to repositories that use planned implementation slices. It
 operationalizes the general vertical-slice completeness rule for phase-driven
 work.
 
+Do not create artificial phases or slices just to apply this rule. If the repository does not have a named plan unit for the work, use the ordinary validation rules and Rule 12 only when a contract surface changed.
+
 ## When this rule applies
 
 Use this rule whenever work is described in terms such as:

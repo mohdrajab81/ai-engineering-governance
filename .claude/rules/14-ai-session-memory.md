@@ -71,6 +71,12 @@ Persistent memory is not for:
 Putting ephemeral state into persistent memory pollutes the context of future
 sessions with stale information that no longer applies.
 
+## Memory is guidance, not enforcement
+
+- Treat memory files, `CLAUDE.md`, and rule text as context that guides behavior, not as hard enforcement. If a constraint must block an unsafe action, enforce it through permissions, hooks, CI, or another mechanical gate.
+- Keep personal or machine-specific memory in local ignored files, not in shared repository rules. Shared memory should describe durable project facts and team standards only.
+- When a remembered fact affects correctness, verify it against the current repository state before acting. Memory can be stale; the working tree and authoritative project documents are the source of truth.
+
 ## Recommended memory structure
 
 For multi-session projects, organize persistent memory into three tiers. This is

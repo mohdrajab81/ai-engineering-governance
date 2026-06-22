@@ -1,4 +1,17 @@
+---
+paths:
+  - "**/*.py"
+  - "**/*.pyi"
+  - "**/pyproject.toml"
+  - "**/requirements*.txt"
+  - "**/poetry.lock"
+  - "**/pdm.lock"
+  - "**/uv.lock"
+---
+
 # Python Language Rules
+
+This rule file is path-scoped so it loads when Python source or dependency files are in scope. It complements the base governance rules; it does not replace them.
 
 This file extends the base governance rules with Python-specific guidance. It applies
 whenever the repository contains `.py` or `.pyi` files. Activate it according to

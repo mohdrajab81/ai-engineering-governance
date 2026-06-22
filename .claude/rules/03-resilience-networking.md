@@ -30,6 +30,12 @@
   counts, latency, and error rate. If the provider exposes token-usage headers,
   quotas, or remaining-budget metadata, record and alert on them. If it does
   not, estimate token usage at the caller and expose the estimate as telemetry.
+- Token estimates must be conservative and cheap enough for the code path. Use
+  an existing tokenizer when the dependency is already present and the overhead
+  is acceptable. Do not add a heavyweight tokenization dependency or exact
+  counter to a high-throughput hot path solely for telemetry without an explicit
+  tradeoff. If the estimate is approximate, label it as an estimate and bias it
+  high enough for safe admission control.
 - When an AI dependency returns overload or quota errors, identify whether the
   saturation is driven by request count, token volume, or concurrency. The
   mitigation differs: a request-count cap may call for slower intake; a token

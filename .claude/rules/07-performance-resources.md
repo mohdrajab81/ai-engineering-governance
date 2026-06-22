@@ -60,6 +60,10 @@
   maximum number of application threads or runnable tasks. In async,
   virtual-thread, or coroutine-based runtimes, a pool sized to task count
   can exhaust the database long before the application saturates CPU.
+- Any AI-generated database configuration block must set an explicit maximum
+  pool size and pool acquisition timeout, or document why the platform defaults
+  are deliberately accepted. ORM and driver defaults vary widely and can change
+  on upgrade; implicit defaults are not a capacity plan.
 - Set pool acquisition timeouts shorter than request timeouts. A request
   that waits indefinitely for a connection turns pool exhaustion into a
   latency mystery instead of a visible resource failure.

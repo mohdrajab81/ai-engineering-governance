@@ -16,14 +16,18 @@ On the first serious task in a repository, fill in the canonical commands below 
 | Integration tests | n/a | n/a | No code — docs-only repo |
 | Migrate / seed | n/a | n/a | No database |
 | Start local services | n/a | n/a | No services required |
-| Smoke test | `if grep -rE "^\|.*\| fill me \|" . --include="*.md"; then echo "ERROR: Unfilled command table cells remain."; exit 1; else echo "Command table check passed."; fi` | n/a | Verify no unfilled table cells remain |
+| Smoke test | `bash scripts/check-governance.sh` | n/a | Canonical structural governance check used locally and by CI |
 | Run locally | n/a | n/a | Static docs — no runtime |
 | Security scan | `grep -rE "(password&#124;secret&#124;token&#124;api_key)\s*=\s*\S+" . --include="*.md"` | n/a | Scan for accidentally committed secrets |
-| JSON validation | `python3 -m json.tool .claude/settings.example.json > /dev/null` | n/a | Verify settings example is valid JSON |
+| JSON validation | `python3 -m json.tool .claude/settings.example.json > /dev/null && python3 -m json.tool .claude/hooks/hooks.json > /dev/null` | n/a | Verify settings example and hook manifest are valid JSON |
 | YAML validation | `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/governance-check.yml'))"` | n/a | Verify CI workflow is valid YAML; requires `PyYAML` if you want local parsing |
 | Rollback | `git revert HEAD` | n/a | Revert last commit |
 
-**Enforcement:** CI must include a step that fails the build if any cell in the command table above still contains the literal text `fill me`. A governance file that has never been completed gives false confidence that commands have been verified. Add a check equivalent to:
+**Enforcement:** CI must run `bash scripts/check-governance.sh`. That script
+fails the build if any cell in the command table above still contains the
+literal text `fill me`. A governance file that has never been completed gives
+false confidence that commands have been verified. The fill-me check is
+equivalent to:
 
 ```bash
 grep -E "^\|.*\| fill me \|" AI_AGENT_WORKFLOW.md && echo "ERROR: Unfilled command table in AI_AGENT_WORKFLOW.md" && exit 1
@@ -92,7 +96,7 @@ special environment.
 
 0. Before writing any new code, search the repository for existing implementations, check official vendor or SDK docs, and check package registries if relevant. State briefly what was found and why custom code is needed if that is the decision. Skipping this step and duplicating existing logic is a verification failure. See Rule 11 for the full scope of this requirement.
 1. Read the task, acceptance criteria, and any linked design material.
-2. Identify impacted files, callers, contracts, docs, tests, and operational behavior.
+2. Identify impacted files, callers, contracts, docs, tests, and operational behavior. Name the relevant domain or language rule files that apply to the task, and check the repository's active-layer record if one exists.
 3. Write a short plan for any non-trivial task. For changes that cross a high-risk boundary — backward-compatibility risk, schema or API migration, destructive operation, public contract change, staged rollout, or multi-session work — copy `tasks/assurance-evidence-template.md` and fill it in before implementation begins. The template's risk-trigger checklist identifies whether it applies.
 4. Define exact validation before coding.
 5. Implement in small steps.

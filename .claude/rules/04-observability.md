@@ -75,6 +75,11 @@
   thread handoffs, and async task submissions so logs, metrics, and traces
   can be correlated for the same request.
 - For high-volume workloads, define a sampling rate before enabling tracing in production. Head-based sampling is simpler; tail-based sampling gives better coverage of errors and slow requests.
+- Application code should propagate trace context unconditionally at boundaries.
+  Sampling decisions, especially tail-based sampling, usually belong in the
+  OpenTelemetry Collector or equivalent infrastructure layer rather than in
+  request-handling code. Do not simulate tail-based sampling by buffering large
+  request state in the application.
 - Apply data redaction rules to span attributes and log fields that could carry sensitive data before spans are exported.
 
 ## Continuous profiling

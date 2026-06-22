@@ -86,14 +86,20 @@ published AI governance standards:**
 | `.github/copilot-instructions.md` | GitHub Copilot adapter — references CLAUDE.md as authority |
 | `copilot-instructions.md` | Root-level pointer to the GitHub Copilot adapter path above, kept for discoverability without duplicating rules |
 | `.claude/settings.example.json` | Example Claude Code permissions and post-edit hook configuration |
-| `.claude/hooks/hooks.json` | Governance enforcement hooks for Rules 05, 06, and 08 — secret scanning, lint-config protection, destructive-command blocking |
+| `.claude/hooks/hooks.json` | Governance enforcement hook manifest for Rules 05, 06, and 08 — secret scanning, lint-config protection, destructive-command blocking |
+| `.claude/hooks/scripts/` | Companion shell scripts called by the hook manifest, kept outside JSON for maintainability and direct review |
 | `tasks/lessons.md` | Lessons-log template for capturing repeat failures and rule/process improvements |
 | `tasks/handoff-template.md` | Session handoff template — used when incomplete work must survive a session boundary (Rule 14) |
 | `.github/PULL_REQUEST_TEMPLATE.md` | PR template pre-populated with the governance review checklist |
+| `.github/workflows/governance-check.yml` | Canonical GitHub Actions workflow that installs markdownlint and runs `scripts/check-governance.sh` |
+| `scripts/check-governance.sh` | Canonical structural governance check used by local validation and CI |
+| `scripts/run-markdownlint.sh` | Markdown lint wrapper with Bash/WSL `node` / `node.exe` handling |
+| `scripts/governance-lint.sh` | Optional heuristic lint helper for consuming repositories |
 | `CHANGELOG.md` | Full version history — every release with added, changed, and migration notes |
 | `CONTRIBUTING.md` | Contributor workflow for making focused, reviewable changes to the pack |
 | `README.md` | This file |
 | `REFERENCES.md` | Full provenance — standards, review history, production-experience origin |
+| `SECURITY.md` | Vulnerability reporting policy for this repository |
 | `docs/upstream/` | Evaluations of external governance packs and selective adoption decisions |
 
 ### Domain rule files (`.claude/rules/`)
@@ -123,6 +129,10 @@ published AI governance standards:**
 | `languages/python.md` | Python-specific depth including runtime boundary validation, Pydantic as the recommended default, async generator safety, and AI failure modes |
 | `languages/typescript.md` | TypeScript-specific depth including strict-mode requirements, zod as the recommended boundary validator, and type-safety rules |
 
+These language files include Claude Code `paths` front matter for conditional
+loading. Agents that do not use that metadata should follow the activation
+guidance in [PHASED_ADOPTION.md](./PHASED_ADOPTION.md).
+
 ---
 
 ## How to Deploy
@@ -135,14 +145,15 @@ published AI governance standards:**
 4. Fill in the command table in `AI_AGENT_WORKFLOW.md` with your repo's actual commands
 5. Configure CI to run build, lint, test, security scan, and the fill-me check — fail on errors
 6. Optional: copy `.claude/settings.example.json` to `.claude/settings.json` and customize the allow-list, deny-list, and post-edit hook for your stack
-7. Optional: copy the relevant hook entries from `.claude/hooks/hooks.json` into your `.claude/settings.json` under the `hooks` key to enable secret scanning, lint-config protection, and destructive-command blocking
+7. Optional: copy the relevant hook entries from `.claude/hooks/hooks.json` into your `.claude/settings.json` under the `hooks` key, and copy `.claude/hooks/scripts/` with them. If you relocate the scripts, update the hook command paths. This enables secret scanning, lint-config protection, and destructive-command blocking
 8. Run `bash scripts/check-governance.sh` locally to validate all structural checks before pushing. The markdown lint step requires `markdownlint-cli` plus a Node runtime visible in the same shell; `scripts/run-markdownlint.sh` handles `node` or `node.exe` in Bash/WSL.
 
 **Canonical GitHub Actions governance check:** copy
 `.github/workflows/governance-check.yml` from this repository rather than
-copying an inline README snippet. The workflow now includes inventory-sync
-checks and cross-reference validation, and keeping the canonical version in
-one file avoids the README drifting behind the real CI logic.
+copying an inline README snippet. The workflow delegates to
+`scripts/check-governance.sh`, which is the single source of truth for structural
+governance checks. Keep new checks in that script so local validation and CI do
+not drift.
 
 ### For GitHub Copilot
 

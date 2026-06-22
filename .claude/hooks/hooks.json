@@ -1,7 +1,7 @@
 {
-  "_note": "Governance hooks for code repositories. Copy relevant hooks into your project's .claude/settings.json under the 'hooks' key. Each hook references the governance rule it enforces.",
+  "_note": "Governance hooks for code repositories. Copy relevant hooks into your project's .claude/settings.json under the 'hooks' key and copy the companion scripts in .claude/hooks/scripts/. Each hook references the governance rule it enforces.",
 
-  "_shell_requirement": "These hooks are written for POSIX-compatible shells (bash, sh). They require cat, grep, basename, and python3. They will work in Linux, macOS, and Windows environments running under WSL2 or Git Bash. They will NOT work in native Windows PowerShell or CMD without modification. If your Claude Code installation runs hooks via PowerShell (possible on Windows without WSL), you must rewrite these as .ps1 scripts. See the Claude Code hooks documentation for PowerShell hook configuration.",
+  "_shell_requirement": "These hooks are written for POSIX-compatible shells (bash, sh). They require bash, cat, grep, basename, git, and python3. They will work in Linux, macOS, and Windows environments running under WSL2 or Git Bash. They will NOT work in native Windows PowerShell or CMD without modification. If your Claude Code installation runs hooks via PowerShell (possible on Windows without WSL), you must rewrite these as .ps1 scripts. See the Claude Code hooks documentation for PowerShell hook configuration.",
 
   "_exit_code_reference": {
     "0": "Success. If stdout contains a valid JSON hook response, Claude Code processes it.",
@@ -30,7 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(cat); COMMAND=$(echo \"$INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('command',''))\" 2>/dev/null || echo ''); if echo \"$COMMAND\" | grep -qE 'git (commit|merge|rebase).*--no-verify'; then echo '[BLOCKED by Rule 08] --no-verify bypasses commit hooks and is not permitted. Fix the failing hook instead of skipping it.' >&2; exit 2; fi; exit 0",
+            "command": "bash .claude/hooks/scripts/block-no-verify.sh",
             "timeout": 5
           }
         ]
@@ -42,7 +42,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(cat); COMMAND=$(echo \"$INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('command',''))\" 2>/dev/null || echo ''); if ! echo \"$COMMAND\" | grep -qE '^git commit'; then exit 0; fi; FINDINGS=$(git diff --cached | grep '^+' | grep -v '^+++' | grep -E '(password|secret|token|api_key|apikey|private_key|access_key|client_secret)[[:space:]]*[=:\"'\\'']+[[:space:]]*[A-Za-z0-9+/_-]{8,}' 2>/dev/null | grep -v '\\.example' | grep -v '\\.sample' | grep -v 'YOUR_' | grep -v 'PLACEHOLDER' | grep -v 'test_' | head -5); if [ -n \"$FINDINGS\" ]; then echo '[BLOCKED by Rule 05] Possible hardcoded secret detected in staged diff. Move secrets to environment variables before committing.' >&2; echo \"$FINDINGS\" >&2; exit 2; fi; exit 0",
+            "command": "bash .claude/hooks/scripts/scan-staged-secrets.sh",
             "timeout": 15
           }
         ]
@@ -54,7 +54,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(cat); COMMAND=$(echo \"$INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('command',''))\" 2>/dev/null || echo ''); if echo \"$COMMAND\" | grep -qE 'rm\\s+-[a-zA-Z]*r[a-zA-Z]*f\\s+(\\/\\s|\\/$|~\\/|~\\s|~$|\\.\\.\\/|\\*|\\./\\*)'; then echo '[BLOCKED by Rule 08] rm -rf on root, home, wildcard, or parent-directory paths is not permitted in an AI coding session. If this deletion is intentional, run it manually in a terminal.' >&2; exit 2; fi; exit 0",
+            "command": "bash .claude/hooks/scripts/block-destructive-rm.sh",
             "timeout": 5
           }
         ]
@@ -66,7 +66,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(cat); FILE=$(echo \"$INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('file_path',''))\" 2>/dev/null || echo ''); BASENAME=$(basename \"$FILE\"); case \"$BASENAME\" in .eslintrc|.eslintrc.js|.eslintrc.cjs|.eslintrc.json|.eslintrc.yaml|.eslintrc.yml|eslint.config.js|eslint.config.mjs|eslint.config.cjs|.prettierrc|.prettierrc.js|.prettierrc.cjs|.prettierrc.json|.prettierrc.yaml|.prettierrc.yml|prettier.config.js|prettier.config.mjs|ruff.toml|.ruff.toml|.markdownlint.json|.markdownlint.yaml|.markdownlint.yml|.markdownlintrc|.stylelintrc|.stylelintrc.json|.stylelintrc.yaml|stylelint.config.js|.flake8) echo '[BLOCKED by Rule 06] Editing lint/format config to make checks pass is not permitted. Fix the code that fails the check instead. If this is a deliberate team policy change, make it a standalone commit with an explicit reason in the commit message.' >&2; exit 2;; pyproject.toml) echo '[WARN] Editing pyproject.toml: if this touches [tool.ruff], [tool.black], [tool.isort], or [tool.flake8] sections, confirm it is a deliberate team policy decision and not a workaround to silence a failing check.' >&2; exit 0;; *) exit 0;; esac",
+            "command": "bash .claude/hooks/scripts/protect-lint-config.sh",
             "timeout": 10
           }
         ]

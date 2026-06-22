@@ -4,3 +4,5 @@ Thumbs.db
 *.log
 LINKEDIN_ARTICLE_final.md
 LINKEDIN_POST_final.md
+.claude/settings.json
+.claude/settings.local.json

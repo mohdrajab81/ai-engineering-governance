@@ -4,7 +4,7 @@ Where each type of rule should live and who enforces it.
 
 ## Principles
 
-- **CLAUDE.md** (project root): static, project-wide rules the agent cannot infer from code. Keep under 650 words. The higher limit vs. the original 500 reflects two mandatory AI-verification non-negotiables that belong at root level.
+- **CLAUDE.md** (project root): static, project-wide rules the agent cannot infer from code. Keep it compact — roughly 800 words in this pack — and do not move domain detail into the root policy.
 - **.claude/rules/*.md**: detailed domain rules loaded on demand when relevant.
 - **Supporting governance artifacts**: rollout, lessons, and local settings examples belong in separate docs, not in rule files.
 - **Linters, formatters, CI tools**: anything checkable deterministically. Never duplicate in instruction files.
@@ -55,10 +55,11 @@ Where each type of rule should live and who enforces it.
 ## How to Read This
 
 - **CLAUDE.md**: loaded into every AI coding session automatically. It holds principles and hard constraints only.
-- **.claude/rules/**: loaded when the agent works on a relevant topic. They hold the detail, examples, and edge cases.
+- **.claude/rules/**: loaded when the agent works on a relevant topic. They hold the detail, examples, and edge cases. For non-trivial work, the agent should name the relevant domain and language rule files in its plan and cross-check them before finalizing implementation and validation.
 - **PHASED_ADOPTION.md**: maintainer guidance for sequencing governance rollout. Not a runtime instruction file.
 - **tasks/lessons.md**: maintainer log for lessons learned and future rule updates. Not a runtime instruction file.
 - **.claude/settings.example.json**: optional local Claude Code configuration example. Operational helper, not a policy source.
 - **Linter / CI / Tools**: enforced mechanically. Do not repeat in instruction files — it wastes context tokens and creates drift when tools and instructions diverge.
 - Some rules appear in multiple columns. CLAUDE.md holds the principle, the rule file holds the detail, CI enforces the check. They complement, not duplicate.
+- This file is a placement matrix, not a canonical inventory of rule filenames. Keep exact rule inventories in files that intentionally enumerate the pack contents, such as `README.md` and `AGENTS.md`, and validate those inventories through `scripts/check-governance.sh`.
 - This file is a governance-maintainer document. It is not loaded by agents at runtime. Store it in `docs/ai-governance/` or the repository root alongside CLAUDE.md.

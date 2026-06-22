@@ -67,6 +67,26 @@ contract-baseline diff checks can strengthen Rule 12 and Rule 13 evidence. Keep
 the distinction clear: a generated report is review evidence unless it exits
 non-zero for the claimed failure condition.
 
+The language rule files include Claude Code `paths` front matter so they load
+only when matching source, dependency, or config files are in scope. Agents or
+tools that do not understand that metadata should still apply the activation
+table above: use a language rule only when that language is present and relevant
+to the task.
+
+## Recording active layers
+
+When a repository activates a domain or language layer, record that fact in a
+small current artifact that agents read during planning: `AI_AGENT_WORKFLOW.md`,
+`docs/ai-governance/active-layers.md`, or an equivalent local governance note.
+The record should name the active rule file, the trigger that made it active,
+and any local scope limits.
+
+An agent should check this active-layer record together with the current task.
+If the task clearly crosses a layer boundary that is not recorded yet, the agent
+should propose activating the relevant rule file instead of guessing. Do not
+turn this record into a history log; keep history in `CHANGELOG.md`,
+`tasks/lessons.md`, or project-specific decision records.
+
 ## Apply as hardening
 
 These rules matter most once the system is already functional:

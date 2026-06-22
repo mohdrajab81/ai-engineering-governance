@@ -404,3 +404,53 @@ Copy this block for each new lesson:
 
 - Contract-first rebuild methodology review, 2026-06-22. The source methodology
   file is external evidence and is not bundled into this repository.
+
+## 2026-06-22 — Review feedback should become precise operational guidance
+
+### What happened
+
+- External review feedback praised the pack's structure but identified several
+  places where the operational guidance could be easier to apply: complex hook
+  shell logic embedded directly in JSON, no explicit place to record active
+  governance layers, and a few domain-rule points that needed implementation
+  boundaries.
+
+### Why it happened
+
+- The hook manifest optimized for copy/paste portability, but non-trivial shell
+  bodies inside JSON are hard to review, edit, and syntax-check.
+- The phased-adoption guide explained when layers activate, but not where a
+  consuming repository should record that a layer is now active.
+- Several domain rules stated the principle but left room for agents to overdo
+  implementation detail, such as heavyweight token counting or application-level
+  tail-sampling logic.
+
+### What changed
+
+- Moved default hook logic into companion scripts under `.claude/hooks/scripts/`
+  and updated local/CI validation to parse `hooks.json` and syntax-check the
+  scripts.
+- Added active-layer recording guidance to `PHASED_ADOPTION.md` and task-flow
+  guidance to name relevant rule files during planning.
+- Clarified token-estimation tradeoffs, trace sampling ownership, golden
+  dataset storage, and explicit database pool sizing.
+
+### Prevention rule
+
+- When review feedback identifies a governance gap, translate it into a small
+  operational rule, artifact, or validation check rather than adding broad
+  explanatory prose.
+
+### Decision
+
+- Upstream pack change.
+
+### Scope
+
+- Suitable for the upstream governance pack because hook maintainability,
+  adoption-state tracking, and over/under-specific agent guidance are generic
+  AI-assisted engineering workflow issues.
+
+### Evidence
+
+- External review feedback attached to the 2026-06-22 governance review session.
